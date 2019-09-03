@@ -1,7 +1,3 @@
-<template>
-  <HelloWorld />
-</template>
-
 <script>
 import HelloWorld from '../components/HelloWorld';
 
@@ -11,3 +7,7 @@ export default {
   },
 };
 </script>
+
+<template>
+  <HelloWorld />
+</template>

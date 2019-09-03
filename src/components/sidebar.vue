@@ -1,6 +1,11 @@
 <script>
   export default {
     props: {
+      dark: {
+        type: Boolean,
+        default: false,
+      },
+
       drawerOpen: {
         type: Boolean,
         default: false,
@@ -14,7 +19,7 @@
     :value="drawerOpen"
     app
     color="secondary"
-    @input="emit('update:drawer-open', $event)"
+    @input="$emit('update:drawer-open', $event)"
   >
     <v-list dense>
       <v-list-item @click="">
@@ -37,8 +42,9 @@
 
     <template v-slot:append>
       <v-switch
-        v-model="dark"
+        :value="dark"
         label="Dark Mode"
+        @change="$emit('update:dark', $event)"
       />
     </template>
   </v-navigation-drawer>

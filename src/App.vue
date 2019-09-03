@@ -1,9 +1,10 @@
 <script>
-  import Sidebar from './components/sidebar';
+  import Sidebar from './components/sidebar'
+  import Login from './components/login'
 
   export default {
     components: {
-      Sidebar,
+      Login,
     },
 
     props: {
@@ -24,8 +25,10 @@
 </script>
 
 <template>
-  <v-app id="inspire">
-    <sidebar :drawer-open.sync="drawerOpen" />
+  <v-app>
+    <login />
+
+    <sidebar :drawer-open.sync="drawerOpen" :dark.sync="dark" />
 
     <v-app-bar
       app

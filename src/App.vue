@@ -11,6 +11,7 @@
     },
 
     data: () => ({
+      drawer: false,
       dark: false,
     }),
   }
@@ -19,9 +20,8 @@
 <template>
   <v-app id="inspire">
     <v-navigation-drawer
+      v-model="drawer"
       app
-      permanent
-      expand-on-hover
       color="secondary"
     >
       <v-list dense>
@@ -30,15 +30,15 @@
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Dashboard</v-list-item-title>
+            <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item @click="">
           <v-list-item-action>
-            <v-icon>mdi-settings</v-icon>
+            <v-icon>mdi-exit-run</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Settings</v-list-item-title>
+            <v-list-item-title>Logout</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -55,7 +55,17 @@
       app
       color="primary"
     >
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>Animals</v-toolbar-title>
+      <v-btn
+        absolute
+        fab
+        bottom
+        right
+        color="accent"
+      >
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <v-content>

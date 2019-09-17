@@ -23,14 +23,18 @@
       dark: false,
       showLogin: false,
       uuid: null,
+      userEmail: null,
     }),
 
     created() {
       this.$firebase.auth().onAuthStateChanged((user) => {
         if(user) {
           this.uuid = user.uid;
+          this.userEmail = user.email;
           this.showLogin = false;
         } else {
+          this.uuid = null;
+          this.userEmail = null;
           this.showLogin = true;
         }
       });
@@ -42,7 +46,11 @@
   <v-app>
     <login :shown="showLogin" />
 
-    <sidebar :open.sync="drawerOpen" :dark.sync="dark" />
+    <sidebar
+      :email="userEmail"
+      :open.sync="drawerOpen"
+      :dark.sync="dark"
+    />
 
     <v-app-bar
       app

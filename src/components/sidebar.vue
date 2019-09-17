@@ -6,23 +6,38 @@
         default: false,
       },
 
-      drawerOpen: {
+      open: {
         type: Boolean,
         default: false,
       }
+    },
+
+    methods: {
+      goHome() {
+        this.$router.push('/');
+      },
+
+      logOut() {
+        this.$emit("update:open", false);
+        this.$firebase.auth().signOut().then(function() {
+          this.$router.push('/');
+        }, function(error) {
+          console.log(error);
+        });
+      },
     },
   }
 </script>
 
 <template>
   <v-navigation-drawer
-    :value="drawerOpen"
+    :value="open"
     app
     color="secondary"
     @input="$emit('update:drawer-open', $event)"
   >
     <v-list dense>
-      <v-list-item @click="">
+      <v-list-item @click.prevent="goHome">
         <v-list-item-action>
           <v-icon>mdi-home</v-icon>
         </v-list-item-action>
@@ -30,7 +45,8 @@
           <v-list-item-title>Home</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-list-item @click="">
+
+      <v-list-item @click="logOut">
         <v-list-item-action>
           <v-icon>mdi-exit-run</v-icon>
         </v-list-item-action>

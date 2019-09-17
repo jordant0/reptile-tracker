@@ -29,6 +29,7 @@
       this.$firebase.auth().onAuthStateChanged((user) => {
         if(user) {
           this.uuid = user.uid;
+          this.showLogin = false;
         } else {
           this.showLogin = true;
         }
@@ -41,7 +42,7 @@
   <v-app>
     <login :shown="showLogin" />
 
-    <sidebar :drawer-open.sync="drawerOpen" :dark.sync="dark" />
+    <sidebar :open.sync="drawerOpen" :dark.sync="dark" />
 
     <v-app-bar
       app
@@ -56,7 +57,7 @@
         class="fill-height"
         fluid
       >
-        <router-view></router-view>
+        <router-view :uuid="uuid"></router-view>
       </v-container>
     </v-content>
   </v-app>

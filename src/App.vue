@@ -4,6 +4,7 @@
 
   export default {
     components: {
+      Sidebar,
       Login,
     },
 
@@ -20,13 +21,25 @@
     data: () => ({
       drawerOpen: false,
       dark: false,
+      showLogin: false,
+      uuid: null,
     }),
+
+    created() {
+      this.$firebase.auth().onAuthStateChanged((user) => {
+        if(user) {
+          this.uuid = user.uid;
+        } else {
+          this.showLogin = true;
+        }
+      });
+    },
   }
 </script>
 
 <template>
   <v-app>
-    <login />
+    <login :shown="showLogin" />
 
     <sidebar :drawer-open.sync="drawerOpen" :dark.sync="dark" />
 

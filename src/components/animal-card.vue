@@ -15,15 +15,9 @@ export default {
   },
 
   data() {
-    let letters = '0123456789ABCDEF';
-    let color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-
     return {
       lastFedEvent: null,
-      randomColor: color,
+      randomColor: `hsl(${360 * Math.random()},${25 + 70 * Math.random()}%, ${85 + 10 * Math.random()}%)`,
     }
   },
 
@@ -96,7 +90,9 @@ export default {
     <div
       class="animal-image"
       :style="{ backgroundColor: randomColor }"
-    />
+    >
+      No image
+    </div>
 
     <v-expansion-panel-header>
       <div class="animal-header" @click.prevent.stop="goToAnimalDetails">
@@ -155,6 +151,11 @@ export default {
     position: absolute;
     width: 100px;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999999;
+    font-style: italic;
   }
 
   .animal-header {

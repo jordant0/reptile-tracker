@@ -38,19 +38,20 @@
 
 <template>
   <div class="animal-listing">
-    <animal-card
-      v-for="animal in animalsList"
-      :key="animal.id"
-      :animal="animal"
-      :uuid="uuid"
-    />
+    <v-expansion-panels popout>
+      <animal-card
+        v-for="animal in animalsList"
+        :key="animal.id"
+        :animal="animal"
+        :uuid="uuid"
+      />
+    </v-expansion-panels>
   </div>
 </template>
 
 <style scoped>
   .animal-listing {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+    max-width: 1000px;
+    margin: auto;
   }
 </style>

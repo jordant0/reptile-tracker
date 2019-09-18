@@ -15,8 +15,15 @@ export default {
   },
 
   data() {
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+
     return {
       lastFedEvent: null,
+      randomColor: color,
     }
   },
 
@@ -73,35 +80,112 @@ export default {
       }
       return null;
     },
-  }
+  },
+
+  methods: {
+    goToAnimalDetails() {
+      debugger;
+    },
+  },
 }
 
 </script>
 
 <template>
-  <v-card
-    class="animal-card"
-    width="300px"
-  >
-    <v-card-title>{{ animal.name }}</v-card-title>
-    <v-card-text>
-      <v-row>{{ animal.species }}</v-row>
+  <v-expansion-panel>
+    <div
+      class="animal-image"
+      :style="{ backgroundColor: randomColor }"
+    />
+
+    <v-expansion-panel-header>
+      <div class="animal-header" @click.prevent.stop="goToAnimalDetails">
+        <div class="animal-header--first">
+          <span class="animal-name">
+            {{ animal.name }}
+          </span>
+
+          <span>{{ animal.species }}</span>
+        </div>
+
+        <div class="animal-header--last">
+          <span v-if="lastFedDate">
+            Last fed {{ lastFedDate }}
+          </span>
+
+          <span v-if="nextFeedingFromNow">
+            Next feeding {{ nextFeedingFromNow }}
+          </span>
+        </div>
+      </div>
+
+      <template v-slot:actions>
+        <div class="expand-action">
+          <v-icon>$vuetify.icons.expand</v-icon>
+        </div>
+      </template>
+    </v-expansion-panel-header>
+
+    <v-expansion-panel-content>
       <v-row v-if="animal.feedingDuration">
         Feeding every {{ animal.feedingDuration }} days
       </v-row>
-      <v-row v-if="lastFedDate">
-        Last fed {{ lastFedDate }}
-      </v-row>
-      <v-row v-if="nextFeedingFromNow">
-        Next feeding {{ nextFeedingFromNow }}
-      </v-row>
-    </v-card-text>
-  </v-card>
+    </v-expansion-panel-content>
+  </v-expansion-panel>
 </template>
 
 <style scoped>
-  .animal-card {
-    margin: 20px;
+  .v-expansion-panel {
+    position: relative;
+  }
+
+  .v-expansion-panel-header {
+    padding: 0;
+  }
+
+  .animal-header {
+    padding: 16px 24px 16px 124px;
+  }
+
+  .v-expansion-panel-content {
+    margin-left: 100px;
+  }
+
+  .animal-image {
+    position: absolute;
+    width: 100px;
+    height: 100%;
+  }
+
+  .animal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .animal-header--first span:not(:first-child):before {
+    content: '|';
+    padding: 0 8px;
+  }
+
+  .animal-header--last {
+    color: #999999;
+  }
+
+  .animal-header--last span:not(:last-child):after {
+    content: '|';
+    padding: 0 8px;
+  }
+
+  .animal-name {
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .expand-action {
+    margin: 12px;
+    background-color: #f2f2f2;
+    border-radius: 100%;
   }
 
   .row {

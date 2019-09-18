@@ -1,88 +1,87 @@
 <script>
-import moment from 'moment';
+  import moment from 'moment'
+  import { mapGetters } from 'vuex'
 
-export default {
-  props: {
-    animal: {
-      type: Object,
-      required: true,
+  export default {
+    props: {
+      animal: {
+        type: Object,
+        required: true,
+      },
     },
 
-    uuid: {
-      type: String,
-      required: true,
+    data() {
+      return {
+        lastFedEvent: null,
+        randomColor: `hsl(${360 * Math.random()},${25 + 70 * Math.random()}%, ${85 + 10 * Math.random()}%)`,
+      }
     },
-  },
 
-  data() {
-    return {
-      lastFedEvent: null,
-      randomColor: `hsl(${360 * Math.random()},${25 + 70 * Math.random()}%, ${85 + 10 * Math.random()}%)`,
-    }
-  },
-
-  watch: {
-    'animal.id': {
-      immediate: true,
-      handler() {
-        if(this.uuid && this.animal.id) {
-          this.$bind(
-            'lastFedEvent',
-            this.$firebase
-              .firestore()
-              .collection('users')
-              .doc(this.uuid)
-              .collection('animals')
-              .doc(this.animal.id)
-              .collection('events')
-              .where("type", "==", "Feeding")
-              .orderBy("timestamp", "desc")
-              .limit(1)
-          )
+    watch: {
+      'animal.id': {
+        immediate: true,
+        handler() {
+          if(this.uuid && this.animal.id) {
+            this.$bind(
+              'lastFedEvent',
+              this.$firebase
+                .firestore()
+                .collection('users')
+                .doc(this.uuid)
+                .collection('animals')
+                .doc(this.animal.id)
+                .collection('events')
+                .where("type", "==", "Feeding")
+                .orderBy("timestamp", "desc")
+                .limit(1)
+            )
+          }
         }
-      }
+      },
     },
-  },
 
-  computed: {
-    lastFed() {
-      if(!(this.lastFedEvent && this.lastFedEvent.length)) {
+    computed: {
+      ...mapGetters([
+        'uuid',
+      ]),
+
+      lastFed() {
+        if(!(this.lastFedEvent && this.lastFedEvent.length)) {
+          return null;
+        }
+
+        return moment(this.lastFedEvent[0].timestamp.toDate());
+      },
+
+      lastFedDate() {
+        if(this.lastFed) {
+          return this.lastFed.format('M/D h:mm a');
+        } else {
+          return null;
+        }
+      },
+
+      nextFeed() {
+        if(this.lastFed && this.animal.feedingDuration) {
+          return this.lastFed.add(this.animal.feedingDuration, 'd');
+        }
         return null;
-      }
+      },
 
-      return moment(this.lastFedEvent[0].timestamp.toDate());
-    },
-
-    lastFedDate() {
-      if(this.lastFed) {
-        return this.lastFed.format('M/D h:mm a');
-      } else {
+      nextFeedingFromNow() {
+        if(this.nextFeed) {
+          return this.nextFeed.fromNow();
+        }
         return null;
-      }
+      },
     },
 
-    nextFeed() {
-      if(this.lastFed && this.animal.feedingDuration) {
-        return this.lastFed.add(this.animal.feedingDuration, 'd');
-      }
-      return null;
+    methods: {
+      goToAnimalDetails() {
+        debugger;
+      },
     },
-
-    nextFeedingFromNow() {
-      if(this.nextFeed) {
-        return this.nextFeed.fromNow();
-      }
-      return null;
-    },
-  },
-
-  methods: {
-    goToAnimalDetails() {
-      debugger;
-    },
-  },
-}
-
+  }
 </script>
 
 <template>

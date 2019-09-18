@@ -1,16 +1,10 @@
 <script>
   import AnimalCard from '@/components/animal-card'
+  import { mapGetters } from 'vuex'
 
   export default {
     components: {
       AnimalCard,
-    },
-
-    props: {
-      uuid: {
-        type: String,
-        default: ''
-      },
     },
 
     data() {
@@ -20,19 +14,28 @@
     },
 
     watch: {
-      uuid() {
-        if(this.uuid) {
-          this.$bind(
-            'animalsList',
-            this.$firebase
-              .firestore()
-              .collection('users')
-              .doc(this.uuid)
-              .collection('animals')
-          )
+      uuid: {
+        immediate: true,
+        handler() {
+          if(this.uuid) {
+            this.$bind(
+              'animalsList',
+              this.$firebase
+                .firestore()
+                .collection('users')
+                .doc(this.uuid)
+                .collection('animals')
+            )
+          }
         }
       },
     },
+
+    computed: {
+      ...mapGetters([
+        'uuid',
+      ])
+    }
   };
 </script>
 
@@ -43,15 +46,7 @@
         v-for="animal in animalsList"
         :key="animal.id"
         :animal="animal"
-        :uuid="uuid"
       />
     </v-expansion-panels>
   </div>
 </template>
-
-<style scoped>
-  .animal-listing {
-    max-width: 1000px;
-    margin: auto;
-  }
-</style>

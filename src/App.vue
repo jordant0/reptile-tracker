@@ -1,9 +1,12 @@
 <script>
-  import Sidebar from './components/sidebar'
-  import Login from './components/login'
+  import Navbar from '@/components/navbar'
+  import Sidebar from '@/components/sidebar'
+  import Login from '@/components/login'
+  import { mapState } from 'vuex'
 
   export default {
     components: {
+      Navbar,
       Sidebar,
       Login,
     },
@@ -13,32 +16,35 @@
     },
 
     watch: {
-      dark() {
-        this.$vuetify.theme.dark = this.dark;
+      darkTheme(value) {
+        this.$vuetify.theme.dark = value;
       },
     },
 
-    data: () => ({
-      drawerOpen: false,
-      dark: false,
-      showLogin: false,
-      uuid: null,
-      userEmail: null,
-    }),
+    data() {
+      return {
+        drawerOpen: false,
+        showLogin: false,
+      }
+    },
 
     created() {
       this.$firebase.auth().onAuthStateChanged((user) => {
         if(user) {
-          this.uuid = user.uid;
-          this.userEmail = user.email;
+          this.$store.commit('updateUser', user);
           this.showLogin = false;
         } else {
-          this.uuid = null;
-          this.userEmail = null;
+          this.$store.commit('updateUser', {});
           this.showLogin = true;
         }
       });
     },
+
+    computed: {
+      ...mapState([
+        'darkTheme',
+      ])
+    }
   }
 </script>
 
@@ -47,25 +53,17 @@
     <login :shown="showLogin" />
 
     <sidebar
-      :email="userEmail"
       :open.sync="drawerOpen"
-      :dark.sync="dark"
     />
 
-    <v-app-bar
-      app
-      color="primary"
-    >
-      <v-app-bar-nav-icon @click.stop="drawerOpen = !drawerOpen"></v-app-bar-nav-icon>
-      <v-toolbar-title>{{ $route.meta.title }}</v-toolbar-title>
-    </v-app-bar>
+    <navbar @toggle-drawer="drawerOpen = !drawerOpen" />
 
     <v-content>
       <v-container
-        class="fill-height"
+        class="container-wrapper fill-height"
         fluid
       >
-        <router-view :uuid="uuid"></router-view>
+        <router-view />
       </v-container>
     </v-content>
   </v-app>
@@ -75,8 +73,15 @@
 .v-navigation-drawer--mini-variant .v-navigation-drawer__append {
   opacity: 0;
 }
+
 .v-navigation-drawer__append {
   display: flex;
   justify-content: center;
+}
+
+.container.fill-height.container-wrapper {
+  max-width: 1000px;
+  margin: 8px auto;
+  align-items: flex-start;
 }
 </style>

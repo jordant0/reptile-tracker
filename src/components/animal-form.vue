@@ -65,6 +65,16 @@
 
     <div class="form-actions">
       <v-btn
+        text
+        color="#999999"
+      >
+        Cancel
+      </v-btn>
+
+
+      <div class="flex-grow-1" />
+
+      <v-btn
         color="primary"
       >
         Submit
@@ -80,7 +90,7 @@
   }
 
   .form-actions {
+    display: flex;
     margin-top: 24px;
-    text-align: right;
   }
 </style>

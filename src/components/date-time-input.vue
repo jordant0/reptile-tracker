@@ -101,17 +101,19 @@
         </div>
       </template>
 
-      <v-btn text @click.prevent="dateModalOpen = true">
-        {{ dateString }}
-      </v-btn>
+      <div class="selection-display">
+        <v-btn text @click.prevent="dateModalOpen = true">
+          {{ dateString }}
+        </v-btn>
 
-      <v-btn
-        v-if="includeTime"
-        text
-        @click.prevent="timeModalOpen = true"
-      >
-        {{ timeString }}
-      </v-btn>
+        <v-btn
+          v-if="includeTime"
+          text
+          @click.prevent="timeModalOpen = true"
+        >
+          {{ timeString }}
+        </v-btn>
+      </div>
     </v-input>
 
     <date-time-picker-dialog
@@ -146,5 +148,19 @@
     height: auto;
     margin-right: 32px;
     min-width: 200px;
+  }
+
+  @media screen and (max-width: 500px) {
+    .date-time-input .v-input__slot {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .selection-display {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      margin-top: 8px;
+    }
   }
 </style>

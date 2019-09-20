@@ -105,7 +105,19 @@
 
           return config;
         }
-      }
+      },
+
+      birthDate() {
+        if(this.animal.birthdate) {
+          return moment(this.animal.birthdate.toDate()).format('MM/DD/YYYY');
+        }
+      },
+
+      arrivalDate() {
+        if(this.animal.arrival) {
+          return moment(this.animal.arrival.toDate()).format('MM/DD/YYYY');
+        }
+      },
     },
 
     methods: {
@@ -132,18 +144,11 @@
             {{ animal.name }}
           </span>
 
-          <span>{{ animal.species }}</span>
+          <span class="animal-header--species">{{ animal.species }}</span>
         </div>
 
-        <div class="animal-header--last">
-          <span v-if="lastFedDate">
-            Last fed {{ lastFedDate }}
-          </span>
-
-          <span
-            v-if="nextFeedingFromNow"
-            :style="{ color: feedingConfig.color }"
-          >
+        <div v-if="nextFeedingFromNow" class="animal-header--last">
+          <span :style="{ color: feedingConfig.color }">
             Next feeding {{ feedingConfig.text }}
           </span>
         </div>
@@ -157,9 +162,27 @@
     </v-expansion-panel-header>
 
     <v-expansion-panel-content>
-      <v-row v-if="animal.feedingDuration">
-        Feeding every {{ animal.feedingDuration }} days
-      </v-row>
+      <ul class="animal-info">
+        <li v-if="animal.species">
+          Species: {{ animal.species }}
+        </li>
+
+        <li v-if="birthDate">
+          Birthdate: {{ birthDate }}
+        </li>
+
+        <li v-if="arrivalDate">
+          Arrived on {{ arrivalDate }}
+        </li>
+
+        <li v-if="animal.feedingDuration">
+          Feeding every {{ animal.feedingDuration }} days
+        </li>
+
+        <li v-if="lastFedDate">
+          Last fed {{ lastFedDate }}
+        </li>
+      </ul>
     </v-expansion-panel-content>
   </v-expansion-panel>
 </template>
@@ -172,7 +195,9 @@
   .v-expansion-panel-header {
     padding: 0;
   }
+</style>
 
+<style>
   .animal-header {
     padding: 16px 24px 16px 124px;
   }
@@ -223,7 +248,51 @@
     border-radius: 100%;
   }
 
-  .row {
-    margin: 0;
+  .animal-info {
+    color: #999999;
+    column-count: 2;
+  }
+
+  @media screen and (max-width: 900px) {
+    .animal-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .animal-header--last {
+      margin-top: 12px;
+    }
+  }
+
+  @media screen and (max-width: 750px) {
+    .animal-info {
+      column-count: 1;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .animal-image {
+      display: none;
+    }
+
+    .animal-header {
+      padding-left: 24px;
+    }
+
+    .v-expansion-panel-content {
+      margin-left: 0;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .animal-header--fed-date {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    .animal-header--species {
+      display: none;
+    }
   }
 </style>

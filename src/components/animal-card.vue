@@ -63,17 +63,49 @@
 
       nextFeed() {
         if(this.lastFed && this.animal.feedingDuration) {
-          return this.lastFed.add(this.animal.feedingDuration, 'd');
+          return this.lastFed.add(this.animal.feedingDuration, 'd').startOf('day');
         }
         return null;
       },
 
+      today() {
+        return moment().startOf('day');
+      },
+
       nextFeedingFromNow() {
         if(this.nextFeed) {
-          return this.nextFeed.fromNow();
+          return this.nextFeed.from(this.today);
         }
         return null;
       },
+
+      nextFeedToday() {
+        return this.nextFeed.year() === this.today.year() && this.nextFeed.dayOfYear() === this.today.dayOfYear();
+      },
+
+      feedingConfig() {
+        if(this.nextFeedToday) {
+          return { color: '#27C72F', text: 'today!' }
+        } else {
+          let config = {
+            color: '#4CD3FE',
+            text: this.nextFeedingFromNow,
+          }
+
+          if(this.nextFeedingFromNow.includes('ago')) {
+            config.color = '#FF0000';
+          }
+
+          if(this.nextFeedingFromNow === 'a day ago') {
+            config.text = 'yesterday';
+          } else if(this.nextFeedingFromNow === 'in a day') {
+            config.text = 'tomorrow';
+            config.color = '#E4D125';
+          }
+
+          return config;
+        }
+      }
     },
 
     methods: {
@@ -108,8 +140,11 @@
             Last fed {{ lastFedDate }}
           </span>
 
-          <span v-if="nextFeedingFromNow">
-            Next feeding {{ nextFeedingFromNow }}
+          <span
+            v-if="nextFeedingFromNow"
+            :style="{ color: feedingConfig.color }"
+          >
+            Next feeding {{ feedingConfig.text }}
           </span>
         </div>
       </div>

@@ -81,7 +81,6 @@
 
 .container.fill-height.container-wrapper {
   max-width: 1000px;
-  margin: 8px auto;
   align-items: flex-start;
 }
 </style>

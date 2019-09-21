@@ -38,6 +38,8 @@
           this.showLogin = true;
         }
       });
+
+      this.version = `v${VERSION}`;
     },
 
     computed: {
@@ -66,21 +68,32 @@
         <router-view />
       </v-container>
     </v-content>
+
+    <v-footer class="app-footer">
+      <div>{{ version }}</div>
+      <div class="flex-grow-1"></div>
+      <div>&copy; 2019 Jordanssson</div>
+    </v-footer>
   </v-app>
 </template>
 
 <style>
-.v-navigation-drawer--mini-variant .v-navigation-drawer__append {
-  opacity: 0;
-}
+  .v-navigation-drawer--mini-variant .v-navigation-drawer__append {
+    opacity: 0;
+  }
 
-.v-navigation-drawer__append {
-  display: flex;
-  justify-content: center;
-}
+  .v-navigation-drawer__append {
+    display: flex;
+    justify-content: center;
+  }
 
-.container.fill-height.container-wrapper {
-  max-width: 1000px;
-  align-items: flex-start;
-}
+  .container.fill-height.container-wrapper {
+    max-width: 1000px;
+    align-items: flex-start;
+  }
+
+  .app-footer.v-footer {
+    margin-top: 24px;
+    font-size: 12px;
+  }
 </style>

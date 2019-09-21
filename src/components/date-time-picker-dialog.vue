@@ -85,20 +85,22 @@
   </v-dialog>
 </template>
 
-<style>
-  .date-time-picker_dialog {
-    width: auto;
+<style scoped>
+  .date-time-picker_dialog .v-card .v-card__text {
+    padding: 0 !important;
   }
 
-  .date-time-picker_dialog .v-card .v-card__text {
-    padding: 0;
+  .date-time-picker_dialog .v-card__actions {
+    padding-top: 0 !important;
+  }
+</style>
+
+<style>
+  .date-time-picker_dialog {
+    width: auto !important;
   }
 
   .date-time-picker_dialog .v-picker {
     box-shadow: none;
-  }
-
-  .date-time-picker_dialog .v-card__actions {
-    padding-top: 0;
   }
 </style>

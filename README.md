@@ -40,7 +40,7 @@ yarn run build
 1. Deploy
 
     ```
-    deploy
+    firebase deploy
     ```
 
 ### Run your tests

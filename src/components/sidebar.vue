@@ -98,6 +98,7 @@
 <style scoped>
   .v-navigation-drawer {
     overflow: visible;
+    position: fixed;
   }
 
   .v-navigation-drawer__append {

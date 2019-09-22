@@ -114,7 +114,23 @@ export default {
 
     birthDate() {
       if(this.animal.birthdate) {
-        return moment(this.animal.birthdate.toDate()).format('MM/DD/YYYY')
+        return moment(this.animal.birthdate.toDate())
+      } else {
+        return null
+      }
+    },
+
+    birthDateStr() {
+      if(this.birthDate) {
+        return this.birthDate.format('MM/DD/YYYY')
+      } else {
+        return null
+      }
+    },
+
+    age() {
+      if(this.birthDate) {
+        return `${this.today.from(this.birthDate, true)} old`
       } else {
         return null
       }
@@ -152,6 +168,13 @@ export default {
     goToAnimalDetails() {
       this.$router.push({
         name: 'event-listing',
+        params: { animal_id: this.animal.id },
+      })
+    },
+
+    editAnimal() {
+      this.$router.push({
+        name: 'edit-animal',
         params: { animal_id: this.animal.id },
       })
     },
@@ -218,8 +241,12 @@ export default {
           Species: {{ animal.species }}
         </li>
 
-        <li v-if="birthDate">
-          Birthdate: {{ birthDate }}
+        <li v-if="age">
+          {{ age }}
+        </li>
+
+        <li v-if="birthDateStr">
+          Birthdate: {{ birthDateStr }}
         </li>
 
         <li v-if="arrivalDate">
@@ -256,6 +283,7 @@ export default {
               icon
               color="#46cdff"
               v-on="on"
+              @click.prevent="editAnimal"
             >
               <v-icon>mdi-pencil</v-icon>
             </v-btn>

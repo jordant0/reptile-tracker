@@ -39,19 +39,25 @@ export default {
     submit() {
       this.submitting = true
       if(this.$refs.form.validate() && this.uuid) {
-        this.$firebase
+        let collection = this.$firebase
           .firestore()
           .collection('users')
           .doc(this.uuid)
           .collection('animals')
-          .add(this.animalData)
-          .then(() => {
-            this.submitting = false
-            this.$router.back()
-          })
+
+        let action = (this.animal && this.animal.id)
+          ? collection.doc(this.animal.id).update(this.animalData)
+          : collection.add(this.animalData)
+
+        action.then(() => this.submitDone())
       } else {
         this.submitting = false
       }
+    },
+
+    submitDone() {
+      this.submitting = false
+      this.$router.back()
     },
   },
 }

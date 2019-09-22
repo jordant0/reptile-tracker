@@ -1,154 +1,158 @@
 <script>
-  import moment from 'moment'
-  import { mapGetters } from 'vuex'
+import moment from 'moment'
+import { mapGetters } from 'vuex'
 
-  export default {
-    props: {
-      animal: {
-        type: Object,
-        required: true,
-      },
-    },
+export default {
+  props: {
+    animal: {
+      type: Object,
+      required: true
+    }
+  },
 
-    data() {
-      return {
-        lastFedEvent: null,
-        randomColor: `hsl(${360 * Math.random()},${25 + 70 * Math.random()}%, ${85 + 10 * Math.random()}%)`,
+  data () {
+    return {
+      lastFedEvent: null,
+      randomColor: `hsl(${360 * Math.random()},${25 + 70 * Math.random()}%, ${85 + 10 * Math.random()}%)`
+    }
+  },
+
+  watch: {
+    'animal.id': {
+      immediate: true,
+      handler () {
+        this.setupBinging()
       }
     },
 
-    watch: {
-      'animal.id': {
-        immediate: true,
-        handler() {
-          this.setupBinging();
-        },
-      },
+    uuid: {
+      immediate: true,
+      handler () {
+        this.setupBinging()
+      }
+    }
+  },
 
-      uuid: {
-        immediate: true,
-        handler() {
-          this.setupBinging();
-        },
-      },
+  computed: {
+    ...mapGetters([
+      'uuid'
+    ]),
+
+    lastFed () {
+      if (!(this.lastFedEvent && this.lastFedEvent.length)) {
+        return null
+      }
+
+      return moment(this.lastFedEvent[0].timestamp.toDate())
     },
 
-    computed: {
-      ...mapGetters([
-        'uuid',
-      ]),
-
-      lastFed() {
-        if(!(this.lastFedEvent && this.lastFedEvent.length)) {
-          return null;
-        }
-
-        return moment(this.lastFedEvent[0].timestamp.toDate());
-      },
-
-      lastFedDate() {
-        if(this.lastFed) {
-          return this.lastFed.format('M/D h:mm a');
-        } else {
-          return null;
-        }
-      },
-
-      lastFedFromNow() {
-        if(this.lastFed) {
-          return this.lastFed.fromNow();
-        } else {
-          return null;
-        }
-      },
-
-      nextFeed() {
-        if(this.lastFed && this.animal.feedingDuration) {
-          return moment(this.lastFed).add(this.animal.feedingDuration, 'd').startOf('day');
-        }
-        return null;
-      },
-
-      today() {
-        return moment().startOf('day');
-      },
-
-      nextFeedingFromNow() {
-        if(this.nextFeed) {
-          return this.nextFeed.from(this.today);
-        }
-        return null;
-      },
-
-      nextFeedToday() {
-        return this.nextFeed.year() === this.today.year() && this.nextFeed.dayOfYear() === this.today.dayOfYear();
-      },
-
-      feedingConfig() {
-        if(this.nextFeedToday) {
-          return { color: '#27C72F', text: 'today!' }
-        } else {
-          let config = {
-            color: '#4CD3FE',
-            text: this.nextFeedingFromNow,
-          }
-
-          if(this.nextFeedingFromNow.includes('ago')) {
-            config.color = '#FF0000';
-          }
-
-          if(this.nextFeedingFromNow === 'a day ago') {
-            config.text = 'yesterday';
-          } else if(this.nextFeedingFromNow === 'in a day') {
-            config.text = 'tomorrow';
-            config.color = '#E4D125';
-          }
-
-          return config;
-        }
-      },
-
-      birthDate() {
-        if(this.animal.birthdate) {
-          return moment(this.animal.birthdate.toDate()).format('MM/DD/YYYY');
-        }
-      },
-
-      arrivalDate() {
-        if(this.animal.arrival) {
-          return moment(this.animal.arrival.toDate()).format('MM/DD/YYYY');
-        }
-      },
+    lastFedDate () {
+      if (this.lastFed) {
+        return this.lastFed.format('M/D h:mm a')
+      } else {
+        return null
+      }
     },
 
-    methods: {
-      setupBinging() {
-        if(!this.bindingSetup && this.uuid && this.animal.id) {
-          this.bindingSetup = true;
-          this.$bind(
-            'lastFedEvent',
-            this.$firebase
-              .firestore()
-              .collection('users')
-              .doc(this.uuid)
-              .collection('animals')
-              .doc(this.animal.id)
-              .collection('events')
-              .where("type", "==", "Feeding")
-              .orderBy("timestamp", "desc")
-              .limit(1)
-          );
-        }
-      },
-
-      goToAnimalDetails() {
-        this.$router.push({
-          name: 'event-listing',
-          params: { animal_id: this.animal.id },
-        });
-      },
+    lastFedFromNow () {
+      if (this.lastFed) {
+        return this.lastFed.fromNow()
+      } else {
+        return null
+      }
     },
+
+    nextFeed () {
+      if (this.lastFed && this.animal.feedingDuration) {
+        return moment(this.lastFed).add(this.animal.feedingDuration, 'd').startOf('day')
+      }
+      return null
+    },
+
+    today () {
+      return moment().startOf('day')
+    },
+
+    nextFeedingFromNow () {
+      if (this.nextFeed) {
+        return this.nextFeed.from(this.today)
+      }
+      return null
+    },
+
+    nextFeedToday () {
+      return this.nextFeed.year() === this.today.year() && this.nextFeed.dayOfYear() === this.today.dayOfYear()
+    },
+
+    feedingConfig () {
+      if (this.nextFeedToday) {
+        return { color: '#27C72F', text: 'today!' }
+      } else {
+        let config = {
+          color: '#4CD3FE',
+          text: this.nextFeedingFromNow
+        }
+
+        if (this.nextFeedingFromNow.includes('ago')) {
+          config.color = '#FF0000'
+        }
+
+        if (this.nextFeedingFromNow === 'a day ago') {
+          config.text = 'yesterday'
+        } else if (this.nextFeedingFromNow === 'in a day') {
+          config.text = 'tomorrow'
+          config.color = '#E4D125'
+        }
+
+        return config
+      }
+    },
+
+    birthDate () {
+      if (this.animal.birthdate) {
+        return moment(this.animal.birthdate.toDate()).format('MM/DD/YYYY')
+      } else {
+        return null
+      }
+    },
+
+    arrivalDate () {
+      if (this.animal.arrival) {
+        return moment(this.animal.arrival.toDate()).format('MM/DD/YYYY')
+      } else {
+        return null
+      }
+    }
+  },
+
+  methods: {
+    setupBinging () {
+      if (!this.bindingSetup && this.uuid && this.animal.id) {
+        this.bindingSetup = true
+        this.$bind(
+          'lastFedEvent',
+          this.$firebase
+            .firestore()
+            .collection('users')
+            .doc(this.uuid)
+            .collection('animals')
+            .doc(this.animal.id)
+            .collection('events')
+            .where('type', '==', 'Feeding')
+            .orderBy('timestamp', 'desc')
+            .limit(1)
+        )
+      }
+    },
+
+    goToAnimalDetails () {
+      this.$router.push({
+        name: 'event-listing',
+        params: { animal_id: this.animal.id }
+      })
+    }
   }
+}
 </script>
 
 <template>

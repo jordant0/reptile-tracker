@@ -1,90 +1,90 @@
 <script>
-  import DateTimePickerDialog from '@/components/date-time-picker-dialog'
-  import moment from 'moment'
+import DateTimePickerDialog from '@/components/date-time-picker-dialog'
+import moment from 'moment'
 
-  export default {
-    components: {
-      DateTimePickerDialog
+export default {
+  components: {
+    DateTimePickerDialog
+  },
+
+  props: {
+    label: {
+      type: String,
+      default: null
     },
 
-    props: {
-      label: {
-        type: String,
-        default: null,
-      },
-
-      hint: {
-        type: String,
-        default: null,
-      },
-
-      value: {
-        type: Date,
-        default: null,
-      },
-
-      excludeTime: {
-        type: Boolean,
-        default: false,
-      }
+    hint: {
+      type: String,
+      default: null
     },
 
-    data() {
-      return {
-        dateModalOpen: false,
-        timeModalOpen: false,
-      }
+    value: {
+      type: Date,
+      default: null
     },
 
-    computed: {
-      parsedDate() {
-        return moment(this.value);
-      },
+    excludeTime: {
+      type: Boolean,
+      default: false
+    }
+  },
 
-      dateString() {
-        return this.parsedDate.format('MM/DD/YYYY');
-      },
+  data () {
+    return {
+      dateModalOpen: false,
+      timeModalOpen: false
+    }
+  },
 
-      timeString() {
-        return this.parsedDate.format('LT');
-      },
-
-      dateForPicker() {
-        return this.parsedDate.format('YYYY-MM-DD');
-      },
-
-      timeForPicker() {
-        return this.parsedDate.format('HH:mm');
-      },
+  computed: {
+    parsedDate () {
+      return moment(this.value)
     },
 
-    methods: {
-      updateDate(newDateStr) {
-        let newDate = moment(newDateStr, 'YYYY-MM-DD'),
-            currentDate = moment(this.value);
-
-        this.dateModalOpen = false;
-
-        newDate.hour(currentDate.hour());
-        newDate.minute(currentDate.minute());
-
-        this.$emit('input', newDate.toDate());
-      },
-
-      updateTime(newTimeStr) {
-        let newDate = moment(newTimeStr, 'HH:mm'),
-            currentDate = moment(this.value);
-
-        this.timeModalOpen = false;
-
-        newDate.date(currentDate.date());
-        newDate.month(currentDate.month());
-        newDate.year(currentDate.year());
-
-        this.$emit('input', newDate.toDate());
-      },
+    dateString () {
+      return this.parsedDate.format('MM/DD/YYYY')
     },
-  };
+
+    timeString () {
+      return this.parsedDate.format('LT')
+    },
+
+    dateForPicker () {
+      return this.parsedDate.format('YYYY-MM-DD')
+    },
+
+    timeForPicker () {
+      return this.parsedDate.format('HH:mm')
+    }
+  },
+
+  methods: {
+    updateDate (newDateStr) {
+      let newDate = moment(newDateStr, 'YYYY-MM-DD')
+      let currentDate = moment(this.value)
+
+      this.dateModalOpen = false
+
+      newDate.hour(currentDate.hour())
+      newDate.minute(currentDate.minute())
+
+      this.$emit('input', newDate.toDate())
+    },
+
+    updateTime (newTimeStr) {
+      let newDate = moment(newTimeStr, 'HH:mm')
+      let currentDate = moment(this.value)
+
+      this.timeModalOpen = false
+
+      newDate.date(currentDate.date())
+      newDate.month(currentDate.month())
+      newDate.year(currentDate.year())
+
+      this.$emit('input', newDate.toDate())
+    }
+  }
+}
 </script>
 
 <template>

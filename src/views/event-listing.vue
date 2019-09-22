@@ -1,107 +1,107 @@
 <script>
-  import Loading from '@/components/loading'
-  import Empty from '@/components/empty'
-  import EventCard from '@/components/event-card'
-  import { mapGetters } from 'vuex'
-  import eventTypeData from '@/data/event-type'
+import Loading from '@/components/loading'
+import Empty from '@/components/empty'
+import EventCard from '@/components/event-card'
+import { mapGetters } from 'vuex'
+import eventTypeData from '@/data/event-type'
 
-  export default {
-    components: {
-      EventCard,
-      Loading,
-      Empty,
-    },
+export default {
+  components: {
+    EventCard,
+    Loading,
+    Empty
+  },
 
-    data() {
-      return {
-        loading: true,
-        animalId: this.$route.params.animal_id,
-        animal: null,
-        eventsList: [],
-        addMenu: false,
+  data () {
+    return {
+      loading: true,
+      animalId: this.$route.params.animal_id,
+      animal: null,
+      eventsList: [],
+      addMenu: false
+    }
+  },
+
+  created () {
+    this.typesData = eventTypeData
+  },
+
+  watch: {
+    '$route': {
+      immediate: true,
+      handler () {
+        this.animalId = this.$route.params.animal_id
       }
     },
 
-    created() {
-      this.typesData = eventTypeData;
+    animalId: {
+      immediate: true,
+      handler () {
+        this.setupBinging()
+      }
     },
 
-    watch: {
-      '$route': {
-        immediate: true,
-        handler() {
-          this.animalId = this.$route.params.animal_id;
-        },
-      },
+    uuid: {
+      immediate: true,
+      handler () {
+        this.setupBinging()
+      }
+    }
+  },
 
-      animalId: {
-        immediate: true,
-        handler() {
-          this.setupBinging();
-        }
-      },
+  computed: {
+    ...mapGetters([
+      'uuid'
+    ]),
 
-      uuid: {
-        immediate: true,
-        handler() {
-          this.setupBinging();
-        },
-      },
+    animalName () {
+      if (this.animal) {
+        return this.animal.name
+      } else {
+        return ''
+      }
+    }
+  },
+
+  methods: {
+    setupBinging () {
+      if (!this.bindingSetup && this.uuid && this.animalId) {
+        this.bindingSetup = true
+        this.$bind(
+          'animal',
+          this.$firebase
+            .firestore()
+            .collection('users')
+            .doc(this.uuid)
+            .collection('animals')
+            .doc(this.animalId)
+        )
+
+        this.$bind(
+          'eventsList',
+          this.$firebase
+            .firestore()
+            .collection('users')
+            .doc(this.uuid)
+            .collection('animals')
+            .doc(this.animalId)
+            .collection('events')
+            .orderBy('timestamp', 'desc')
+        ).then(() => {
+          this.loading = false
+        })
+      }
     },
 
-    computed: {
-      ...mapGetters([
-        'uuid',
-      ]),
-
-      animalName() {
-        if(this.animal) {
-          return this.animal.name;
-        } else {
-          return '';
-        }
-      },
-    },
-
-    methods: {
-      setupBinging() {
-        if(!this.bindingSetup && this.uuid && this.animalId) {
-          this.bindingSetup = true;
-          this.$bind(
-            'animal',
-            this.$firebase
-              .firestore()
-              .collection('users')
-              .doc(this.uuid)
-              .collection('animals')
-              .doc(this.animalId)
-          );
-
-          this.$bind(
-            'eventsList',
-            this.$firebase
-              .firestore()
-              .collection('users')
-              .doc(this.uuid)
-              .collection('animals')
-              .doc(this.animalId)
-              .collection('events')
-              .orderBy('timestamp', 'desc')
-          ).then(() => {
-            this.loading = false;
-          });
-        }
-      },
-
-      addEvent(eventType) {
-        this.$router.push({
-          name: 'add-event',
-          params: { animal_id: this.animalId },
-          query: { event_type: eventType },
-        });
-      },
-    },
-  };
+    addEvent (eventType) {
+      this.$router.push({
+        name: 'add-event',
+        params: { animal_id: this.animalId },
+        query: { event_type: eventType }
+      })
+    }
+  }
+}
 </script>
 
 <template>

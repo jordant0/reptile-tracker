@@ -8,7 +8,7 @@ module.exports = {
       new webpack.DefinePlugin({
         'VERSION': JSON.stringify(gitRevisionPlugin.version()),
         'COMMITHASH': JSON.stringify(gitRevisionPlugin.commithash()),
-        'BRANCH': JSON.stringify(gitRevisionPlugin.branch()),
+        'BRANCH': JSON.stringify(gitRevisionPlugin.branch())
       })
     ]
   }

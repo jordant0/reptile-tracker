@@ -1,40 +1,40 @@
 <script>
-  import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 
-  export default {
-    props: {
-      open: {
-        type: Boolean,
-        default: false,
-      }
+export default {
+  props: {
+    open: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  computed: {
+    ...mapState([
+      'darkTheme',
+      'user'
+    ])
+  },
+
+  methods: {
+    goHome () {
+      this.$router.push('/')
     },
 
-    computed: {
-      ...mapState([
-        'darkTheme',
-        'user',
-      ])
+    logOut () {
+      this.$emit('update:open', false)
+      this.$firebase.auth().signOut().then(() => {
+        this.$router.push('/')
+      }, function (error) {
+        console.log(error)
+      })
     },
 
-    methods: {
-      goHome() {
-        this.$router.push('/');
-      },
-
-      logOut() {
-        this.$emit("update:open", false);
-        this.$firebase.auth().signOut().then(() => {
-          this.$router.push('/');
-        }, function(error) {
-          console.log(error);
-        });
-      },
-
-      toggleDarkMode(value) {
-        this.$store.commit('updateDarkTheme', value);
-      }
-    },
+    toggleDarkMode (value) {
+      this.$store.commit('updateDarkTheme', value)
+    }
   }
+}
 </script>
 
 <template>

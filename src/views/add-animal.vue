@@ -1,11 +1,11 @@
 <script>
-  import AnimalForm from '@/components/animal-form'
+import AnimalForm from '@/components/animal-form'
 
-  export default {
-    components: {
-      AnimalForm,
-    },
-  };
+export default {
+  components: {
+    AnimalForm
+  }
+}
 </script>
 
 <template>

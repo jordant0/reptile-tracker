@@ -1,60 +1,60 @@
 <script>
-  import DateTimeInput from '@/components/date-time-input'
-  import { mapGetters } from 'vuex'
+import DateTimeInput from '@/components/date-time-input'
+import { mapGetters } from 'vuex'
 
-  export default {
-    components: {
-      DateTimeInput,
-    },
+export default {
+  components: {
+    DateTimeInput
+  },
 
-    props: {
-      animal: {
-        type: Object,
-        default() {
-          return {};
-        },
+  props: {
+    animal: {
+      type: Object,
+      default () {
+        return {}
       }
-    },
+    }
+  },
 
-    data() {
-      return {
-        submitting: false,
-        animalData: {
-          name: this.animal.name || '',
-          species: this.animal.species || '',
-          feedingDuration: this.animal.feedingDuration || null,
-          birthdate: this.animal.birthdate ? this.animal.birthdate.toDate() : new Date(),
-          arrival: this.animal.arrival ? this.animal.arrival.toDate() : new Date(),
-        }
+  data () {
+    return {
+      submitting: false,
+      animalData: {
+        name: this.animal.name || '',
+        species: this.animal.species || '',
+        feedingDuration: this.animal.feedingDuration || null,
+        birthdate: this.animal.birthdate ? this.animal.birthdate.toDate() : new Date(),
+        arrival: this.animal.arrival ? this.animal.arrival.toDate() : new Date()
       }
-    },
+    }
+  },
 
-    computed: {
-      ...mapGetters([
-        'uuid',
-      ]),
-    },
+  computed: {
+    ...mapGetters([
+      'uuid'
+    ])
+  },
 
-    methods: {
-      submit() {
-        this.submitting = true;
-        if(this.$refs.form.validate() && this.uuid) {
-          this.$firebase
-            .firestore()
-            .collection('users')
-            .doc(this.uuid)
-            .collection('animals')
-            .add(this.animalData)
-            .then(() => {
-              this.submitting = false;
-              this.$router.back();
-            });
-        } else {
-          this.submitting = false;
-        }
-      },
-    },
-  };
+  methods: {
+    submit () {
+      this.submitting = true
+      if (this.$refs.form.validate() && this.uuid) {
+        this.$firebase
+          .firestore()
+          .collection('users')
+          .doc(this.uuid)
+          .collection('animals')
+          .add(this.animalData)
+          .then(() => {
+            this.submitting = false
+            this.$router.back()
+          })
+      } else {
+        this.submitting = false
+      }
+    }
+  }
+}
 </script>
 
 <template>

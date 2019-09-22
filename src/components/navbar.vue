@@ -1,11 +1,11 @@
 <script>
-  export default {
-    methods: {
-      toggleDrawer() {
-        this.$emit('toggle-drawer')
-      },
-    },
+export default {
+  methods: {
+    toggleDrawer () {
+      this.$emit('toggle-drawer')
+    }
   }
+}
 </script>
 
 <template>

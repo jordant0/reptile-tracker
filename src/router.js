@@ -30,6 +30,6 @@ export default new Router({
       component: () => import('./views/add-event.vue'),
       props: (route) => ({ eventType: route.query.event_type }),
       meta: { title: 'New Event' }
-    },
+    }
   ]
 })

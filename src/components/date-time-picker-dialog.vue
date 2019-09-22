@@ -1,45 +1,45 @@
 <script>
-  export default {
-    props: {
-      open: {
-        type: Boolean,
-        default: false,
-      },
-
-      value: {
-        type: String,
-        default: null,
-      },
-
-      type: {
-        type: String,
-        default: 'date',
-      },
+export default {
+  props: {
+    open: {
+      type: Boolean,
+      default: false
     },
 
-    watch: {
-      open() {
-        this.selectedValue = this.value;
-      },
+    value: {
+      type: String,
+      default: null
     },
 
-    data() {
-      return {
-        selectedValue: this.value,
-      }
+    type: {
+      type: String,
+      default: 'date'
+    }
+  },
+
+  watch: {
+    open () {
+      this.selectedValue = this.value
+    }
+  },
+
+  data () {
+    return {
+      selectedValue: this.value
+    }
+  },
+
+  methods: {
+    save () {
+      this.$emit('input', this.selectedValue)
+      this.close()
     },
 
-    methods: {
-      save() {
-        this.$emit('input', this.selectedValue);
-        this.close();
-      },
-
-      close() {
-        this.$emit('update:open', false);
-      },
-    },
-  };
+    close () {
+      this.$emit('update:open', false)
+    }
+  }
+}
 </script>
 
 <template>

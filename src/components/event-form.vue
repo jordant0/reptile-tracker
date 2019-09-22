@@ -1,88 +1,88 @@
 <script>
-  import DateTimeInput from '@/components/date-time-input'
-  import { mapGetters } from 'vuex'
+import DateTimeInput from '@/components/date-time-input'
+import { mapGetters } from 'vuex'
 
-  export default {
-    components: {
-      DateTimeInput,
+export default {
+  components: {
+    DateTimeInput
+  },
+
+  props: {
+    animalId: {
+      type: String,
+      default: null
     },
 
-    props: {
-      animalId: {
-        type: String,
-        default: null,
-      },
+    eventType: {
+      type: String,
+      default: 'Other'
+    },
 
-      eventType: {
-        type: String,
-        default: 'Other',
-      },
-
-      currentEvent: {
-        type: Object,
-        default() {
-          return {};
-        },
+    currentEvent: {
+      type: Object,
+      default () {
+        return {}
       }
-    },
+    }
+  },
 
-    data() {
-      return {
-        submitting: false,
-        eventData: {
-          type: this.currentEvent.type || this.eventType,
-          timestamp: this.currentEvent.timestamp ? this.currentEvent.timestamp.toDate() : new Date(),
-          value: this.currentEvent.value || '',
-          notes: this.currentEvent.notes || '',
-        },
+  data () {
+    return {
+      submitting: false,
+      eventData: {
+        type: this.currentEvent.type || this.eventType,
+        timestamp: this.currentEvent.timestamp ? this.currentEvent.timestamp.toDate() : new Date(),
+        value: this.currentEvent.value || '',
+        notes: this.currentEvent.notes || ''
       }
-    },
+    }
+  },
 
-    computed: {
-      ...mapGetters([
-        'uuid',
-      ]),
+  computed: {
+    ...mapGetters([
+      'uuid'
+    ]),
 
-      valueField() {
-        switch(this.eventData.type) {
-          case 'Handling':
-            return {
-              label: 'Duration',
-              hint: 'Duration of handling session (in minutes)'
-            }
-          case 'Weight':
-            return {
-              label: 'Weight',
-              hint: 'Weight of the animal (in grams)'
-            }
-          default:
-            return null
-        }
-      },
-    },
+    valueField () {
+      switch (this.eventData.type) {
+        case 'Handling':
+          return {
+            label: 'Duration',
+            hint: 'Duration of handling session (in minutes)'
+          }
+        case 'Weight':
+          return {
+            label: 'Weight',
+            hint: 'Weight of the animal (in grams)'
+          }
+        default:
+          return null
+      }
+    }
+  },
 
-    methods: {
-      submit() {
-        this.submitting = true;
-        if(this.$refs.form.validate() && this.uuid && this.animalId) {
-          this.$firebase
-            .firestore()
-            .collection('users')
-            .doc(this.uuid)
-            .collection('animals')
-            .doc(this.animalId)
-            .collection('events')
-            .add(this.eventData)
-            .then(() => {
-              this.submitting = false;
-              this.$router.back();
-            });
-        } else {
-          this.submitting = false;
-        }
-      },
-    },
-  };
+  methods: {
+    submit () {
+      this.submitting = true
+      if (this.$refs.form.validate() && this.uuid && this.animalId) {
+        this.$firebase
+          .firestore()
+          .collection('users')
+          .doc(this.uuid)
+          .collection('animals')
+          .doc(this.animalId)
+          .collection('events')
+          .add(this.eventData)
+          .then(() => {
+            this.submitting = false
+            this.$router.back()
+          })
+      } else {
+        this.submitting = false
+      }
+    }
+  }
+}
 </script>
 
 <template>

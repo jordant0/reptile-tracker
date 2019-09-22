@@ -1,79 +1,79 @@
 <script>
-  import eventTypeData from '@/data/event-type'
-  import moment from 'moment'
+import eventTypeData from '@/data/event-type'
+import moment from 'moment'
 
-  export default {
-    props: {
-      animal: {
-        type: Object,
-        default() {
-          return {};
-        },
-      },
-
-      currentEvent: {
-        type: Object,
-        required: true,
-      },
+export default {
+  props: {
+    animal: {
+      type: Object,
+      default () {
+        return {}
+      }
     },
 
-    created() {
-      this.typesConfig = eventTypeData.config;
+    currentEvent: {
+      type: Object,
+      required: true
+    }
+  },
+
+  created () {
+    this.typesConfig = eventTypeData.config
+  },
+
+  computed: {
+    animalName () {
+      if (this.animal) {
+        return this.animal.name
+      } else {
+        return ''
+      }
     },
 
-    computed: {
-      animalName() {
-        if(this.animal) {
-          return this.animal.name;
-        } else {
-          return '';
-        }
-      },
+    eventIcon () {
+      let configVal = this.typesConfig[this.currentEvent.type]
 
-      eventIcon() {
-        let configVal = this.typesConfig[this.currentEvent.type];
-
-        return configVal || this.typesConfig.Other;
-      },
-
-      processedTimeStamp() {
-        return moment(this.currentEvent.timestamp.toDate());
-      },
-
-      fullTimestamp() {
-        return this.processedTimeStamp.format("ddd M/D/YY @ h:mm a");
-      },
-
-      timeFromNow() {
-        return this.processedTimeStamp.fromNow();
-      },
-
-      dateStr() {
-        return this.processedTimeStamp.format("M/D/YY");
-      },
-
-      timeStr() {
-        return this.processedTimeStamp.format("h:mm a");
-      },
-
-      eventDetails() {
-        switch(this.currentEvent.type) {
-          case 'Feeding':
-            return `Fed ${this.animalName} ${this.currentEvent.notes}`
-          case 'Handling':
-            return `Handled ${this.animalName} for ${this.currentEvent.value} minutes`
-          case 'Weight':
-            return `Weighed ${this.animalName}: ${this.currentEvent.value}g`
-          case 'Shedding':
-            return `${this.animalName} shed`
-          case 'Maintenance':
-            return `Maintenance for ${this.animalName}`
-          default:
-            return `${this.animalName}`
-        }
-      },
+      return configVal || this.typesConfig.Other
     },
+
+    processedTimeStamp () {
+      return moment(this.currentEvent.timestamp.toDate())
+    },
+
+    fullTimestamp () {
+      return this.processedTimeStamp.format('ddd M/D/YY @ h:mm a')
+    },
+
+    timeFromNow () {
+      return this.processedTimeStamp.fromNow()
+    },
+
+    dateStr () {
+      return this.processedTimeStamp.format('M/D/YY')
+    },
+
+    timeStr () {
+      return this.processedTimeStamp.format('h:mm a')
+    },
+
+    eventDetails () {
+      switch (this.currentEvent.type) {
+        case 'Feeding':
+          return `Fed ${this.animalName} ${this.currentEvent.notes}`
+        case 'Handling':
+          return `Handled ${this.animalName} for ${this.currentEvent.value} minutes`
+        case 'Weight':
+          return `Weighed ${this.animalName}: ${this.currentEvent.value}g`
+        case 'Shedding':
+          return `${this.animalName} shed`
+        case 'Maintenance':
+          return `Maintenance for ${this.animalName}`
+        default:
+          return `${this.animalName}`
+      }
+    }
   }
+}
 </script>
 
 <template>

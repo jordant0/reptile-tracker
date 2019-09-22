@@ -1,29 +1,29 @@
 <script>
-  export default {
-    props: {
-      shown: {
-        type: Boolean,
-        default: false,
-      }
-    },
+export default {
+  props: {
+    shown: {
+      type: Boolean,
+      default: false
+    }
+  },
 
-    data() {
-      return {
-        email: '',
-        password: '',
-      }
-    },
+  data () {
+    return {
+      email: '',
+      password: ''
+    }
+  },
 
-    methods: {
-      login() {
-        this.$firebase.auth()
-          .signInWithEmailAndPassword(this.email, this.password)
-          .catch(function(error) {
-            debugger;
-          });
-      },
-    },
+  methods: {
+    login () {
+      this.$firebase.auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .catch(function (error) {
+          console.log(`Log in failed: ${error}`)
+        })
+    }
   }
+}
 </script>
 
 <template>

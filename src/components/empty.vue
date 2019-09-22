@@ -1,12 +1,12 @@
 <script>
-  export default {
-    props: {
-      noun: {
-        type: String,
-        default: 'item',
-      },
-    },
+export default {
+  props: {
+    noun: {
+      type: String,
+      default: 'item'
+    }
   }
+}
 </script>
 
 <template>

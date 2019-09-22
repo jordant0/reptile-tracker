@@ -1,53 +1,53 @@
 <script>
-  import Navbar from '@/components/navbar'
-  import Sidebar from '@/components/sidebar'
-  import Login from '@/components/login'
-  import { mapState } from 'vuex'
+import Navbar from '@/components/navbar'
+import Sidebar from '@/components/sidebar'
+import Login from '@/components/login'
+import { mapState } from 'vuex'
 
-  export default {
-    components: {
-      Navbar,
-      Sidebar,
-      Login,
-    },
+export default {
+  components: {
+    Navbar,
+    Sidebar,
+    Login
+  },
 
-    props: {
-      source: String,
-    },
+  props: {
+    source: String
+  },
 
-    watch: {
-      darkTheme(value) {
-        this.$vuetify.theme.dark = value;
-      },
-    },
-
-    data() {
-      return {
-        drawerOpen: false,
-        showLogin: false,
-      }
-    },
-
-    created() {
-      this.$firebase.auth().onAuthStateChanged((user) => {
-        if(user) {
-          this.$store.commit('updateUser', user);
-          this.showLogin = false;
-        } else {
-          this.$store.commit('updateUser', {});
-          this.showLogin = true;
-        }
-      });
-
-      this.version = `v${VERSION}`;
-    },
-
-    computed: {
-      ...mapState([
-        'darkTheme',
-      ])
+  watch: {
+    darkTheme (value) {
+      this.$vuetify.theme.dark = value
     }
+  },
+
+  data () {
+    return {
+      drawerOpen: false,
+      showLogin: false
+    }
+  },
+
+  created () {
+    this.$firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.$store.commit('updateUser', user)
+        this.showLogin = false
+      } else {
+        this.$store.commit('updateUser', {})
+        this.showLogin = true
+      }
+    })
+
+    this.version = `v${VERSION}`
+  },
+
+  computed: {
+    ...mapState([
+      'darkTheme'
+    ])
   }
+}
 </script>
 
 <template>

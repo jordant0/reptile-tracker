@@ -5,32 +5,32 @@ export default {
     'Weight',
     'Shedding',
     'Maintenance',
-    'Other',
+    'Other'
   ],
   config: {
     'Feeding': {
       color: '#2ab058',
-      icon: 'mdi-silverware-fork-knife',
+      icon: 'mdi-silverware-fork-knife'
     },
     'Handling': {
       color: '#f072f2',
-      icon: 'mdi-hand-heart',
+      icon: 'mdi-hand-heart'
     },
     'Weight': {
       color: '#f44e4e',
-      icon: 'mdi-weight-gram',
+      icon: 'mdi-weight-gram'
     },
     'Shedding': {
       color: '#ddd61d',
-      icon: 'mdi-creation',
+      icon: 'mdi-creation'
     },
     'Maintenance': {
       color: '#bb91ff',
-      icon: 'mdi-tools',
+      icon: 'mdi-tools'
     },
     'Other': {
       color: '#7dd8ff',
-      icon: 'mdi-information',
-    },
+      icon: 'mdi-information'
+    }
   }
 }

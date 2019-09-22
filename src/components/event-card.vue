@@ -28,17 +28,35 @@
       eventIcon() {
         switch(this.currentEvent.type) {
           case 'Feeding':
-            return 'mdi-silverware-fork-knife';
+            return {
+              color: '#2ab058',
+              icon: 'mdi-silverware-fork-knife',
+            };
           case 'Handling':
-            return 'mdi-hand-heart';
+            return {
+              color: '#f072f2',
+              icon: 'mdi-hand-heart',
+            };
           case 'Weight':
-            return 'mdi-weight-gram';
+            return {
+              color: '#f44e4e',
+              icon: 'mdi-weight-gram'
+            };
           case 'Shedding':
-            return 'mdi-creation';
+            return {
+              color: '#c9c20b',
+              icon: 'mdi-creation'
+            };
           case 'Maintenance':
-            return 'mdi-tools';
+            return {
+              color: '#bb91ff',
+              icon: 'mdi-tools'
+            };
           default:
-            return 'mdi-information';
+            return {
+              color: '#7dd8ff',
+              icon: 'mdi-information',
+            };
         }
       },
 
@@ -86,8 +104,12 @@
   <v-expansion-panel>
     <v-expansion-panel-header>
       <div class="event-info_wrapper">
-        <v-icon class="event-icon" size="20px">
-          {{ eventIcon }}
+        <v-icon
+          class="event-icon"
+          size="20px"
+          :color="eventIcon.color"
+        >
+          {{ eventIcon.icon }}
         </v-icon>
 
         <div class="event-info">

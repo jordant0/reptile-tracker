@@ -34,7 +34,10 @@
   <v-card class="container-card">
     <v-card-title>Add {{ eventType }} Event</v-card-title>
     <v-card-text>
-      <event-form :initial-type="eventType" />
+      <event-form
+        :animal-id="animalId"
+        :event-type="eventType"
+      />
     </v-card-text>
   </v-card>
 </template>

@@ -66,7 +66,7 @@
         <v-btn
           text
           color="#999999"
-          @click="$emit('update:open', close)"
+          @click="$emit('update:open', false)"
         >
           Cancel
         </v-btn>

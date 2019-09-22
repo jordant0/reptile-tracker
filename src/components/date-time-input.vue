@@ -23,9 +23,9 @@
         default: null,
       },
 
-      includeTime: {
+      excludeTime: {
         type: Boolean,
-        default: true,
+        default: false,
       }
     },
 
@@ -107,7 +107,7 @@
         </v-btn>
 
         <v-btn
-          v-if="includeTime"
+          v-if="!excludeTime"
           text
           @click.prevent="timeModalOpen = true"
         >

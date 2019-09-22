@@ -55,9 +55,9 @@
 <template>
   <div class="animal-listing container-wrapper">
     <loading v-if="loading" />
-    <empty v-else-if="!animalsList.length" noun="animal" />
     <template v-else>
-      <v-expansion-panels>
+      <empty v-if="!animalsList.length" noun="animal" />
+      <v-expansion-panels v-else>
         <animal-card
           v-for="animal in animalsList"
           :key="animal.id"

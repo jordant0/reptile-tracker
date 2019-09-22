@@ -107,13 +107,13 @@
 <template>
   <div class="event-listing container-wrapper">
     <loading v-if="loading" />
-    <empty v-else-if="!eventsList.length" noun="event" />
     <template v-else>
       <div class="event-listing_header">
         Events for {{ animalName }}
       </div>
 
-      <v-expansion-panels>
+      <empty v-if="!eventsList.length" noun="event" />
+      <v-expansion-panels v-else>
         <event-card
           v-for="currentEvent in eventsList"
           :key="currentEvent.id"

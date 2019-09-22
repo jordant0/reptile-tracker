@@ -21,22 +21,15 @@
       'animal.id': {
         immediate: true,
         handler() {
-          if(this.uuid && this.animal.id) {
-            this.$bind(
-              'lastFedEvent',
-              this.$firebase
-                .firestore()
-                .collection('users')
-                .doc(this.uuid)
-                .collection('animals')
-                .doc(this.animal.id)
-                .collection('events')
-                .where("type", "==", "Feeding")
-                .orderBy("timestamp", "desc")
-                .limit(1)
-            )
-          }
-        }
+          this.setupBinging();
+        },
+      },
+
+      uuid: {
+        immediate: true,
+        handler() {
+          this.setupBinging();
+        },
       },
     },
 
@@ -121,8 +114,30 @@
     },
 
     methods: {
+      setupBinging() {
+        if(!this.bindingSetup && this.uuid && this.animal.id) {
+          this.bindingSetup = true;
+          this.$bind(
+            'lastFedEvent',
+            this.$firebase
+              .firestore()
+              .collection('users')
+              .doc(this.uuid)
+              .collection('animals')
+              .doc(this.animal.id)
+              .collection('events')
+              .where("type", "==", "Feeding")
+              .orderBy("timestamp", "desc")
+              .limit(1)
+          );
+        }
+      },
+
       goToAnimalDetails() {
-        debugger;
+        this.$router.push({
+          name: 'event-listing',
+          params: { animal_id: this.animal.id },
+        });
       },
     },
   }
@@ -195,15 +210,15 @@
   .v-expansion-panel-header {
     padding: 0;
   }
+
+  .v-expansion-panel-content {
+    margin-left: 100px;
+  }
 </style>
 
 <style>
   .animal-header {
     padding: 16px 24px 16px 124px;
-  }
-
-  .v-expansion-panel-content {
-    margin-left: 100px;
   }
 
   .animal-image {

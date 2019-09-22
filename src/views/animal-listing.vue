@@ -47,7 +47,7 @@
 
 <template>
   <div class="animal-listing">
-    <v-expansion-panels popout>
+    <v-expansion-panels>
       <animal-card
         v-for="animal in animalsList"
         :key="animal.id"

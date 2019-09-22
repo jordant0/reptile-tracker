@@ -28,7 +28,7 @@
 </script>
 
 <template>
-  <v-form class="animal-form">
+  <v-form class="animal-form general-form">
     <v-text-field
       v-model="name"
       label="Name"
@@ -67,10 +67,10 @@
       <v-btn
         text
         color="#999999"
+        @click.prevent="$router.back()"
       >
         Cancel
       </v-btn>
-
 
       <div class="flex-grow-1" />
 
@@ -82,15 +82,3 @@
     </div>
   </v-form>
 </template>
-
-<style scoped>
-  .animal-form {
-    max-width: 800px;
-    margin: auto;
-  }
-
-  .form-actions {
-    display: flex;
-    margin-top: 24px;
-  }
-</style>

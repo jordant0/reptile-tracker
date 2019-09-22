@@ -1,4 +1,5 @@
 <script>
+  import eventTypeData from '@/data/event-type'
   import moment from 'moment'
 
   export default {
@@ -16,6 +17,10 @@
       },
     },
 
+    created() {
+      this.typesConfig = eventTypeData.config;
+    },
+
     computed: {
       animalName() {
         if(this.animal) {
@@ -26,38 +31,9 @@
       },
 
       eventIcon() {
-        switch(this.currentEvent.type) {
-          case 'Feeding':
-            return {
-              color: '#2ab058',
-              icon: 'mdi-silverware-fork-knife',
-            };
-          case 'Handling':
-            return {
-              color: '#f072f2',
-              icon: 'mdi-hand-heart',
-            };
-          case 'Weight':
-            return {
-              color: '#f44e4e',
-              icon: 'mdi-weight-gram'
-            };
-          case 'Shedding':
-            return {
-              color: '#c9c20b',
-              icon: 'mdi-creation'
-            };
-          case 'Maintenance':
-            return {
-              color: '#bb91ff',
-              icon: 'mdi-tools'
-            };
-          default:
-            return {
-              color: '#7dd8ff',
-              icon: 'mdi-information',
-            };
-        }
+        let configVal = this.typesConfig[this.currentEvent.type];
+
+        return configVal || this.typesConfig.Other;
       },
 
       processedTimeStamp() {
@@ -132,7 +108,7 @@
 
     <v-expansion-panel-content>
       <ul class="animal-info">
-        <li>
+        <li v-if="currentEvent.notes">
           {{ currentEvent.notes }}
         </li>
 

@@ -1,6 +1,7 @@
 <script>
   import EventCard from '@/components/event-card'
   import { mapGetters } from 'vuex'
+  import eventTypeData from '@/data/event-type'
 
   export default {
     components: {
@@ -12,7 +13,12 @@
         animalId: this.$route.params.animal_id,
         animal: null,
         eventsList: [],
+        addMenu: false,
       }
+    },
+
+    created() {
+      this.typesData = eventTypeData;
     },
 
     watch: {
@@ -80,8 +86,12 @@
         }
       },
 
-      addEvent() {
-        debugger;
+      addEvent(eventType) {
+        this.$router.push({
+          name: 'add-event',
+          params: { animal_id: this.animalId },
+          query: { event_type: eventType },
+        });
       },
     },
   };
@@ -102,17 +112,47 @@
       />
     </v-expansion-panels>
 
-    <v-btn
+    <v-speed-dial
+      v-model="addMenu"
       fixed
-      dark
-      fab
       bottom
       right
-      color="accent"
-      @click.prevent="addEvent"
+      open-on-hover
+      direction="top"
+      transition="slide-y-reverse-transition"
     >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
+      <template v-slot:activator>
+        <v-btn
+          v-model="addMenu"
+          color="accent"
+          dark
+          fab
+        >
+          <v-icon v-if="addMenu">mdi-close</v-icon>
+          <v-icon v-else>mdi-plus</v-icon>
+        </v-btn>
+      </template>
+
+      <v-tooltip
+        v-for="eventType in typesData.order"
+        :key="eventType"
+        left
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn
+            fab
+            dark
+            small
+            :color="typesData.config[eventType].color"
+            v-on="on"
+            @click.prevent="addEvent(eventType)"
+          >
+            <v-icon>{{ typesData.config[eventType].icon }}</v-icon>
+          </v-btn>
+        </template>
+        <span>{{ eventType }}</span>
+      </v-tooltip>
+    </v-speed-dial>
   </div>
 </template>
 

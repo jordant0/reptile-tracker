@@ -97,4 +97,26 @@
     margin-top: 24px;
     font-size: 12px;
   }
+
+  .container-card {
+    width: 100%;
+  }
+
+  .container-card .v-card__title {
+    padding: 24px 24px 32px 24px;
+  }
+
+  .container-card .v-card__text {
+    padding: 0 24px 24px 24px;
+  }
+
+  .general-form {
+    max-width: 800px;
+    margin: auto;
+  }
+
+  .form-actions {
+    display: flex;
+    margin-top: 24px;
+  }
 </style>

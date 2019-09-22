@@ -16,17 +16,3 @@
     </v-card-text>
   </v-card>
 </template>
-
-<style>
-  .container-card {
-    width: 100%;
-  }
-
-  .container-card .v-card__title {
-    padding: 24px 24px 32px 24px;
-  }
-
-  .container-card .v-card__text {
-    padding: 0 24px 24px 24px;
-  }
-</style>

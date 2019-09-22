@@ -54,9 +54,17 @@
         }
       },
 
+      lastFedFromNow() {
+        if(this.lastFed) {
+          return this.lastFed.fromNow();
+        } else {
+          return null;
+        }
+      },
+
       nextFeed() {
         if(this.lastFed && this.animal.feedingDuration) {
-          return this.lastFed.add(this.animal.feedingDuration, 'd').startOf('day');
+          return moment(this.lastFed).add(this.animal.feedingDuration, 'd').startOf('day');
         }
         return null;
       },
@@ -195,7 +203,7 @@
         </li>
 
         <li v-if="lastFedDate">
-          Last fed {{ lastFedDate }}
+          Last fed {{ lastFedDate }} ({{ lastFedFromNow }})
         </li>
       </ul>
     </v-expansion-panel-content>

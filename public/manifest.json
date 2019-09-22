@@ -1,6 +1,5 @@
 {
-  "name": "reptile-tracker",
-  "short_name": "reptile-tracker",
+  "name": "Herps Tracker",
   "icons": [
     {
       "src": "./img/icons/android-icon-36x36.png",

@@ -35,7 +35,13 @@
       ...mapGetters([
         'uuid',
       ])
-    }
+    },
+
+    methods: {
+      addAnimal() {
+        this.$router.push({ name: 'add-animal' });
+      },
+    },
   };
 </script>
 
@@ -48,5 +54,17 @@
         :animal="animal"
       />
     </v-expansion-panels>
+
+    <v-btn
+      fixed
+      dark
+      fab
+      bottom
+      right
+      color="accent"
+      @click.prevent="addAnimal"
+    >
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
   </div>
 </template>

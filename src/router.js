@@ -15,7 +15,8 @@ export default new Router({
     {
       path: '/new-animal',
       name: 'add-animal',
-      component: () => import('./views/add-animal.vue')
+      component: () => import('./views/add-animal.vue'),
+      meta: { title: 'Add Animal' }
     }
   ]
 })

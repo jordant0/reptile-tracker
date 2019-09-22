@@ -88,6 +88,7 @@
   }
 
   .container.fill-height.container-wrapper {
+    padding: 20px 12px;
     max-width: 1000px;
     align-items: flex-start;
   }

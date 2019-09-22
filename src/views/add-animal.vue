@@ -3,8 +3,8 @@ import AnimalForm from '@/components/animal-form'
 
 export default {
   components: {
-    AnimalForm
-  }
+    AnimalForm,
+  },
 }
 </script>
 

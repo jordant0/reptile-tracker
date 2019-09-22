@@ -6,23 +6,23 @@ export default {
   props: {
     animal: {
       type: Object,
-      default () {
+      default() {
         return {}
-      }
+      },
     },
 
     currentEvent: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
-  created () {
+  created() {
     this.typesConfig = eventTypeData.config
   },
 
   computed: {
-    animalName () {
+    animalName() {
       if (this.animal) {
         return this.animal.name
       } else {
@@ -30,33 +30,33 @@ export default {
       }
     },
 
-    eventIcon () {
+    eventIcon() {
       let configVal = this.typesConfig[this.currentEvent.type]
 
       return configVal || this.typesConfig.Other
     },
 
-    processedTimeStamp () {
+    processedTimeStamp() {
       return moment(this.currentEvent.timestamp.toDate())
     },
 
-    fullTimestamp () {
+    fullTimestamp() {
       return this.processedTimeStamp.format('ddd M/D/YY @ h:mm a')
     },
 
-    timeFromNow () {
+    timeFromNow() {
       return this.processedTimeStamp.fromNow()
     },
 
-    dateStr () {
+    dateStr() {
       return this.processedTimeStamp.format('M/D/YY')
     },
 
-    timeStr () {
+    timeStr() {
       return this.processedTimeStamp.format('h:mm a')
     },
 
-    eventDetails () {
+    eventDetails() {
       switch (this.currentEvent.type) {
         case 'Feeding':
           return `Fed ${this.animalName} ${this.currentEvent.notes}`
@@ -71,8 +71,8 @@ export default {
         default:
           return `${this.animalName}`
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

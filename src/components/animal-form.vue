@@ -4,19 +4,19 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    DateTimeInput
+    DateTimeInput,
   },
 
   props: {
     animal: {
       type: Object,
-      default () {
+      default() {
         return {}
-      }
-    }
+      },
+    },
   },
 
-  data () {
+  data() {
     return {
       submitting: false,
       animalData: {
@@ -24,19 +24,19 @@ export default {
         species: this.animal.species || '',
         feedingDuration: this.animal.feedingDuration || null,
         birthdate: this.animal.birthdate ? this.animal.birthdate.toDate() : new Date(),
-        arrival: this.animal.arrival ? this.animal.arrival.toDate() : new Date()
-      }
+        arrival: this.animal.arrival ? this.animal.arrival.toDate() : new Date(),
+      },
     }
   },
 
   computed: {
     ...mapGetters([
-      'uuid'
-    ])
+      'uuid',
+    ]),
   },
 
   methods: {
-    submit () {
+    submit() {
       this.submitting = true
       if (this.$refs.form.validate() && this.uuid) {
         this.$firebase
@@ -52,8 +52,8 @@ export default {
       } else {
         this.submitting = false
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

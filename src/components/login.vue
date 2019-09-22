@@ -3,26 +3,26 @@ export default {
   props: {
     shown: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
-  data () {
+  data() {
     return {
       email: '',
-      password: ''
+      password: '',
     }
   },
 
   methods: {
-    login () {
+    login() {
       this.$firebase.auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        .catch(function (error) {
+        .catch(function(error) {
           console.log(`Log in failed: ${error}`)
         })
-    }
-  }
+    },
+  },
 }
 </script>
 

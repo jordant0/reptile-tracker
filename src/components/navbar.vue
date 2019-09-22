@@ -1,10 +1,10 @@
 <script>
 export default {
   methods: {
-    toggleDrawer () {
+    toggleDrawer() {
       this.$emit('toggle-drawer')
-    }
-  }
+    },
+  },
 }
 </script>
 

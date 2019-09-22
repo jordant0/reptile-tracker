@@ -9,62 +9,62 @@ export default {
   components: {
     EventCard,
     Loading,
-    Empty
+    Empty,
   },
 
-  data () {
+  data() {
     return {
       loading: true,
       animalId: this.$route.params.animal_id,
       animal: null,
       eventsList: [],
-      addMenu: false
+      addMenu: false,
     }
   },
 
-  created () {
+  created() {
     this.typesData = eventTypeData
   },
 
   watch: {
     '$route': {
       immediate: true,
-      handler () {
+      handler() {
         this.animalId = this.$route.params.animal_id
-      }
+      },
     },
 
     animalId: {
       immediate: true,
-      handler () {
+      handler() {
         this.setupBinging()
-      }
+      },
     },
 
     uuid: {
       immediate: true,
-      handler () {
+      handler() {
         this.setupBinging()
-      }
-    }
+      },
+    },
   },
 
   computed: {
     ...mapGetters([
-      'uuid'
+      'uuid',
     ]),
 
-    animalName () {
+    animalName() {
       if (this.animal) {
         return this.animal.name
       } else {
         return ''
       }
-    }
+    },
   },
 
   methods: {
-    setupBinging () {
+    setupBinging() {
       if (!this.bindingSetup && this.uuid && this.animalId) {
         this.bindingSetup = true
         this.$bind(
@@ -93,14 +93,14 @@ export default {
       }
     },
 
-    addEvent (eventType) {
+    addEvent(eventType) {
       this.$router.push({
         name: 'add-event',
         params: { animal_id: this.animalId },
-        query: { event_type: eventType }
+        query: { event_type: eventType },
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

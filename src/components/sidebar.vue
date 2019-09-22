@@ -5,35 +5,35 @@ export default {
   props: {
     open: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   computed: {
     ...mapState([
       'darkTheme',
-      'user'
-    ])
+      'user',
+    ]),
   },
 
   methods: {
-    goHome () {
+    goHome() {
       this.$router.push('/')
     },
 
-    logOut () {
+    logOut() {
       this.$emit('update:open', false)
       this.$firebase.auth().signOut().then(() => {
         this.$router.push('/')
-      }, function (error) {
+      }, function(error) {
         console.log(error)
       })
     },
 
-    toggleDarkMode (value) {
+    toggleDarkMode(value) {
       this.$store.commit('updateDarkTheme', value)
-    }
-  }
+    },
+  },
 }
 </script>
 

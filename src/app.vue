@@ -8,27 +8,27 @@ export default {
   components: {
     Navbar,
     Sidebar,
-    Login
+    Login,
   },
 
   props: {
-    source: String
+    source: String,
   },
 
   watch: {
-    darkTheme (value) {
+    darkTheme(value) {
       this.$vuetify.theme.dark = value
-    }
+    },
   },
 
-  data () {
+  data() {
     return {
       drawerOpen: false,
-      showLogin: false
+      showLogin: false,
     }
   },
 
-  created () {
+  created() {
     this.$firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.$store.commit('updateUser', user)
@@ -44,9 +44,9 @@ export default {
 
   computed: {
     ...mapState([
-      'darkTheme'
-    ])
-  }
+      'darkTheme',
+    ]),
+  },
 }
 </script>
 
@@ -130,5 +130,15 @@ export default {
     font-size: 18px;
     font-style: italic;
     color: #999999;
+  }
+
+  .card-actions {
+    margin-top: 16px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .card-actions .v-btn {
+    margin-left: 8px;
   }
 </style>

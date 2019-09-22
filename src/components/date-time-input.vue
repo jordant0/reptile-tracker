@@ -4,62 +4,62 @@ import moment from 'moment'
 
 export default {
   components: {
-    DateTimePickerDialog
+    DateTimePickerDialog,
   },
 
   props: {
     label: {
       type: String,
-      default: null
+      default: null,
     },
 
     hint: {
       type: String,
-      default: null
+      default: null,
     },
 
     value: {
       type: Date,
-      default: null
+      default: null,
     },
 
     excludeTime: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
-  data () {
+  data() {
     return {
       dateModalOpen: false,
-      timeModalOpen: false
+      timeModalOpen: false,
     }
   },
 
   computed: {
-    parsedDate () {
+    parsedDate() {
       return moment(this.value)
     },
 
-    dateString () {
+    dateString() {
       return this.parsedDate.format('MM/DD/YYYY')
     },
 
-    timeString () {
+    timeString() {
       return this.parsedDate.format('LT')
     },
 
-    dateForPicker () {
+    dateForPicker() {
       return this.parsedDate.format('YYYY-MM-DD')
     },
 
-    timeForPicker () {
+    timeForPicker() {
       return this.parsedDate.format('HH:mm')
-    }
+    },
   },
 
   methods: {
-    updateDate (newDateStr) {
+    updateDate(newDateStr) {
       let newDate = moment(newDateStr, 'YYYY-MM-DD')
       let currentDate = moment(this.value)
 
@@ -71,7 +71,7 @@ export default {
       this.$emit('input', newDate.toDate())
     },
 
-    updateTime (newTimeStr) {
+    updateTime(newTimeStr) {
       let newDate = moment(newTimeStr, 'HH:mm')
       let currentDate = moment(this.value)
 
@@ -82,8 +82,8 @@ export default {
       newDate.year(currentDate.year())
 
       this.$emit('input', newDate.toDate())
-    }
-  }
+    },
+  },
 }
 </script>
 

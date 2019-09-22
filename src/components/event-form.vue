@@ -4,65 +4,65 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    DateTimeInput
+    DateTimeInput,
   },
 
   props: {
     animalId: {
       type: String,
-      default: null
+      default: null,
     },
 
     eventType: {
       type: String,
-      default: 'Other'
+      default: 'Other',
     },
 
     currentEvent: {
       type: Object,
-      default () {
+      default() {
         return {}
-      }
-    }
+      },
+    },
   },
 
-  data () {
+  data() {
     return {
       submitting: false,
       eventData: {
         type: this.currentEvent.type || this.eventType,
         timestamp: this.currentEvent.timestamp ? this.currentEvent.timestamp.toDate() : new Date(),
         value: this.currentEvent.value || '',
-        notes: this.currentEvent.notes || ''
-      }
+        notes: this.currentEvent.notes || '',
+      },
     }
   },
 
   computed: {
     ...mapGetters([
-      'uuid'
+      'uuid',
     ]),
 
-    valueField () {
+    valueField() {
       switch (this.eventData.type) {
         case 'Handling':
           return {
             label: 'Duration',
-            hint: 'Duration of handling session (in minutes)'
+            hint: 'Duration of handling session (in minutes)',
           }
         case 'Weight':
           return {
             label: 'Weight',
-            hint: 'Weight of the animal (in grams)'
+            hint: 'Weight of the animal (in grams)',
           }
         default:
           return null
       }
-    }
+    },
   },
 
   methods: {
-    submit () {
+    submit() {
       this.submitting = true
       if (this.$refs.form.validate() && this.uuid && this.animalId) {
         this.$firebase
@@ -80,8 +80,8 @@ export default {
       } else {
         this.submitting = false
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

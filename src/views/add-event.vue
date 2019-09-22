@@ -3,30 +3,30 @@ import EventForm from '@/components/event-form'
 
 export default {
   components: {
-    EventForm
+    EventForm,
   },
 
   props: {
     eventType: {
       type: String,
-      default: 'Other'
-    }
+      default: 'Other',
+    },
   },
 
   watch: {
     '$route': {
       immediate: true,
-      handler () {
+      handler() {
         this.animalId = this.$route.params.animal_id
-      }
-    }
+      },
+    },
   },
 
-  data () {
+  data() {
     return {
-      animalId: this.$route.params.animal_id
+      animalId: this.$route.params.animal_id,
     }
-  }
+  },
 }
 </script>
 

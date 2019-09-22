@@ -6,39 +6,39 @@ export default {
   props: {
     animal: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
 
-  data () {
+  data() {
     return {
       lastFedEvent: null,
-      randomColor: `hsl(${360 * Math.random()},${25 + 70 * Math.random()}%, ${85 + 10 * Math.random()}%)`
+      randomColor: `hsl(${360 * Math.random()},${25 + 70 * Math.random()}%, ${85 + 10 * Math.random()}%)`,
     }
   },
 
   watch: {
     'animal.id': {
       immediate: true,
-      handler () {
+      handler() {
         this.setupBinging()
-      }
+      },
     },
 
     uuid: {
       immediate: true,
-      handler () {
+      handler() {
         this.setupBinging()
-      }
-    }
+      },
+    },
   },
 
   computed: {
     ...mapGetters([
-      'uuid'
+      'uuid',
     ]),
 
-    lastFed () {
+    lastFed() {
       if (!(this.lastFedEvent && this.lastFedEvent.length)) {
         return null
       }
@@ -46,7 +46,7 @@ export default {
       return moment(this.lastFedEvent[0].timestamp.toDate())
     },
 
-    lastFedDate () {
+    lastFedDate() {
       if (this.lastFed) {
         return this.lastFed.format('M/D h:mm a')
       } else {
@@ -54,7 +54,7 @@ export default {
       }
     },
 
-    lastFedFromNow () {
+    lastFedFromNow() {
       if (this.lastFed) {
         return this.lastFed.fromNow()
       } else {
@@ -62,35 +62,35 @@ export default {
       }
     },
 
-    nextFeed () {
+    nextFeed() {
       if (this.lastFed && this.animal.feedingDuration) {
         return moment(this.lastFed).add(this.animal.feedingDuration, 'd').startOf('day')
       }
       return null
     },
 
-    today () {
+    today() {
       return moment().startOf('day')
     },
 
-    nextFeedingFromNow () {
+    nextFeedingFromNow() {
       if (this.nextFeed) {
         return this.nextFeed.from(this.today)
       }
       return null
     },
 
-    nextFeedToday () {
+    nextFeedToday() {
       return this.nextFeed.year() === this.today.year() && this.nextFeed.dayOfYear() === this.today.dayOfYear()
     },
 
-    feedingConfig () {
+    feedingConfig() {
       if (this.nextFeedToday) {
         return { color: '#27C72F', text: 'today!' }
       } else {
         let config = {
           color: '#4CD3FE',
-          text: this.nextFeedingFromNow
+          text: this.nextFeedingFromNow,
         }
 
         if (this.nextFeedingFromNow.includes('ago')) {
@@ -108,7 +108,7 @@ export default {
       }
     },
 
-    birthDate () {
+    birthDate() {
       if (this.animal.birthdate) {
         return moment(this.animal.birthdate.toDate()).format('MM/DD/YYYY')
       } else {
@@ -116,17 +116,17 @@ export default {
       }
     },
 
-    arrivalDate () {
+    arrivalDate() {
       if (this.animal.arrival) {
         return moment(this.animal.arrival.toDate()).format('MM/DD/YYYY')
       } else {
         return null
       }
-    }
+    },
   },
 
   methods: {
-    setupBinging () {
+    setupBinging() {
       if (!this.bindingSetup && this.uuid && this.animal.id) {
         this.bindingSetup = true
         this.$bind(
@@ -145,13 +145,19 @@ export default {
       }
     },
 
-    goToAnimalDetails () {
+    goToAnimalDetails() {
       this.$router.push({
         name: 'event-listing',
-        params: { animal_id: this.animal.id }
+        params: { animal_id: this.animal.id },
       })
-    }
-  }
+    },
+
+    deleteAnimal() {
+      if (confirm('Are you sure you want to delete this animal forever?')) {
+        debugger
+      }
+    },
+  },
 }
 </script>
 
@@ -210,6 +216,35 @@ export default {
           Last fed {{ lastFedDate }} ({{ lastFedFromNow }})
         </li>
       </ul>
+
+      <div class="card-actions">
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              icon
+              color="#f66262"
+              v-on="on"
+              @click.prevent="deleteAnimal"
+            >
+              <v-icon>mdi-delete-forever</v-icon>
+            </v-btn>
+          </template>
+          <span>Delete</span>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              icon
+              color="#46cdff"
+              v-on="on"
+            >
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+          </template>
+          <span>Edit</span>
+        </v-tooltip>
+      </div>
     </v-expansion-panel-content>
   </v-expansion-panel>
 </template>

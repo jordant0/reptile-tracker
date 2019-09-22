@@ -8,20 +8,20 @@ export default {
   components: {
     AnimalCard,
     Loading,
-    Empty
+    Empty,
   },
 
-  data () {
+  data() {
     return {
       loading: true,
-      animalsList: []
+      animalsList: [],
     }
   },
 
   watch: {
     uuid: {
       immediate: true,
-      handler () {
+      handler() {
         if (this.uuid) {
           this.$bind(
             'animalsList',
@@ -34,21 +34,21 @@ export default {
             this.loading = false
           })
         }
-      }
-    }
+      },
+    },
   },
 
   computed: {
     ...mapGetters([
-      'uuid'
-    ])
+      'uuid',
+    ]),
   },
 
   methods: {
-    addAnimal () {
+    addAnimal() {
       this.$router.push({ name: 'add-animal' })
-    }
-  }
+    },
+  },
 }
 </script>
 

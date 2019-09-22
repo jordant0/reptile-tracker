@@ -3,42 +3,42 @@ export default {
   props: {
     open: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     value: {
       type: String,
-      default: null
+      default: null,
     },
 
     type: {
       type: String,
-      default: 'date'
-    }
+      default: 'date',
+    },
   },
 
   watch: {
-    open () {
+    open() {
       this.selectedValue = this.value
-    }
+    },
   },
 
-  data () {
+  data() {
     return {
-      selectedValue: this.value
+      selectedValue: this.value,
     }
   },
 
   methods: {
-    save () {
+    save() {
       this.$emit('input', this.selectedValue)
       this.close()
     },
 
-    close () {
+    close() {
       this.$emit('update:open', false)
-    }
-  }
+    },
+  },
 }
 </script>
 

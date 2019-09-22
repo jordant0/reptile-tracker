@@ -19,7 +19,7 @@ const config = {
   projectId: 'snek-tracker',
   storageBucket: 'snek-tracker.appspot.com',
   messagingSenderId: '439027452183',
-  appId: '1:439027452183:web:f2c3786b856953a2'
+  appId: '1:439027452183:web:f2c3786b856953a2',
 }
 firebase.initializeApp(config)
 
@@ -30,5 +30,5 @@ new Vue({
   router,
   store,
   vuetify,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app')

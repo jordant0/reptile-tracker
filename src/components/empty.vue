@@ -3,9 +3,9 @@ export default {
   props: {
     noun: {
       type: String,
-      default: 'item'
-    }
-  }
+      default: 'item',
+    },
+  },
 }
 </script>
 

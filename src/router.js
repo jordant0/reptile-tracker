@@ -10,26 +10,26 @@ export default new Router({
       path: '/',
       name: 'animals',
       component: AnimalListing,
-      meta: { title: 'Animals' }
+      meta: { title: 'Animals' },
     },
     {
       path: '/new-animal',
       name: 'add-animal',
       component: () => import('./views/add-animal.vue'),
-      meta: { title: 'New Animal' }
+      meta: { title: 'New Animal' },
     },
     {
       path: '/events/:animal_id',
       name: 'event-listing',
       component: () => import('./views/event-listing.vue'),
-      meta: { title: 'Events' }
+      meta: { title: 'Events' },
     },
     {
       path: '/new-event/:animal_id',
       name: 'add-event',
       component: () => import('./views/add-event.vue'),
       props: (route) => ({ eventType: route.query.event_type }),
-      meta: { title: 'New Event' }
-    }
-  ]
+      meta: { title: 'New Event' },
+    },
+  ],
 })

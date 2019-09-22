@@ -34,14 +34,7 @@ export default {
       },
     },
 
-    animalId: {
-      immediate: true,
-      handler() {
-        this.setupBinging()
-      },
-    },
-
-    uuid: {
+    bindingProps: {
       immediate: true,
       handler() {
         this.setupBinging()
@@ -53,6 +46,13 @@ export default {
     ...mapGetters([
       'uuid',
     ]),
+
+    bindingProps() {
+      return [
+        this.animalId,
+        this.uuid,
+      ]
+    },
 
     animalName() {
       if(this.animal) {

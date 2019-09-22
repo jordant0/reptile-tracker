@@ -98,7 +98,7 @@
     font-size: 12px;
   }
 
-  .container-card {
+  .container-wrapper, .container-card {
     width: 100%;
   }
 
@@ -118,5 +118,17 @@
   .form-actions {
     display: flex;
     margin-top: 24px;
+  }
+
+  .special-card {
+    display: flex;
+    justify-content: center;
+  }
+
+  .special-card .v-card__title {
+    padding: 100px;
+    font-size: 18px;
+    font-style: italic;
+    color: #999999;
   }
 </style>

@@ -1,4 +1,6 @@
 <script>
+  import Loading from '@/components/loading'
+  import Empty from '@/components/empty'
   import EventCard from '@/components/event-card'
   import { mapGetters } from 'vuex'
   import eventTypeData from '@/data/event-type'
@@ -6,10 +8,13 @@
   export default {
     components: {
       EventCard,
+      Loading,
+      Empty,
     },
 
     data() {
       return {
+        loading: true,
         animalId: this.$route.params.animal_id,
         animal: null,
         eventsList: [],
@@ -82,7 +87,9 @@
               .doc(this.animalId)
               .collection('events')
               .orderBy('timestamp', 'desc')
-          );
+          ).then(() => {
+            this.loading = false;
+          });
         }
       },
 
@@ -98,61 +105,65 @@
 </script>
 
 <template>
-  <div class="event-listing">
-    <div class="event-listing_header">
-      Events for {{ animalName }}
-    </div>
+  <div class="event-listing container-wrapper">
+    <loading v-if="loading" />
+    <empty v-else-if="!eventsList.length" noun="event" />
+    <template v-else>
+      <div class="event-listing_header">
+        Events for {{ animalName }}
+      </div>
 
-    <v-expansion-panels>
-      <event-card
-        v-for="currentEvent in eventsList"
-        :key="currentEvent.id"
-        :current-event="currentEvent"
-        :animal="animal"
-      />
-    </v-expansion-panels>
+      <v-expansion-panels>
+        <event-card
+          v-for="currentEvent in eventsList"
+          :key="currentEvent.id"
+          :current-event="currentEvent"
+          :animal="animal"
+        />
+      </v-expansion-panels>
 
-    <v-speed-dial
-      v-model="addMenu"
-      fixed
-      bottom
-      right
-      open-on-hover
-      direction="top"
-      transition="slide-y-reverse-transition"
-    >
-      <template v-slot:activator>
-        <v-btn
-          v-model="addMenu"
-          color="accent"
-          dark
-          fab
-        >
-          <v-icon v-if="addMenu">mdi-close</v-icon>
-          <v-icon v-else>mdi-plus</v-icon>
-        </v-btn>
-      </template>
-
-      <v-tooltip
-        v-for="eventType in typesData.order"
-        :key="eventType"
-        left
+      <v-speed-dial
+        v-model="addMenu"
+        fixed
+        bottom
+        right
+        open-on-hover
+        direction="top"
+        transition="slide-y-reverse-transition"
       >
-        <template v-slot:activator="{ on }">
+        <template v-slot:activator>
           <v-btn
-            fab
+            v-model="addMenu"
+            color="accent"
             dark
-            small
-            :color="typesData.config[eventType].color"
-            v-on="on"
-            @click.prevent="addEvent(eventType)"
+            fab
           >
-            <v-icon>{{ typesData.config[eventType].icon }}</v-icon>
+            <v-icon v-if="addMenu">mdi-close</v-icon>
+            <v-icon v-else>mdi-plus</v-icon>
           </v-btn>
         </template>
-        <span>{{ eventType }}</span>
-      </v-tooltip>
-    </v-speed-dial>
+
+        <v-tooltip
+          v-for="eventType in typesData.order"
+          :key="eventType"
+          left
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn
+              fab
+              dark
+              small
+              :color="typesData.config[eventType].color"
+              v-on="on"
+              @click.prevent="addEvent(eventType)"
+            >
+              <v-icon>{{ typesData.config[eventType].icon }}</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ eventType }}</span>
+        </v-tooltip>
+      </v-speed-dial>
+    </template>
   </div>
 </template>
 

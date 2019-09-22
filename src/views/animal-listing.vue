@@ -1,14 +1,19 @@
 <script>
+  import Loading from '@/components/loading'
+  import Empty from '@/components/empty'
   import AnimalCard from '@/components/animal-card'
   import { mapGetters } from 'vuex'
 
   export default {
     components: {
       AnimalCard,
+      Loading,
+      Empty,
     },
 
     data() {
       return {
+        loading: true,
         animalsList: [],
       }
     },
@@ -25,7 +30,9 @@
                 .collection('users')
                 .doc(this.uuid)
                 .collection('animals')
-            )
+            ).then(() => {
+              this.loading = false;
+            });
           }
         }
       },
@@ -46,25 +53,29 @@
 </script>
 
 <template>
-  <div class="animal-listing">
-    <v-expansion-panels>
-      <animal-card
-        v-for="animal in animalsList"
-        :key="animal.id"
-        :animal="animal"
-      />
-    </v-expansion-panels>
+  <div class="animal-listing container-wrapper">
+    <loading v-if="loading" />
+    <empty v-else-if="!animalsList.length" noun="animal" />
+    <template v-else>
+      <v-expansion-panels>
+        <animal-card
+          v-for="animal in animalsList"
+          :key="animal.id"
+          :animal="animal"
+        />
+      </v-expansion-panels>
 
-    <v-btn
-      fixed
-      dark
-      fab
-      bottom
-      right
-      color="accent"
-      @click.prevent="addAnimal"
-    >
-      <v-icon>mdi-plus</v-icon>
-    </v-btn>
+      <v-btn
+        fixed
+        dark
+        fab
+        bottom
+        right
+        color="accent"
+        @click.prevent="addAnimal"
+      >
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+    </template>
   </div>
 </template>

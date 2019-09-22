@@ -120,4 +120,10 @@
   .event-listing {
     max-width: 100%;
   }
+
+  .event-listing_header {
+    font-size: 18px;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
 </style>

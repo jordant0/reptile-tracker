@@ -1,6 +1,6 @@
-# reptile-tracker
+# Herps Tracker
 
-Website for tracking reptile activities: https://snek-tracker.firebaseapp.com
+Website for tracking reptile activities: https://herpstracker.com
 
 ## Project setup
 ```
@@ -12,12 +12,12 @@ yarn install
 yarn run serve
 ```
 
-### Compiles and minifies for production
+### Lints and fixes files
 ```
-yarn run build
+yarn run lint
 ```
 
-### Deploying
+## Deploying
 
 1. Install `firebase-tools` if necessary
 
@@ -42,16 +42,3 @@ yarn run build
     ```
     firebase deploy
     ```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

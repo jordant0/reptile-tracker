@@ -1,6 +1,7 @@
 <script>
 import eventTypeData from '@/data/event-type'
 import moment from 'moment'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -22,6 +23,14 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'confirmDialog',
+    ]),
+
+    ...mapGetters([
+      'uuid',
+    ]),
+
     animalName() {
       if(this.animal) {
         return this.animal.name
@@ -73,6 +82,40 @@ export default {
       }
     },
   },
+
+  methods: {
+    editEvent() {
+      this.$router.push({
+        name: 'edit-event',
+        params: {
+          animal_id: this.animal.id,
+          event_id: this.currentEvent.id,
+        },
+      })
+    },
+
+    deleteEvent() {
+      this.$store.commit('showConfirmDialog', {
+        title: 'Are you sure you want to delete this event?',
+        body: 'This action cannot be undone. Consider archiving instead if you need future access.',
+      })
+
+      this.confirmWatcher = this.$watch('confirmDialog.response', function(response) {
+        this.confirmWatcher()
+        if(response === 'confirm') {
+          this.$firebase
+            .firestore()
+            .collection('users')
+            .doc(this.uuid)
+            .collection('animals')
+            .doc(this.animal.id)
+            .collection('events')
+            .doc(this.currentEvent.id)
+            .delete()
+        }
+      })
+    },
+  },
 }
 </script>
 
@@ -107,7 +150,7 @@ export default {
     </v-expansion-panel-header>
 
     <v-expansion-panel-content>
-      <ul class="animal-info">
+      <ul class="info-listing">
         <li v-if="currentEvent.notes">
           {{ currentEvent.notes }}
         </li>
@@ -116,6 +159,36 @@ export default {
           {{ fullTimestamp }} ({{ timeFromNow }})
         </li>
       </ul>
+
+      <div class="card-actions">
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              icon
+              color="#f66262"
+              v-on="on"
+              @click.prevent="deleteEvent"
+            >
+              <v-icon>mdi-delete-forever</v-icon>
+            </v-btn>
+          </template>
+          <span>Delete</span>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              icon
+              color="#46cdff"
+              v-on="on"
+              @click.prevent="editEvent"
+            >
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+          </template>
+          <span>Edit</span>
+        </v-tooltip>
+      </div>
     </v-expansion-panel-content>
   </v-expansion-panel>
 </template>

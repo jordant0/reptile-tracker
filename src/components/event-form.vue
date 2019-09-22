@@ -65,21 +65,27 @@ export default {
     submit() {
       this.submitting = true
       if(this.$refs.form.validate() && this.uuid && this.animalId) {
-        this.$firebase
+        let collection = this.$firebase
           .firestore()
           .collection('users')
           .doc(this.uuid)
           .collection('animals')
           .doc(this.animalId)
           .collection('events')
-          .add(this.eventData)
-          .then(() => {
-            this.submitting = false
-            this.$router.back()
-          })
+
+        let action = (this.currentEvent && this.currentEvent.id)
+          ? collection.doc(this.currentEvent.id).update(this.eventData)
+          : collection.add(this.eventData)
+
+        action.then(() => this.submitDone())
       } else {
         this.submitting = false
       }
+    },
+
+    submitDone() {
+      this.submitting = false
+      this.$router.back()
     },
   },
 }

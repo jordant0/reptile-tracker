@@ -236,7 +236,7 @@ export default {
     </v-expansion-panel-header>
 
     <v-expansion-panel-content>
-      <ul class="animal-info">
+      <ul class="info-listing animal-info">
         <li v-if="animal.species">
           Species: {{ animal.species }}
         </li>

@@ -232,8 +232,11 @@ export default {
     border-radius: 100%;
   }
 
-  .animal-info {
+  .info-listing {
     color: #999999;
+  }
+
+  .animal-info {
     column-count: 2;
   }
 

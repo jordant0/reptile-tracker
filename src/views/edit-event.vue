@@ -1,11 +1,11 @@
 <script>
-import AnimalForm from '@/components/animal-form'
+import EventForm from '@/components/event-form'
 import Loading from '@/components/loading'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    AnimalForm,
+    EventForm,
     Loading,
   },
 
@@ -13,7 +13,8 @@ export default {
     return {
       loading: true,
       animalId: this.$route.params.animal_id,
-      animal: null,
+      eventId: this.$route.params.event_id,
+      currentEvent: null,
     }
   },
 
@@ -22,17 +23,11 @@ export default {
       immediate: true,
       handler() {
         this.animalId = this.$route.params.animal_id
+        this.eventId = this.$route.params.event_id
       },
     },
 
-    animalId: {
-      immediate: true,
-      handler() {
-        this.setupBinging()
-      },
-    },
-
-    uuid: {
+    bindingProps: {
       immediate: true,
       handler() {
         this.setupBinging()
@@ -44,20 +39,30 @@ export default {
     ...mapGetters([
       'uuid',
     ]),
+
+    bindingProps() {
+      return [
+        this.uuid,
+        this.animalId,
+        this.eventId,
+      ]
+    },
   },
 
   methods: {
     setupBinging() {
-      if(!this.bindingSetup && this.uuid && this.animalId) {
+      if(!this.bindingSetup && this.uuid && this.animalId && this.eventId) {
         this.bindingSetup = true
         this.$bind(
-          'animal',
+          'currentEvent',
           this.$firebase
             .firestore()
             .collection('users')
             .doc(this.uuid)
             .collection('animals')
             .doc(this.animalId)
+            .collection('events')
+            .doc(this.eventId)
         ).then(() => {
           this.loading = false
         })
@@ -71,9 +76,12 @@ export default {
   <div class="container-wrapper">
     <loading v-if="loading" />
     <v-card v-else class="container-card">
-      <v-card-title>Edit Animal</v-card-title>
+      <v-card-title>Edit Event</v-card-title>
       <v-card-text>
-        <animal-form :animal="animal" />
+        <event-form
+          :animal-id="animalId"
+          :current-event="currentEvent"
+        />
       </v-card-text>
     </v-card>
   </div>

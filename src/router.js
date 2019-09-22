@@ -37,5 +37,11 @@ export default new Router({
       props: (route) => ({ eventType: route.query.event_type }),
       meta: { title: 'New Event' },
     },
+    {
+      path: '/edit-event/:animal_id/:event_id',
+      name: 'edit-event',
+      component: () => import('./views/edit-event.vue'),
+      meta: { title: 'Edit Event' },
+    },
   ],
 })

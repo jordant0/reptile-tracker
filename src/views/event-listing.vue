@@ -55,7 +55,7 @@ export default {
     ]),
 
     animalName() {
-      if (this.animal) {
+      if(this.animal) {
         return this.animal.name
       } else {
         return ''
@@ -65,7 +65,7 @@ export default {
 
   methods: {
     setupBinging() {
-      if (!this.bindingSetup && this.uuid && this.animalId) {
+      if(!this.bindingSetup && this.uuid && this.animalId) {
         this.bindingSetup = true
         this.$bind(
           'animal',

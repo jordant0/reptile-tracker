@@ -64,7 +64,7 @@ export default {
   methods: {
     submit() {
       this.submitting = true
-      if (this.$refs.form.validate() && this.uuid && this.animalId) {
+      if(this.$refs.form.validate() && this.uuid && this.animalId) {
         this.$firebase
           .firestore()
           .collection('users')

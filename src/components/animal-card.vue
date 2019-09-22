@@ -1,6 +1,6 @@
 <script>
 import moment from 'moment'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -34,12 +34,16 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'confirmDialog',
+    ]),
+
     ...mapGetters([
       'uuid',
     ]),
 
     lastFed() {
-      if (!(this.lastFedEvent && this.lastFedEvent.length)) {
+      if(!(this.lastFedEvent && this.lastFedEvent.length)) {
         return null
       }
 
@@ -47,7 +51,7 @@ export default {
     },
 
     lastFedDate() {
-      if (this.lastFed) {
+      if(this.lastFed) {
         return this.lastFed.format('M/D h:mm a')
       } else {
         return null
@@ -55,7 +59,7 @@ export default {
     },
 
     lastFedFromNow() {
-      if (this.lastFed) {
+      if(this.lastFed) {
         return this.lastFed.fromNow()
       } else {
         return null
@@ -63,7 +67,7 @@ export default {
     },
 
     nextFeed() {
-      if (this.lastFed && this.animal.feedingDuration) {
+      if(this.lastFed && this.animal.feedingDuration) {
         return moment(this.lastFed).add(this.animal.feedingDuration, 'd').startOf('day')
       }
       return null
@@ -74,7 +78,7 @@ export default {
     },
 
     nextFeedingFromNow() {
-      if (this.nextFeed) {
+      if(this.nextFeed) {
         return this.nextFeed.from(this.today)
       }
       return null
@@ -85,7 +89,7 @@ export default {
     },
 
     feedingConfig() {
-      if (this.nextFeedToday) {
+      if(this.nextFeedToday) {
         return { color: '#27C72F', text: 'today!' }
       } else {
         let config = {
@@ -93,13 +97,13 @@ export default {
           text: this.nextFeedingFromNow,
         }
 
-        if (this.nextFeedingFromNow.includes('ago')) {
+        if(this.nextFeedingFromNow.includes('ago')) {
           config.color = '#FF0000'
         }
 
-        if (this.nextFeedingFromNow === 'a day ago') {
+        if(this.nextFeedingFromNow === 'a day ago') {
           config.text = 'yesterday'
-        } else if (this.nextFeedingFromNow === 'in a day') {
+        } else if(this.nextFeedingFromNow === 'in a day') {
           config.text = 'tomorrow'
           config.color = '#E4D125'
         }
@@ -109,7 +113,7 @@ export default {
     },
 
     birthDate() {
-      if (this.animal.birthdate) {
+      if(this.animal.birthdate) {
         return moment(this.animal.birthdate.toDate()).format('MM/DD/YYYY')
       } else {
         return null
@@ -117,7 +121,7 @@ export default {
     },
 
     arrivalDate() {
-      if (this.animal.arrival) {
+      if(this.animal.arrival) {
         return moment(this.animal.arrival.toDate()).format('MM/DD/YYYY')
       } else {
         return null
@@ -127,7 +131,7 @@ export default {
 
   methods: {
     setupBinging() {
-      if (!this.bindingSetup && this.uuid && this.animal.id) {
+      if(!this.bindingSetup && this.uuid && this.animal.id) {
         this.bindingSetup = true
         this.$bind(
           'lastFedEvent',
@@ -153,9 +157,23 @@ export default {
     },
 
     deleteAnimal() {
-      if (confirm('Are you sure you want to delete this animal forever?')) {
-        debugger
-      }
+      this.$store.commit('showConfirmDialog', {
+        title: 'Are you sure you want to delete this animal?',
+        body: 'This action cannot be undone. Consider archiving instead if you need future access.',
+      })
+
+      this.confirmWatcher = this.$watch('confirmDialog.response', function(response) {
+        this.confirmWatcher()
+        if(response === 'confirm') {
+          this.$firebase
+            .firestore()
+            .collection('users')
+            .doc(this.uuid)
+            .collection('animals')
+            .doc(this.animal.id)
+            .delete()
+        }
+      })
     },
   },
 }
@@ -260,101 +278,5 @@ export default {
 
   .v-expansion-panel-content {
     margin-left: 100px;
-  }
-</style>
-
-<style>
-  .animal-header {
-    padding: 16px 24px 16px 124px;
-  }
-
-  .animal-image {
-    position: absolute;
-    width: 100px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #999999;
-    font-style: italic;
-  }
-
-  .animal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .animal-header--first span:not(:first-child):before {
-    content: '|';
-    padding: 0 8px;
-  }
-
-  .animal-header--last {
-    color: #999999;
-  }
-
-  .animal-header--last span:not(:last-child):after {
-    content: '|';
-    padding: 0 8px;
-  }
-
-  .animal-name {
-    font-size: 20px;
-    font-weight: 400;
-  }
-
-  .expand-action {
-    margin: 12px;
-    background-color: #f2f2f2;
-    border-radius: 100%;
-  }
-
-  .animal-info {
-    color: #999999;
-    column-count: 2;
-  }
-
-  @media screen and (max-width: 900px) {
-    .animal-header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .animal-header--last {
-      margin-top: 12px;
-    }
-  }
-
-  @media screen and (max-width: 750px) {
-    .animal-info {
-      column-count: 1;
-    }
-  }
-
-  @media screen and (max-width: 600px) {
-    .animal-image {
-      display: none;
-    }
-
-    .animal-header {
-      padding-left: 24px;
-    }
-
-    .v-expansion-panel-content {
-      margin-left: 0;
-    }
-  }
-
-  @media screen and (max-width: 500px) {
-    .animal-header--fed-date {
-      display: none;
-    }
-  }
-
-  @media screen and (max-width: 400px) {
-    .animal-header--species {
-      display: none;
-    }
   }
 </style>

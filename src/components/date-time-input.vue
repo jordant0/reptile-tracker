@@ -131,36 +131,3 @@ export default {
     />
   </div>
 </template>
-
-<style>
-  .date-time-input {
-    display: flex;
-    align-items: center;
-    padding-top: 12px;
-    margin-top: 4px;
-  }
-
-  .date-time-input .v-messages {
-    margin-top: 4px;
-  }
-
-  .date-time-input label.v-label {
-    height: auto;
-    margin-right: 32px;
-    min-width: 200px;
-  }
-
-  @media screen and (max-width: 500px) {
-    .date-time-input .v-input__slot {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .selection-display {
-      display: flex;
-      width: 100%;
-      justify-content: center;
-      margin-top: 8px;
-    }
-  }
-</style>

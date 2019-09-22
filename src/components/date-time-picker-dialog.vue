@@ -94,13 +94,3 @@ export default {
     padding-top: 0 !important;
   }
 </style>
-
-<style>
-  .date-time-picker_dialog {
-    width: auto !important;
-  }
-
-  .date-time-picker_dialog .v-picker {
-    box-shadow: none;
-  }
-</style>

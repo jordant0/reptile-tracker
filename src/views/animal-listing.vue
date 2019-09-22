@@ -22,7 +22,7 @@ export default {
     uuid: {
       immediate: true,
       handler() {
-        if (this.uuid) {
+        if(this.uuid) {
           this.$bind(
             'animalsList',
             this.$firebase

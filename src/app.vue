@@ -1,6 +1,7 @@
 <script>
 import Navbar from '@/components/navbar'
 import Sidebar from '@/components/sidebar'
+import ConfirmDialog from '@/components/confirm-dialog'
 import Login from '@/components/login'
 import { mapState } from 'vuex'
 
@@ -9,6 +10,7 @@ export default {
     Navbar,
     Sidebar,
     Login,
+    ConfirmDialog,
   },
 
   props: {
@@ -30,7 +32,7 @@ export default {
 
   created() {
     this.$firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
+      if(user) {
         this.$store.commit('updateUser', user)
         this.showLogin = false
       } else {
@@ -68,6 +70,8 @@ export default {
         <router-view />
       </v-container>
     </v-content>
+
+    <confirm-dialog />
 
     <v-footer class="app-footer">
       <div>{{ version }}</div>
@@ -140,5 +144,147 @@ export default {
 
   .card-actions .v-btn {
     margin-left: 8px;
+  }
+
+  .confirm-dialog {
+    width: 400px;
+    max-width: calc(100% - 20px);
+  }
+
+  .confirm-dialog .v-card__title {
+    word-break: normal;
+  }
+
+  .date-time-input {
+    display: flex;
+    align-items: center;
+    padding-top: 12px;
+    margin-top: 4px;
+  }
+
+  .date-time-input .v-messages {
+    margin-top: 4px;
+  }
+
+  .date-time-input label.v-label {
+    height: auto;
+    margin-right: 32px;
+    min-width: 200px;
+  }
+
+  @media screen and (max-width: 500px) {
+    .date-time-input .v-input__slot {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .selection-display {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      margin-top: 8px;
+    }
+  }
+
+  .animal-header {
+    padding: 16px 24px 16px 124px;
+  }
+
+  .animal-image {
+    position: absolute;
+    width: 100px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999999;
+    font-style: italic;
+  }
+
+  .animal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .animal-header--first span:not(:first-child):before {
+    content: '|';
+    padding: 0 8px;
+  }
+
+  .animal-header--last {
+    color: #999999;
+  }
+
+  .animal-header--last span:not(:last-child):after {
+    content: '|';
+    padding: 0 8px;
+  }
+
+  .animal-name {
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .expand-action {
+    margin: 12px;
+    background-color: #f2f2f2;
+    border-radius: 100%;
+  }
+
+  .animal-info {
+    color: #999999;
+    column-count: 2;
+  }
+
+  @media screen and (max-width: 900px) {
+    .animal-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .animal-header--last {
+      margin-top: 12px;
+    }
+  }
+
+  @media screen and (max-width: 750px) {
+    .animal-info {
+      column-count: 1;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .animal-image {
+      display: none;
+    }
+
+    .animal-header {
+      padding-left: 24px;
+    }
+
+    .v-expansion-panel-content {
+      margin-left: 0;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .animal-header--fed-date {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    .animal-header--species {
+      display: none;
+    }
+  }
+
+  .date-time-picker_dialog {
+    width: auto !important;
+  }
+
+  .date-time-picker_dialog .v-picker {
+    box-shadow: none;
   }
 </style>

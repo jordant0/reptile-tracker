@@ -23,7 +23,7 @@ export default {
 
   computed: {
     animalName() {
-      if (this.animal) {
+      if(this.animal) {
         return this.animal.name
       } else {
         return ''

@@ -78,7 +78,7 @@ export default {
         case 'Maintenance':
           return `Maintenance for ${this.animalName}`
         default:
-          return `${this.animalName}`
+          return this.currentEvent.notes
       }
     },
   },

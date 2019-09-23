@@ -121,7 +121,7 @@ export default {
 
 <template>
   <v-expansion-panel>
-    <v-expansion-panel-header>
+    <v-expansion-panel-header class="event-info_header">
       <div class="event-info_wrapper">
         <v-icon
           class="event-icon"
@@ -192,62 +192,3 @@ export default {
     </v-expansion-panel-content>
   </v-expansion-panel>
 </template>
-
-<style scoped>
-  .event-info_wrapper {
-    display: flex;
-    align-items: center;
-    max-width: calc(100% - 36px);
-  }
-
-  .event-info {
-    display: flex;
-    align-items: center;
-    flex: 1 1 auto;
-    overflow: hidden;
-  }
-
-  .event-icon {
-    margin-right: 12px;
-  }
-
-  .event-timestamp {
-    display: flex;
-    width: 160px;
-    flex-shrink: 0;
-  }
-
-  .event-timestamp--date {
-    margin-right: 8px;
-    width: 58px;
-    text-align: right;
-  }
-
-  .event-timestamp--time {
-    width: 70px;
-    text-align: left;
-  }
-
-  .event-details {
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  @media screen and (max-width: 500px) {
-    .v-expansion-panel-header {
-      padding: 12px;
-    }
-
-    .event-info {
-      flex-direction: column;
-      align-items: flex-start;
-      position: relative;
-    }
-
-    .event-details {
-      margin-top: 8px;
-    }
-  }
-</style>

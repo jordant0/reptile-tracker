@@ -2,6 +2,8 @@
 import Loading from '@/components/loading'
 import Empty from '@/components/empty'
 import EventCard from '@/components/event-card'
+import ArrivalCard from '@/components/arrival-card'
+import BirthdateCard from '@/components/birthdate-card'
 import AddEventBttns from '@/components/add-event-bttns'
 import Filtering from '@/components/filtering'
 import { mapGetters } from 'vuex'
@@ -9,6 +11,8 @@ import { mapGetters } from 'vuex'
 export default {
   components: {
     EventCard,
+    ArrivalCard,
+    BirthdateCard,
     Loading,
     Empty,
     AddEventBttns,
@@ -63,6 +67,10 @@ export default {
       } else {
         return ''
       }
+    },
+
+    includeOtherCards() {
+      return this.animal && (!this.filter || !this.filter.length || this.filter === 'Other')
     },
   },
 
@@ -140,6 +148,18 @@ export default {
           :key="currentEvent.id"
           :current-event="currentEvent"
           :animal="animal"
+        />
+
+        <arrival-card
+          v-if="includeOtherCards && animal.arrival"
+          :date="animal.arrival"
+          :animal-name="animalName"
+        />
+
+        <birthdate-card
+          v-if="includeOtherCards && animal.birthdate"
+          :date="animal.birthdate"
+          :animal-name="animalName"
         />
       </v-expansion-panels>
 

@@ -321,4 +321,61 @@ export default {
   .login-card .v-input {
     margin-bottom: 8px;
   }
+
+  .event-info_wrapper {
+    display: flex;
+    align-items: center;
+    max-width: calc(100% - 36px);
+  }
+
+  .event-info {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+
+  .event-icon {
+    margin-right: 12px;
+  }
+
+  .event-timestamp {
+    display: flex;
+    width: 160px;
+    flex-shrink: 0;
+  }
+
+  .event-timestamp--date {
+    margin-right: 8px;
+    width: 58px;
+    text-align: right;
+  }
+
+  .event-timestamp--time {
+    width: 70px;
+    text-align: left;
+  }
+
+  .event-details {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media screen and (max-width: 500px) {
+    .event-info_header.v-expansion-panel-header {
+      padding: 12px;
+    }
+
+    .event-info {
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+    }
+
+    .event-details {
+      margin-top: 8px;
+    }
+  }
 </style>

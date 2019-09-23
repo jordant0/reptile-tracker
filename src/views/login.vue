@@ -1,11 +1,13 @@
 <script>
 import LoginForm from '@/components/login-form'
 import SignupFrom from '@/components/signup-form'
+import PasswordForm from '@/components/password-form'
 
 export default {
   components: {
     login: LoginForm,
     signup: SignupFrom,
+    password: PasswordForm,
   },
 
   props: {

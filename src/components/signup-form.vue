@@ -85,7 +85,6 @@ export default {
         <v-text-field
           v-model="userEmail"
           label="Email"
-          hint="The email used for logging in"
           :rules="[
             v => !!v || 'Email is required',
             v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
@@ -96,7 +95,6 @@ export default {
         <v-text-field
           v-model="userPassword"
           label="Password"
-          hint="Minimum 8 characters"
           :type="showPassword ? 'text' : 'password'"
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           :rules="[
@@ -112,7 +110,6 @@ export default {
           v-model="repeatPassword"
           label="Retype Password"
           type="password"
-          hint="Must match the above password"
           :rules="[
             v => (v === userPassword) || 'Passwords do not match',
           ]"

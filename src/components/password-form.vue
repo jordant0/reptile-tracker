@@ -5,16 +5,10 @@ export default {
       type: String,
       default: '',
     },
-
-    password: {
-      type: String,
-      default: '',
-    },
   },
 
   data() {
     return {
-      showPassword: false,
       submitting: false,
     }
   },
@@ -29,16 +23,6 @@ export default {
         this.$emit('update:email', value)
       },
     },
-
-    userPassword: {
-      get() {
-        return this.password
-      },
-
-      set(value) {
-        this.$emit('update:password', value)
-      },
-    },
   },
 
   methods: {
@@ -46,10 +30,13 @@ export default {
       this.submitting = true
       if(this.$refs.form.validate()) {
         this.$firebase.auth()
-          .signInWithEmailAndPassword(this.email, this.password)
+          .sendPasswordResetEmail(this.email)
           .then(() => {
+            this.$store.commit('showNotification', {
+              color: 'success',
+              text: `A password email has been sent to ${this.email}. Check your inbox.`,
+            })
             this.submitting = false
-            this.$router.push({ name: 'animals' })
           })
           .catch((error) => {
             this.$store.commit('showNotification', {
@@ -69,11 +56,11 @@ export default {
 <template>
   <v-card class="container-card login-card" max-width="400px">
     <v-card-title>
-      <span class="headline">Login</span>
+      <span class="headline">Reset Password</span>
     </v-card-title>
 
     <div class="sub-headline">
-      Login to access your animals and manage their activities
+      Enter the email associated with the account to receive a password reset email
     </div>
 
     <v-form
@@ -86,40 +73,19 @@ export default {
           label="Email"
           :rules="[
             v => !!v || 'Email is required',
+            v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
           ]"
           required
         />
-
-        <v-text-field
-          v-model="userPassword"
-          label="Password"
-          :type="showPassword ? 'text' : 'password'"
-          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          :rules="[
-            v => !!v || 'Password is required',
-          ]"
-          required
-          @click:append="showPassword = !showPassword"
-        />
-
-        <div class="password-prompt">
-          <a
-            href="#"
-            @click.prevent="$emit('switch', 'password')"
-          >
-            Forgot your password?
-          </a>
-        </div>
       </v-card-text>
 
       <v-card-actions>
         <div class="prompt">
-          Don't have an account?
           <a
             href="#"
-            @click.prevent="$emit('switch', 'signup')"
+            @click.prevent="$emit('switch', 'login')"
           >
-            Sign-up here!
+            Back to Login
           </a>
         </div>
 
@@ -131,15 +97,9 @@ export default {
           type="submit"
           color="primary"
         >
-          Login
+          Submit
         </v-btn>
       </v-card-actions>
     </v-form>
   </v-card>
 </template>
-
-<style scoped>
-  .password-prompt {
-    text-align: right;
-  }
-</style>

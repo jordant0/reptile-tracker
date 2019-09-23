@@ -132,7 +132,11 @@ export default {
       if(this.birthDate) {
         let ageStr = this.today.from(this.birthDate, true)
 
-        return `${ageStr.charAt(0).toUpperCase()}${ageStr.slice(1)} old`
+        if(ageStr.startsWith('a')) {
+          ageStr = `${1}${ageStr.slice(1)}`
+        }
+
+        return `${ageStr} old`
       } else {
         return null
       }

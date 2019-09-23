@@ -268,7 +268,7 @@ export default {
     }
 
     .v-expansion-panel-content {
-      margin-left: 0;
+      margin-left: 0 !important;
     }
   }
 

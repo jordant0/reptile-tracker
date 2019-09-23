@@ -43,6 +43,7 @@ export default {
     })
 
     this.version = `v${VERSION}`
+    this.mailLink = `mailto:admin@herpstracker.com?subject=Herps%20Tracker%20Bug%20Report%20(v${VERSION})`
   },
 
   computed: {
@@ -77,7 +78,11 @@ export default {
     <v-footer class="app-footer">
       <div>{{ version }}</div>
       <div class="flex-grow-1"></div>
-      <div>&copy; 2019 Jordanssson</div>
+      <div>
+        Having issues?
+        <a :href="mailLink">Contact us.</a> |
+        &copy; 2019 Jordanssson
+      </div>
     </v-footer>
   </v-app>
 </template>

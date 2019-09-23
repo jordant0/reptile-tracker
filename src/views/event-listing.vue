@@ -2,14 +2,17 @@
 import Loading from '@/components/loading'
 import Empty from '@/components/empty'
 import EventCard from '@/components/event-card'
+import AddEventBttns from '@/components/add-event-bttns'
+import Filtering from '@/components/filtering'
 import { mapGetters } from 'vuex'
-import eventTypeData from '@/data/event-type'
 
 export default {
   components: {
     EventCard,
     Loading,
     Empty,
+    AddEventBttns,
+    Filtering,
   },
 
   data() {
@@ -18,12 +21,8 @@ export default {
       animalId: this.$route.params.animal_id,
       animal: null,
       eventsList: [],
-      addMenu: false,
+      filter: null,
     }
-  },
-
-  created() {
-    this.typesData = eventTypeData
   },
 
   watch: {
@@ -39,6 +38,10 @@ export default {
       handler() {
         this.setupBinging()
       },
+    },
+
+    filter() {
+      this.refetchEvents()
     },
   },
 
@@ -77,28 +80,38 @@ export default {
             .doc(this.animalId)
         )
 
-        this.$bind(
-          'eventsList',
-          this.$firebase
-            .firestore()
-            .collection('users')
-            .doc(this.uuid)
-            .collection('animals')
-            .doc(this.animalId)
-            .collection('events')
-            .orderBy('timestamp', 'desc')
-        ).then(() => {
-          this.loading = false
-        })
+        this.getEventsList()
       }
     },
 
-    addEvent(eventType) {
-      this.$router.push({
-        name: 'add-event',
-        params: { animal_id: this.animalId },
-        query: { event_type: eventType },
+    getEventsList() {
+      let collection = this.$firebase
+        .firestore()
+        .collection('users')
+        .doc(this.uuid)
+        .collection('animals')
+        .doc(this.animalId)
+        .collection('events')
+
+      if(this.filter && this.filter.length) {
+        collection = collection.where('type', '==', this.filter)
+      }
+
+      this.$bind(
+        'eventsList',
+        collection
+          .orderBy('timestamp', 'desc')
+      ).then(() => {
+        this.loading = false
       })
+    },
+
+    refetchEvents() {
+      if(!this.loading) {
+        this.loading = true
+        this.$unbind('eventsList')
+        this.getEventsList()
+      }
     },
   },
 }
@@ -110,6 +123,14 @@ export default {
     <template v-else>
       <div class="event-listing_header">
         Events for {{ animalName }}
+
+        <div class="flex-grow-1"></div>
+
+        <filtering
+          :animal-id="animalId"
+          :current-filter.sync="filter"
+          :loading="loading"
+        />
       </div>
 
       <empty v-if="!eventsList.length" noun="event" />
@@ -122,46 +143,7 @@ export default {
         />
       </v-expansion-panels>
 
-      <v-speed-dial
-        v-model="addMenu"
-        fixed
-        bottom
-        right
-        direction="top"
-        transition="slide-y-reverse-transition"
-      >
-        <template v-slot:activator>
-          <v-btn
-            v-model="addMenu"
-            color="accent"
-            dark
-            fab
-          >
-            <v-icon v-if="addMenu">mdi-close</v-icon>
-            <v-icon v-else>mdi-plus</v-icon>
-          </v-btn>
-        </template>
-
-        <v-tooltip
-          v-for="eventType in typesData.order"
-          :key="eventType"
-          left
-        >
-          <template v-slot:activator="{ on }">
-            <v-btn
-              fab
-              dark
-              small
-              :color="typesData.config[eventType].color"
-              v-on="on"
-              @click.prevent="addEvent(eventType)"
-            >
-              <v-icon>{{ typesData.config[eventType].icon }}</v-icon>
-            </v-btn>
-          </template>
-          <span>{{ eventType }}</span>
-        </v-tooltip>
-      </v-speed-dial>
+      <add-event-bttns :animal-id="animalId" />
     </template>
   </div>
 </template>
@@ -175,5 +157,6 @@ export default {
     font-size: 18px;
     margin-bottom: 12px;
     font-weight: 500;
+    display: flex;
   }
 </style>

@@ -12,6 +12,11 @@ const INITIAL_STATE = {
     body: null,
     response: null,
   },
+  notification: {
+    shown: false,
+    color: null,
+    text: null,
+  },
 }
 
 export default new Vuex.Store({
@@ -49,6 +54,18 @@ export default new Vuex.Store({
         shown: false,
         response: payload,
       }
+    },
+
+    showNotification(state, payload) {
+      state.notification = {
+        shown: true,
+        color: payload.color,
+        text: payload.text,
+      }
+    },
+
+    setNotificationShown(state, value) {
+      state.notification.shown = value
     },
   },
 })

@@ -19,6 +19,13 @@ export default new Router({
       meta: { title: 'Login / Sign-up' },
     },
     {
+      path: '/sign-up',
+      name: 'sign-up',
+      component: () => import('./views/login.vue'),
+      props: { login: false },
+      meta: { title: 'Login / Sign-up' },
+    },
+    {
       path: '/new-animal',
       name: 'add-animal',
       component: () => import('./views/add-animal.vue'),

@@ -2,6 +2,7 @@
 import Navbar from '@/components/navbar'
 import Sidebar from '@/components/sidebar'
 import ConfirmDialog from '@/components/confirm-dialog'
+import Notifier from '@/components/notification'
 import { mapState } from 'vuex'
 
 export default {
@@ -9,6 +10,7 @@ export default {
     Navbar,
     Sidebar,
     ConfirmDialog,
+    Notifier,
   },
 
   props: {
@@ -32,8 +34,9 @@ export default {
       if(user) {
         this.$store.commit('updateUser', user)
       } else {
+        let currentRoute = this.$router.currentRoute.name;
         this.$store.commit('updateUser', {})
-        if(this.$router.currentRoute.name !== 'login') {
+        if(!(currentRoute === 'login' || currentRoute === 'sign-up')) {
           this.$router.push({ name: 'login' })
         }
       }
@@ -68,6 +71,8 @@ export default {
     </v-content>
 
     <confirm-dialog />
+
+    <notifier />
 
     <v-footer class="app-footer">
       <div>{{ version }}</div>
@@ -285,5 +290,30 @@ export default {
 
   .date-time-picker_dialog .v-picker {
     box-shadow: none;
+  }
+
+  .login-card {
+    margin: auto;
+  }
+
+  .login-card .sub-headline {
+    padding: 0 20px;
+    color: #999999;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .login-card .v-card__actions, .login-card .v-card__title {
+    padding: 20px;
+  }
+
+  .login-card .prompt {
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  .login-card .v-input {
+    margin-bottom: 8px;
   }
 </style>

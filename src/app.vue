@@ -34,7 +34,7 @@ export default {
       if(user) {
         this.$store.commit('updateUser', user)
       } else {
-        let currentRoute = this.$router.currentRoute.name;
+        let currentRoute = this.$router.currentRoute.name
         this.$store.commit('updateUser', {})
         if(!(currentRoute === 'login' || currentRoute === 'sign-up')) {
           this.$router.push({ name: 'login' })

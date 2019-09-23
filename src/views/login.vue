@@ -28,16 +28,16 @@ export default {
 
   methods: {
     submit() {
-      this.submitting = true;
+      this.submitting = true
       this.$firebase.auth()
         .signInWithEmailAndPassword(this.email, this.password)
         .then(() => {
-          this.submitting = false;
+          this.submitting = false
           this.$router.push({ name: 'animals' })
         })
         .catch(function(error) {
           console.log(`Log in failed: ${error}`)
-          this.submitting = false;
+          this.submitting = false
         })
     },
   },
@@ -54,7 +54,7 @@ export default {
         return 'Sign-up to store information about your animals and manage their activities'
       }
     },
-  }
+  },
 }
 </script>
 

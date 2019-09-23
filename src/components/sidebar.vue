@@ -24,7 +24,7 @@ export default {
     logOut() {
       this.$emit('update:open', false)
       this.$firebase.auth().signOut().then(() => {
-        this.$router.push('/')
+        this.$router.push({ name: 'login' })
       }, function(error) {
         console.log(error)
       })

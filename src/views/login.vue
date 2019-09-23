@@ -1,25 +1,25 @@
 <script>
 export default {
-  props: {
-    shown: {
-      type: Boolean,
-      default: false,
-    },
-  },
-
   data() {
     return {
       email: '',
       password: '',
+      submitting: false,
     }
   },
 
   methods: {
     login() {
+      this.submitting = true;
       this.$firebase.auth()
         .signInWithEmailAndPassword(this.email, this.password)
+        .then(() => {
+          this.submitting = false;
+          this.$router.push({ name: 'animals' })
+        })
         .catch(function(error) {
           console.log(`Log in failed: ${error}`)
+          this.submitting = false;
         })
     },
   },
@@ -27,15 +27,16 @@ export default {
 </script>
 
 <template>
-  <v-overlay
-    :value="shown"
-    :dark="false"
-    :z-index="6"
-  >
-    <v-card max-width="400px">
+  <div class="container-wrapper">
+    <v-card class="container-card login-card" max-width="400px">
       <v-card-title>
         <span class="headline">Login</span>
       </v-card-title>
+
+      <div class="sub-headline">
+        Login to access your animals and manage their activities
+      </div>
+
       <v-form @submit.prevent="login">
         <v-card-text>
           <v-container>
@@ -43,7 +44,7 @@ export default {
               <v-col cols="12">
                 <v-text-field
                   v-model="email"
-                  label="Email*"
+                  label="Email"
                   required
                 />
               </v-col>
@@ -51,7 +52,7 @@ export default {
               <v-col cols="12">
                 <v-text-field
                   v-model="password"
-                  label="Password*"
+                  label="Password"
                   type="password"
                   required
                 />
@@ -61,16 +62,44 @@ export default {
         </v-card-text>
 
         <v-card-actions>
+          <div class="prompt">
+            Don't have an account? <a href="#">Sign-up here!</a>
+          </div>
+
           <div class="flex-grow-1"></div>
-          <v-btn type="submit" color="primary">Login</v-btn>
+
+          <v-btn
+            :disabled="submitting"
+            :loading="submitting"
+            type="submit"
+            color="primary"
+          >
+            Login
+          </v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
-  </v-overlay>
+  </div>
 </template>
 
 <style scoped>
+  .login-card {
+    margin: auto;
+  }
+
+  .sub-headline {
+    padding: 0 20px;
+    color: #999999;
+    font-size: 14px;
+    text-align: center;
+  }
+
   .v-card__actions, .v-card__title {
     padding: 20px;
+  }
+
+  .prompt {
+    font-size: 14px;
+    font-style: italic;
   }
 </style>

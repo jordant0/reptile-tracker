@@ -2,14 +2,12 @@
 import Navbar from '@/components/navbar'
 import Sidebar from '@/components/sidebar'
 import ConfirmDialog from '@/components/confirm-dialog'
-import Login from '@/components/login'
 import { mapState } from 'vuex'
 
 export default {
   components: {
     Navbar,
     Sidebar,
-    Login,
     ConfirmDialog,
   },
 
@@ -26,7 +24,6 @@ export default {
   data() {
     return {
       drawerOpen: false,
-      showLogin: false,
     }
   },
 
@@ -34,10 +31,11 @@ export default {
     this.$firebase.auth().onAuthStateChanged((user) => {
       if(user) {
         this.$store.commit('updateUser', user)
-        this.showLogin = false
       } else {
         this.$store.commit('updateUser', {})
-        this.showLogin = true
+        if(this.$router.currentRoute.name !== 'login') {
+          this.$router.push({ name: 'login' })
+        }
       }
     })
 
@@ -54,8 +52,6 @@ export default {
 
 <template>
   <v-app>
-    <login :shown="showLogin" />
-
     <sidebar
       :open.sync="drawerOpen"
     />

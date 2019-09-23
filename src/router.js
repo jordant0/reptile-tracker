@@ -13,6 +13,12 @@ export default new Router({
       meta: { title: 'Animals' },
     },
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('./views/login.vue'),
+      meta: { title: 'Login / Sign-up' },
+    },
+    {
       path: '/new-animal',
       name: 'add-animal',
       component: () => import('./views/add-animal.vue'),

@@ -188,7 +188,7 @@ export default {
     deleteAnimal() {
       this.$store.commit('showConfirmDialog', {
         title: 'Are you sure you want to delete this animal?',
-        body: 'This action cannot be undone. Consider archiving instead if you need future access.',
+        body: 'This action cannot be undone.',
       })
 
       this.confirmWatcher = this.$watch('confirmDialog.response', function(response) {

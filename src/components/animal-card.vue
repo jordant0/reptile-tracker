@@ -153,7 +153,7 @@ export default {
 
   methods: {
     setupBinging() {
-      if(!this.bindingSetup && this.uuid && this.animal.id) {
+      if(!this.animal.archive && !this.bindingSetup && this.uuid && this.animal.id) {
         this.bindingSetup = true
         this.$bind(
           'lastFedEvent',
@@ -188,7 +188,7 @@ export default {
     deleteAnimal() {
       this.$store.commit('showConfirmDialog', {
         title: 'Are you sure you want to delete this animal?',
-        body: 'This action cannot be undone.',
+        body: 'This action cannot be undone. If you need future access to the animal\'s data, consider archiving instead.',
       })
 
       this.confirmWatcher = this.$watch('confirmDialog.response', function(response) {
@@ -203,6 +203,36 @@ export default {
             .delete()
         }
       })
+    },
+
+    archiveAnimal() {
+      this.$store.commit('showConfirmDialog', {
+        title: 'Are you sure you want to archive this animal?',
+        body: 'Archive animals and their data can still be accessed under the Archive menu.',
+      })
+
+      this.confirmWatcher = this.$watch('confirmDialog.response', function(response) {
+        this.confirmWatcher()
+        if(response === 'confirm') {
+          this.$firebase
+            .firestore()
+            .collection('users')
+            .doc(this.uuid)
+            .collection('animals')
+            .doc(this.animal.id)
+            .update({ archive: true })
+        }
+      })
+    },
+
+    unarchive() {
+      this.$firebase
+        .firestore()
+        .collection('users')
+        .doc(this.uuid)
+        .collection('animals')
+        .doc(this.animal.id)
+        .update({ archive: false })
     },
   },
 }
@@ -282,6 +312,34 @@ export default {
           </template>
           <span>Delete</span>
         </v-tooltip>
+
+        <v-tooltip v-if="animal.archive" top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              icon
+              color="#71f55c"
+              v-on="on"
+              @click.prevent="unarchive"
+            >
+              <v-icon>mdi-history</v-icon>
+            </v-btn>
+          </template>
+          <span>Unarchive</span>
+        </v-tooltip>
+        <v-tooltip v-else top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              icon
+              color="#d0a16c"
+              v-on="on"
+              @click.prevent="archiveAnimal"
+            >
+              <v-icon>mdi-archive</v-icon>
+            </v-btn>
+          </template>
+          <span>Archive</span>
+        </v-tooltip>
+
 
         <v-tooltip top>
           <template v-slot:activator="{ on }">

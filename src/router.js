@@ -26,6 +26,13 @@ export default new Router({
       meta: { title: 'Login / Sign-up' },
     },
     {
+      path: '/archive',
+      name: 'archive',
+      component: AnimalListing,
+      meta: { title: 'Archived Animals' },
+      props: { archive: true },
+    },
+    {
       path: '/new-animal',
       name: 'add-animal',
       component: () => import('./views/add-animal.vue'),

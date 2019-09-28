@@ -17,10 +17,6 @@ export default {
   },
 
   methods: {
-    goHome() {
-      this.$router.push('/')
-    },
-
     logOut() {
       this.$emit('update:open', false)
       this.$firebase.auth().signOut().then(() => {
@@ -54,12 +50,21 @@ export default {
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item @click.prevent="goHome">
+      <v-list-item @click.prevent="$router.push('/')">
         <v-list-item-action>
           <v-icon>mdi-home</v-icon>
         </v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>Home</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item @click="$router.push({ name: 'archive' })">
+        <v-list-item-action>
+          <v-icon>mdi-archive</v-icon>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>Archive</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 

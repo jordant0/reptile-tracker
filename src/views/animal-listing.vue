@@ -11,6 +11,13 @@ export default {
     Empty,
   },
 
+  props: {
+    archive: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   data() {
     return {
       loading: true,
@@ -42,6 +49,14 @@ export default {
     ...mapGetters([
       'uuid',
     ]),
+
+    filteredAnimals() {
+      if(this.animalsList) {
+        return this.animalsList.filter(animal => this.archive == !!animal.archive)
+      } else {
+        return []
+      }
+    },
   },
 
   methods: {
@@ -59,7 +74,7 @@ export default {
       <empty v-if="!animalsList.length" noun="animal" />
       <v-expansion-panels v-else>
         <animal-card
-          v-for="animal in animalsList"
+          v-for="animal in filteredAnimals"
           :key="animal.id"
           :animal="animal"
         />

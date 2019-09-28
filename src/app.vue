@@ -378,4 +378,8 @@ export default {
       margin-top: 8px;
     }
   }
+
+  .v-list-item.active {
+    font-weight: 600;
+  }
 </style>

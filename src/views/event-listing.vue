@@ -72,6 +72,10 @@ export default {
     includeOtherCards() {
       return this.animal && (!this.filter || !this.filter.length || this.filter === 'Other')
     },
+
+    showEmpty() {
+      return !this.eventsList.length && (!this.includeOtherCards || (!this.animal.arrival && !this.animal.birthDate))
+    }
   },
 
   methods: {
@@ -141,7 +145,7 @@ export default {
         />
       </div>
 
-      <empty v-if="!eventsList.length" noun="event" />
+      <empty v-if="showEmpty" noun="event" />
       <v-expansion-panels v-else>
         <event-card
           v-for="currentEvent in eventsList"

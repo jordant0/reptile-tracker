@@ -75,14 +75,10 @@ export default {
 <template>
   <div class="container-wrapper">
     <loading v-if="loading" />
-    <v-card v-else class="container-card">
-      <v-card-title>Edit Event</v-card-title>
-      <v-card-text>
-        <event-form
-          :animal-id="animalId"
-          :current-event="currentEvent"
-        />
-      </v-card-text>
-    </v-card>
+    <event-form
+      v-else
+      :animal-id="animalId"
+      :current-event="currentEvent"
+    />
   </div>
 </template>

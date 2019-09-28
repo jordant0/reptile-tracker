@@ -32,14 +32,9 @@ export default {
 
 <template>
   <div class="container-wrapper">
-    <v-card class="container-card">
-      <v-card-title>Add {{ eventType }} Event</v-card-title>
-      <v-card-text>
-        <event-form
-          :animal-id="animalId"
-          :event-type="eventType"
-        />
-      </v-card-text>
-    </v-card>
+    <event-form
+      :animal-id="animalId"
+      :event-type="eventType"
+    />
   </div>
 </template>

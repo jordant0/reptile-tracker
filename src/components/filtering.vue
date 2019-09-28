@@ -108,10 +108,6 @@ export default {
     align-items: center;
   }
 
-  .v-list-item.active {
-    font-weight: 600;
-  }
-
   .filters-list .v-list-item__icon {
     margin: 0 12px 0 0 !important;
     align-self: center;

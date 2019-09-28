@@ -5,6 +5,7 @@ export default {
     'Weight',
     'Shedding',
     'Maintenance',
+    'Health',
     'Other',
   ],
   config: {
@@ -17,7 +18,7 @@ export default {
       icon: 'mdi-hand-heart',
     },
     'Weight': {
-      color: '#f44e4e',
+      color: '#ff8a36',
       icon: 'mdi-weight-gram',
     },
     'Shedding': {
@@ -27,6 +28,10 @@ export default {
     'Maintenance': {
       color: '#bb91ff',
       icon: 'mdi-tools',
+    },
+    'Health': {
+      color: '#f44e4e',
+      icon: 'mdi-hospital-box',
     },
     'Other': {
       color: '#7dd8ff',

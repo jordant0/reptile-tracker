@@ -178,6 +178,14 @@ export default {
       })
     },
 
+    newEvent() {
+      this.$router.push({
+        name: 'add-event',
+        params: { animal_id: this.animal.id },
+        query: { event_type: 'Feeding' },
+      })
+    },
+
     editAnimal() {
       this.$router.push({
         name: 'edit-animal',
@@ -188,7 +196,7 @@ export default {
     deleteAnimal() {
       this.$store.commit('showConfirmDialog', {
         title: 'Are you sure you want to delete this animal?',
-        body: 'This action cannot be undone. If you need future access to the animal\'s data, consider archiving instead.',
+        body: `This action cannot be undone.${this.animal.archive ? '' : 'If you need future access to the animal\'s data, consider archiving instead.'}`,
       })
 
       this.confirmWatcher = this.$watch('confirmDialog.response', function(response) {
@@ -340,20 +348,36 @@ export default {
           <span>Archive</span>
         </v-tooltip>
 
+        <template v-if="!animal.archive">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                color="#46cdff"
+                v-on="on"
+                @click.prevent="editAnimal"
+              >
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </template>
+            <span>Edit</span>
+          </v-tooltip>
 
-        <v-tooltip top>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              icon
-              color="#46cdff"
-              v-on="on"
-              @click.prevent="editAnimal"
-            >
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-          </template>
-          <span>Edit</span>
-        </v-tooltip>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                color="primary"
+                v-on="on"
+                large
+                @click.prevent="newEvent"
+              >
+                <v-icon>mdi-plus-circle</v-icon>
+              </v-btn>
+            </template>
+            <span>New Event</span>
+          </v-tooltip>
+        </template>
       </div>
     </v-expansion-panel-content>
   </v-expansion-panel>

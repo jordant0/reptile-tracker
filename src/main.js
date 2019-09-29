@@ -8,7 +8,10 @@ import vuetify from './plugins/vuetify'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/storage'
 import { firestorePlugin } from 'vuefire'
+
+import 'cropperjs/dist/cropper.css'
 
 Vue.use(firestorePlugin)
 

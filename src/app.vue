@@ -198,18 +198,61 @@ export default {
   }
 
   .animal-header {
-    padding: 16px 24px 16px 124px;
+    padding: 16px 24px 16px 104px;
+    transition: all 0.05s ease;
+  }
+
+  .v-expansion-panel-header--active .animal-header {
+    padding-left: 24px;
+  }
+
+  .v-expansion-panel:first-child .animal-image {
+    border-radius: 4px 0 0 0;
+  }
+
+  .v-expansion-panel:last-child .animal-image {
+    border-radius: 0 0 0 4px;
   }
 
   .animal-image {
     position: absolute;
-    width: 100px;
+    width: 80px;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #b6b6b6;
+    font-size: 12px;
     font-style: italic;
+    overflow: hidden;
+    transition: all 0.05s ease;
+    overflow: hidden;
+  }
+
+  .animal-image img {
+    width: 100%;
+    height: auto;
+  }
+
+  .v-expansion-panel.v-expansion-panel--active .animal-image {
+    display: none;
+  }
+
+  .v-expansion-panel.v-expansion-panel--active .animal-image img {
+    height: 100%;
+    width: auto;
+  }
+
+  .animal-expanded-image {
+    width: 160px;
+    height: 160px;
+    margin: auto;
+    margin-top: 20px;
+  }
+
+  .animal-expanded-image img {
+    max-width: 100%;
+    max-height: 100%;
   }
 
   .animal-header {
@@ -269,26 +312,10 @@ export default {
   }
 
   @media screen and (max-width: 600px) {
-    .animal-image {
-      display: none;
-    }
 
-    .animal-header {
-      padding-left: 24px;
-    }
-
-    .v-expansion-panel-content {
-      margin-left: 0 !important;
-    }
   }
 
   @media screen and (max-width: 500px) {
-    .animal-header--fed-date {
-      display: none;
-    }
-  }
-
-  @media screen and (max-width: 400px) {
     .animal-header--species {
       display: none;
     }
@@ -398,5 +425,75 @@ export default {
 
   .animal-listing .theme--dark.v-expansion-panels .v-expansion-panel-header .v-expansion-panel-header__icon .v-icon {
     color: rgba(0, 0, 0, 0.54);
+  }
+
+  .image-croppper-dialog {
+    max-width: 400px;
+  }
+
+  .image-croppper-dialog .v-card__text {
+    padding: 0 !important;
+  }
+
+  .animal-avatar-select {
+    max-width: 100%;
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+
+  .animal-avatar-select .animal-avatar-select--hover {
+    display: none;
+  }
+
+  .animal-avatar-select {
+    cursor: pointer;
+  }
+
+  .animal-avatar-select:hover .animal-avatar-select--hover {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-style: italic;
+  }
+
+  .animal-avatar-select:hover .animal-avatar_holder--text {
+    display: none;
+  }
+
+  .animal-avatar-select img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .animal-avatar-select .animal-avatar_holder {
+    width: 100%;
+    height: 100%;
+    background-color: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-style: italic;
+    color: #b6b6b6;
+  }
+
+  .animal-avatar-select .image-file-input {
+    position: absolute;
+    top: 0;
+    opacity: 0;
   }
 </style>

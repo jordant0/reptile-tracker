@@ -14,6 +14,7 @@ export default {
     return {
       lastFedEvent: null,
       randomColor: `hsl(${360 * Math.random()},${25 + 70 * Math.random()}%, ${85 + 10 * Math.random()}%)`,
+      animalImage: null,
     }
   },
 
@@ -24,6 +25,14 @@ export default {
         this.setupBinging()
       },
     },
+  },
+
+  created() {
+    if(this.animal.image && this.animal.image.length) {
+      this.$firebase.storage().ref(this.animal.image).getDownloadURL().then((url) => {
+        this.animalImage = url
+      })
+    }
   },
 
   computed: {
@@ -250,9 +259,13 @@ export default {
   <v-expansion-panel>
     <div
       class="animal-image"
-      :style="{ backgroundColor: randomColor }"
+      :style="{ backgroundColor: animalImage ? '#ffffff' : randomColor }"
     >
-      No image
+      <img
+        v-if="animalImage"
+        :src="animalImage"
+      />
+      <span v-else>No image</span>
     </div>
 
     <v-expansion-panel-header>
@@ -305,6 +318,10 @@ export default {
           Last fed {{ lastFedDate }} ({{ lastFedFromNow }})
         </li>
       </ul>
+
+      <div v-if="animalImage" class="animal-expanded-image">
+        <img :src="animalImage" />
+      </div>
 
       <div class="card-actions">
         <v-tooltip top>
@@ -390,9 +407,10 @@ export default {
 
   .v-expansion-panel-header {
     padding: 0;
+    min-height: 60px;
   }
 
   .v-expansion-panel-content {
-    margin-left: 100px;
+    margin-left: 12px;
   }
 </style>

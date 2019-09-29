@@ -1,9 +1,11 @@
 <script>
 import DateTimeInput from '@/components/date-time-input'
+import VueCropper from 'vue-cropperjs'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
+    VueCropper,
     DateTimeInput,
   },
 
@@ -19,6 +21,11 @@ export default {
   data() {
     return {
       submitting: false,
+      tempImage: '',
+      animalImage: '',
+      animalImageUrl: '',
+      cropDialog: false,
+      imageChanged: false,
       animalData: {
         name: this.animal.name || '',
         species: this.animal.species || '',
@@ -26,6 +33,14 @@ export default {
         birthdate: this.animal.birthdate ? this.animal.birthdate.toDate() : new Date(),
         arrival: this.animal.arrival ? this.animal.arrival.toDate() : new Date(),
       },
+    }
+  },
+
+  created() {
+    if(this.animal.image && this.animal.image.length) {
+      this.$firebase.storage().ref(this.animal.image).getDownloadURL().then((url) => {
+        this.animalImageUrl = url
+      })
     }
   },
 
@@ -39,6 +54,17 @@ export default {
     submit() {
       this.submitting = true
       if(this.$refs.form.validate() && this.uuid) {
+        if(this.imageChanged && this.animalImage) {
+          let avatarName = `user/${this.uuid}/${encodeURI(this.animalData.name)}.png`
+          let storageRef = this.$firebase.storage().ref().child(avatarName)
+
+          this.animalData.image = avatarName
+
+          this.animalImage.toBlob((blob) => {
+            storageRef.put(blob)
+          })
+        }
+
         let collection = this.$firebase
           .firestore()
           .collection('users')
@@ -59,6 +85,40 @@ export default {
       this.submitting = false
       this.$router.back()
     },
+
+    uploadImage() {
+      this.$refs.input.click()
+    },
+
+    setImage(e) {
+      const file = e.target.files[0]
+      if(file.type.indexOf('image/') === -1) {
+        alert('Please select an image file')
+        return
+      }
+      if(typeof FileReader === 'function') {
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          this.tempImage = event.target.result
+          // rebuild cropperjs with the updated source
+          this.$refs.cropper.replace(event.target.result)
+        }
+        reader.readAsDataURL(file)
+        this.cropDialog = true
+      } else {
+        alert('Sorry, FileReader API not supported')
+      }
+    },
+
+    cropImage() {
+      this.animalImage = this.$refs.cropper.getCroppedCanvas({
+        width: 300,
+        height: 300,
+      })
+      this.animalImageUrl = this.animalImage.toDataURL()
+      this.imageChanged = true
+      this.cropDialog = false
+    },
   },
 }
 </script>
@@ -69,6 +129,73 @@ export default {
     ref="form"
     @sbmit.prevent="submit"
   >
+    <v-dialog
+      :value="cropDialog"
+      light
+      content-class="image-croppper-dialog"
+      @input="cropDialog = $event"
+    >
+      <v-card>
+        <v-card-text>
+          <div class="img-cropper">
+            <vue-cropper
+              ref="cropper"
+              :aspect-ratio="1"
+              :src="tempImage"
+              :center="false"
+              :auto-crop-area="1"
+            />
+          </div>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn
+            text
+            color="#b6b6b6"
+            @click="cropDialog = false"
+          >
+            Cancel
+          </v-btn>
+
+          <div class="flex-grow-1"></div>
+
+          <v-btn
+            text
+            color="primary"
+            @click="cropImage"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <div class="animal-avatar-select" @click="uploadImage">
+      <img
+        v-if="animalImageUrl && animalImageUrl.length"
+        :src="animalImageUrl"
+        alt="Cropped Image"
+      />
+      <div v-else class="animal-avatar_holder">
+        <span class="animal-avatar_holder--text">
+          No Image
+        </span>
+      </div>
+
+      <div class="animal-avatar-select--hover">
+        Upload Image
+      </div>
+
+      <input
+        ref="input"
+        class="image-file-input"
+        type="file"
+        name="image"
+        accept="image/*"
+        @change="setImage"
+      />
+    </div>
+
     <v-text-field
       v-model="animalData.name"
       label="Name"

@@ -121,7 +121,7 @@ export default {
     <div class="form-actions">
       <v-btn
         text
-        color="#999999"
+        color="#b6b6b6"
         @click.prevent="$router.back()"
       >
         Cancel

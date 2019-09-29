@@ -52,7 +52,7 @@ export default {
 
     filteredAnimals() {
       if(this.animalsList) {
-        return this.animalsList.filter(animal => this.archive == !!animal.archive)
+        return this.animalsList.filter(animal => this.archive === !!animal.archive)
       } else {
         return []
       }

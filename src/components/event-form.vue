@@ -190,7 +190,7 @@ export default {
         <div class="form-actions">
           <v-btn
             text
-            color="#999999"
+            color="#b6b6b6"
             @click.prevent="$router.back()"
           >
             Cancel
@@ -221,12 +221,16 @@ export default {
   font-weight: 400;
   letter-spacing: normal;
   line-height: 2rem;
-  border-bottom: 1px solid #999999;
+  border-bottom: 1px solid #b6b6b6;
   border-radius: 0;
 }
 
 .update-type-bttn.v-size--default:hover {
   border-bottom: 1px solid #333333;
+}
+
+.v-application.theme--dark .update-type-bttn.v-size--default:hover {
+  border-bottom: 1px solid #ffffff;
 }
 
 .update-type-bttn .v-icon {

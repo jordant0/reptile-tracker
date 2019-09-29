@@ -1,4 +1,6 @@
 <script>
+import { mapState } from 'vuex'
+
 export default {
   props: {
     open: {
@@ -29,6 +31,12 @@ export default {
     }
   },
 
+  computed: {
+    ...mapState([
+      'darkTheme',
+    ]),
+  },
+
   methods: {
     save() {
       this.$emit('input', this.selectedValue)
@@ -54,18 +62,22 @@ export default {
         <v-date-picker
           v-if="type === 'date'"
           v-model="selectedValue"
+          :dark="darkTheme"
+          header-color="primary"
         />
         <v-time-picker
           v-else
           ampm-in-title
           v-model="selectedValue"
+          :dark="darkTheme"
+          header-color="primary"
         />
       </v-card-text>
 
       <v-card-actions>
         <v-btn
           text
-          color="#999999"
+          color="#b6b6b6"
           @click="$emit('update:open', false)"
         >
           Cancel

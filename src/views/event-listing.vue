@@ -75,7 +75,7 @@ export default {
 
     showEmpty() {
       return !this.eventsList.length && (!this.includeOtherCards || (!this.animal.arrival && !this.animal.birthDate))
-    }
+    },
   },
 
   methods: {

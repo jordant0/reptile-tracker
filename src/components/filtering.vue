@@ -119,7 +119,7 @@ export default {
 
   .clear-filter .v-list-item__title {
     text-align: center;
-    color: #999999;
+    color: #b6b6b6;
     font-style: italic;
   }
 </style>

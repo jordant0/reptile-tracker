@@ -48,7 +48,7 @@ export default {
 
       <v-card-actions>
         <v-btn
-          color="#999999"
+          color="#b6b6b6"
           text
           @click.prevent="cancel"
         >

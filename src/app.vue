@@ -3,6 +3,7 @@ import Navbar from '@/components/navbar'
 import Sidebar from '@/components/sidebar'
 import ConfirmDialog from '@/components/confirm-dialog'
 import Notifier from '@/components/notification'
+import Cookies from 'js-cookie'
 import { mapState } from 'vuex'
 
 export default {
@@ -18,8 +19,12 @@ export default {
   },
 
   watch: {
-    darkTheme(value) {
-      this.$vuetify.theme.dark = value
+    darkTheme: {
+      immediate: true,
+      handler(value) {
+        this.$vuetify.theme.dark = value
+        Cookies.set('dark-mode', value ? 'true' : 'false')
+      },
     },
   },
 
@@ -139,7 +144,7 @@ export default {
     padding: 100px;
     font-size: 18px;
     font-style: italic;
-    color: #999999;
+    color: #b6b6b6;
   }
 
   .card-actions {
@@ -203,7 +208,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #999999;
+    color: #b6b6b6;
     font-style: italic;
   }
 
@@ -219,7 +224,7 @@ export default {
   }
 
   .animal-header--last {
-    color: #999999;
+    color: #b6b6b6;
   }
 
   .animal-header--last span:not(:last-child):after {
@@ -239,7 +244,7 @@ export default {
   }
 
   .info-listing {
-    color: #999999;
+    color: #b6b6b6;
   }
 
   .animal-info {
@@ -303,7 +308,7 @@ export default {
 
   .login-card .sub-headline {
     padding: 0 20px;
-    color: #999999;
+    color: #b6b6b6;
     font-size: 14px;
     text-align: center;
     margin-bottom: 12px;
@@ -381,5 +386,17 @@ export default {
 
   .v-list-item.active {
     font-weight: 600;
+  }
+
+  .v-application.theme--dark .v-messages__message {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .v-application.theme--dark .v-card__actions {
+    background: #424242;
+  }
+
+  .animal-listing .theme--dark.v-expansion-panels .v-expansion-panel-header .v-expansion-panel-header__icon .v-icon {
+    color: rgba(0, 0, 0, 0.54);
   }
 </style>

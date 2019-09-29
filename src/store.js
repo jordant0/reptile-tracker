@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Cookies from 'js-cookie'
 
 Vue.use(Vuex)
 
 const INITIAL_STATE = {
   user: {},
-  darkTheme: false,
+  darkTheme: Cookies.get('dark-mode') === 'true',
   confirmDialog: {
     shown: false,
     title: null,

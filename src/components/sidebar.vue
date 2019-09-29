@@ -14,6 +14,16 @@ export default {
       'darkTheme',
       'user',
     ]),
+
+    darkMode: {
+      get() {
+        return this.darkTheme
+      },
+
+      set(value) {
+        this.$store.commit('updateDarkTheme', !!value)
+      },
+    },
   },
 
   methods: {
@@ -24,10 +34,6 @@ export default {
       }, function(error) {
         console.log(error)
       })
-    },
-
-    toggleDarkMode(value) {
-      this.$store.commit('updateDarkTheme', value)
     },
   },
 }
@@ -82,9 +88,8 @@ export default {
       <v-list class="bottom-actions" dense>
         <v-list-item>
           <v-switch
-            :value="darkTheme"
+            v-model="darkMode"
             label="Dark Mode"
-            @change="toggleDarkMode"
           />
         </v-list-item>
 

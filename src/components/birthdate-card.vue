@@ -28,7 +28,10 @@ export default {
 
 <template>
   <v-expansion-panel>
-    <v-expansion-panel-header hide-actions>
+    <v-expansion-panel-header
+      class="event-info_header"
+      hide-actions
+    >
       <div class="event-info_wrapper">
         <v-icon
           class="event-icon"

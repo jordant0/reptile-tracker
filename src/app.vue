@@ -3,7 +3,7 @@ import Navbar from '@/components/navbar'
 import Sidebar from '@/components/sidebar'
 import ConfirmDialog from '@/components/confirm-dialog'
 import Notifier from '@/components/notification'
-import Cookies from 'js-cookie'
+import { get, set } from 'idb-keyval'
 import { mapState } from 'vuex'
 
 export default {
@@ -19,12 +19,9 @@ export default {
   },
 
   watch: {
-    darkTheme: {
-      immediate: true,
-      handler(value) {
-        this.$vuetify.theme.dark = value
-        Cookies.set('dark-mode', value ? 'true' : 'false')
-      },
+    darkTheme(value) {
+      this.$vuetify.theme.dark = value
+      set('dark-mode', value ? 'true' : 'false')
     },
   },
 
@@ -35,6 +32,10 @@ export default {
   },
 
   created() {
+    get('dark-mode').then((value) => {
+      this.$store.commit('updateDarkTheme', value === 'true')
+    })
+
     this.$firebase.auth().onAuthStateChanged((user) => {
       if(user) {
         this.$store.commit('updateUser', user)

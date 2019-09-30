@@ -38,6 +38,7 @@ export default {
   computed: {
     ...mapState([
       'confirmDialog',
+      'darkTheme',
     ]),
 
     ...mapGetters([
@@ -49,6 +50,14 @@ export default {
         this.animal.id,
         this.uuid,
       ]
+    },
+
+    imageBackgroundColor() {
+      if(this.animalImage) {
+        return this.darkTheme ? '#424242' : '#ffffff'
+      } else {
+        return this.randomColor
+      }
     },
 
     lastFed() {
@@ -259,7 +268,7 @@ export default {
   <v-expansion-panel>
     <div
       class="animal-image"
-      :style="{ backgroundColor: animalImage ? '#ffffff' : randomColor }"
+      :style="{ backgroundColor: imageBackgroundColor }"
     >
       <img
         v-if="animalImage"

@@ -409,8 +409,4 @@ export default {
     padding: 0;
     min-height: 60px;
   }
-
-  .v-expansion-panel-content {
-    margin-left: 12px;
-  }
 </style>

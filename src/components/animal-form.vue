@@ -61,24 +61,30 @@ export default {
           this.animalData.image = avatarName
 
           this.animalImage.toBlob((blob) => {
-            storageRef.put(blob)
+            storageRef.put(blob).then(() => {
+              this.saveAnimalData()
+            })
           })
+        } else {
+          this.saveAnimalData()
         }
-
-        let collection = this.$firebase
-          .firestore()
-          .collection('users')
-          .doc(this.uuid)
-          .collection('animals')
-
-        let action = (this.animal && this.animal.id)
-          ? collection.doc(this.animal.id).update(this.animalData)
-          : collection.add(this.animalData)
-
-        action.then(() => this.submitDone())
       } else {
         this.submitting = false
       }
+    },
+
+    saveAnimalData() {
+      let collection = this.$firebase
+        .firestore()
+        .collection('users')
+        .doc(this.uuid)
+        .collection('animals')
+
+      let action = (this.animal && this.animal.id)
+        ? collection.doc(this.animal.id).update(this.animalData)
+        : collection.add(this.animalData)
+
+      action.then(() => this.submitDone())
     },
 
     submitDone() {

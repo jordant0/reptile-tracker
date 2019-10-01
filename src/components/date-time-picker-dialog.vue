@@ -17,6 +17,16 @@ export default {
       type: String,
       default: 'date',
     },
+
+    allowedDates: {
+      type: Function,
+      default: null,
+    },
+
+    title: {
+      type: String,
+      default: null,
+    },
   },
 
   watch: {
@@ -58,11 +68,16 @@ export default {
     @input="$emit('update:open', $event)"
   >
     <v-card>
+      <v-card-title v-if="title">
+        {{ title }}
+      </v-card-title>
+
       <v-card-text>
         <v-date-picker
           v-if="type === 'date'"
           v-model="selectedValue"
           :dark="darkTheme"
+          :allowed-dates="allowedDates"
           header-color="primary"
         />
         <v-time-picker
@@ -104,5 +119,16 @@ export default {
 
   .date-time-picker_dialog .v-card__actions {
     padding-top: 0 !important;
+  }
+
+  .date-time-picker_dialog .v-card__title {
+    background-color: #8bc34a;
+    color: #ffffff;
+    padding: 12px 12px 0 12px;
+    font-weight: 400;
+  }
+
+  .theme--dark .date-time-picker_dialog .v-card__title {
+    background-color: #4caf50;
   }
 </style>

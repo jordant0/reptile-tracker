@@ -158,6 +158,15 @@ export default {
     margin-left: 8px;
   }
 
+  .animal-card .card-actions {
+    justify-content: space-between;
+  }
+
+  .card-actions--left .v-btn {
+    margin-left: 0;
+    margin-right: 8px;
+  }
+
   .confirm-dialog {
     width: 400px;
     max-width: calc(100% - 20px);

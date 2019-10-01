@@ -1,8 +1,13 @@
 <script>
+import DateTimePickerDialog from '@/components/date-time-picker-dialog'
 import moment from 'moment'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
+  components: {
+    DateTimePickerDialog,
+  },
+
   props: {
     animal: {
       type: Object,
@@ -15,6 +20,7 @@ export default {
       lastFedEvent: null,
       randomColor: `hsl(${360 * Math.random()},${25 + 70 * Math.random()}%, ${85 + 10 * Math.random()}%)`,
       animalImage: null,
+      dateInput: false,
     }
   },
 
@@ -60,6 +66,18 @@ export default {
       }
     },
 
+    pauseFeeding() {
+      if(this.animal.pauseFeeding) {
+        return moment(this.animal.pauseFeeding.toDate()).startOf('day')
+      }
+
+      return null
+    },
+
+    feedingPaused() {
+      return this.pauseFeeding && this.today < this.pauseFeeding
+    },
+
     lastFed() {
       if(!(this.lastFedEvent && this.lastFedEvent.length)) {
         return null
@@ -93,6 +111,10 @@ export default {
 
     today() {
       return moment().startOf('day')
+    },
+
+    tomorrow() {
+      return moment(this.today).add(1, 'd').format('YYYY-MM-DD')
     },
 
     nextFeedingFromNow() {
@@ -189,6 +211,10 @@ export default {
       }
     },
 
+    allowedDates(val) {
+      return moment(val, 'YYYY-MM-DD') > this.today
+    },
+
     goToAnimalDetails() {
       this.$router.push({
         name: 'event-listing',
@@ -260,12 +286,24 @@ export default {
         .doc(this.animal.id)
         .update({ archive: false })
     },
+
+    updatePauseFeeding(newDateStr) {
+      this.$firebase
+        .firestore()
+        .collection('users')
+        .doc(this.uuid)
+        .collection('animals')
+        .doc(this.animal.id)
+        .update({
+          pauseFeeding: newDateStr ? moment(newDateStr, 'YYYY-MM-DD').toDate() : null,
+        })
+    },
   },
 }
 </script>
 
 <template>
-  <v-expansion-panel>
+  <v-expansion-panel class="animal-card">
     <div
       class="animal-image"
       :style="{ backgroundColor: imageBackgroundColor }"
@@ -287,7 +325,12 @@ export default {
           <span class="animal-header--species">{{ animal.species }}</span>
         </div>
 
-        <div v-if="nextFeedingFromNow" class="animal-header--last">
+        <div v-if="feedingPaused" class="animal-header--last">
+          <span :style="{ color: '#ff8f5e' }">
+            Feeding paused until {{ pauseFeeding.format('MM/DD') }}
+          </span>
+        </div>
+        <div v-else-if="nextFeedingFromNow" class="animal-header--last">
           <span :style="{ color: feedingConfig.color }">
             Next feeding {{ feedingConfig.text }}
           </span>
@@ -333,48 +376,77 @@ export default {
       </div>
 
       <div class="card-actions">
-        <v-tooltip top>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              icon
-              color="#f66262"
-              v-on="on"
-              @click.prevent="deleteAnimal"
-            >
-              <v-icon>mdi-delete-forever</v-icon>
-            </v-btn>
-          </template>
-          <span>Delete</span>
-        </v-tooltip>
+        <div class="card-actions--left">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                color="#f66262"
+                v-on="on"
+                @click.prevent="deleteAnimal"
+              >
+                <v-icon>mdi-delete-forever</v-icon>
+              </v-btn>
+            </template>
+            <span>Delete</span>
+          </v-tooltip>
 
-        <v-tooltip v-if="animal.archive" top>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              icon
-              color="#71f55c"
-              v-on="on"
-              @click.prevent="unarchive"
-            >
-              <v-icon>mdi-history</v-icon>
-            </v-btn>
-          </template>
-          <span>Unarchive</span>
-        </v-tooltip>
-        <v-tooltip v-else top>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              icon
-              color="#d0a16c"
-              v-on="on"
-              @click.prevent="archiveAnimal"
-            >
-              <v-icon>mdi-archive</v-icon>
-            </v-btn>
-          </template>
-          <span>Archive</span>
-        </v-tooltip>
+          <v-tooltip v-if="animal.archive" top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                color="#71f55c"
+                v-on="on"
+                @click.prevent="unarchive"
+              >
+                <v-icon>mdi-history</v-icon>
+              </v-btn>
+            </template>
+            <span>Unarchive</span>
+          </v-tooltip>
+          <v-tooltip v-else top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                color="#d0a16c"
+                v-on="on"
+                @click.prevent="archiveAnimal"
+              >
+                <v-icon>mdi-archive</v-icon>
+              </v-btn>
+            </template>
+            <span>Archive</span>
+          </v-tooltip>
+        </div>
 
-        <template v-if="!animal.archive">
+        <div v-if="!animal.archive">
+          <v-tooltip v-if="pauseFeeding" top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                color="#ff8f5e"
+                v-on="on"
+                @click.prevent="updatePauseFeeding(false)"
+              >
+                <v-icon>mdi-play-circle</v-icon>
+              </v-btn>
+            </template>
+            <span>Resume Feeding</span>
+          </v-tooltip>
+          <v-tooltip v-else top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                color="#ff8f5e"
+                v-on="on"
+                @click.prevent="dateInput = true"
+              >
+                <v-icon>mdi-pause-octagon</v-icon>
+              </v-btn>
+            </template>
+            <span>Pause Feeding</span>
+          </v-tooltip>
+
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-btn
@@ -403,8 +475,17 @@ export default {
             </template>
             <span>New Event</span>
           </v-tooltip>
-        </template>
+        </div>
       </div>
+
+      <date-time-picker-dialog
+        :open.sync="dateInput"
+        :value="tomorrow"
+        :allowed-dates="allowedDates"
+        type="date"
+        title="Pause feeding until:"
+        @input="updatePauseFeeding"
+      />
     </v-expansion-panel-content>
   </v-expansion-panel>
 </template>

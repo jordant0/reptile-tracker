@@ -66,16 +66,16 @@ export default {
       }
     },
 
-    pauseFeeding() {
-      if(this.animal.pauseFeeding) {
-        return moment(this.animal.pauseFeeding.toDate()).startOf('day')
+    feedingOverride() {
+      if(this.animal.feedingOverride) {
+        return moment(this.animal.feedingOverride.toDate()).startOf('day')
       }
 
       return null
     },
 
-    feedingPaused() {
-      return this.pauseFeeding && this.today < this.pauseFeeding
+    hasFeedingOverride() {
+      return this.feedingOverride && this.today <= this.feedingOverride
     },
 
     lastFed() {
@@ -103,7 +103,9 @@ export default {
     },
 
     nextFeed() {
-      if(this.lastFed && this.animal.feedingDuration) {
+      if(this.hasFeedingOverride) {
+        return this.feedingOverride
+      } else if(this.lastFed && this.animal.feedingDuration) {
         return moment(this.lastFed).add(this.animal.feedingDuration, 'd').startOf('day')
       }
       return null
@@ -287,7 +289,7 @@ export default {
         .update({ archive: false })
     },
 
-    updatePauseFeeding(newDateStr) {
+    updateFeedingOverride(newDateStr) {
       this.$firebase
         .firestore()
         .collection('users')
@@ -295,8 +297,22 @@ export default {
         .collection('animals')
         .doc(this.animal.id)
         .update({
-          pauseFeeding: newDateStr ? moment(newDateStr, 'YYYY-MM-DD').toDate() : null,
+          feedingOverride: newDateStr ? moment(newDateStr, 'YYYY-MM-DD').toDate() : null,
         })
+    },
+
+    clearFeedingOverride() {
+      this.$store.commit('showConfirmDialog', {
+        title: 'Clear next feeding override?',
+        body: 'Next feeding will resume to be calculated from feeding duration and last feed event.',
+      })
+
+      this.confirmWatcher = this.$watch('confirmDialog.response', function(response) {
+        this.confirmWatcher()
+        if(response === 'confirm') {
+          this.updateFeedingOverride(false)
+        }
+      })
     },
   },
 }
@@ -325,15 +341,23 @@ export default {
           <span class="animal-header--species">{{ animal.species }}</span>
         </div>
 
-        <div v-if="feedingPaused" class="animal-header--last">
-          <span :style="{ color: '#ff8f5e' }">
-            Feeding paused until {{ pauseFeeding.format('M/D') }}
-          </span>
-        </div>
-        <div v-else-if="nextFeedingFromNow" class="animal-header--last">
+        <div v-if="nextFeedingFromNow" class="animal-header--last">
           <span :style="{ color: feedingConfig.color }">
             Next feeding {{ feedingConfig.text }}
           </span>
+
+          <v-tooltip v-if="hasFeedingOverride" top>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                size="14px"
+                v-on="on"
+                :color="feedingConfig.color"
+              >
+                mdi-star-circle
+              </v-icon>
+            </template>
+            <span>Feeding Override</span>
+          </v-tooltip>
         </div>
       </div>
 
@@ -420,18 +444,18 @@ export default {
         </div>
 
         <div v-if="!animal.archive">
-          <v-tooltip v-if="pauseFeeding" top>
+          <v-tooltip v-if="hasFeedingOverride" top>
             <template v-slot:activator="{ on }">
               <v-btn
                 icon
                 color="#ff8f5e"
                 v-on="on"
-                @click.prevent="updatePauseFeeding(false)"
+                @click.prevent="clearFeedingOverride"
               >
-                <v-icon>mdi-play-circle</v-icon>
+                <v-icon>mdi-calendar-remove</v-icon>
               </v-btn>
             </template>
-            <span>Resume Feeding</span>
+            <span>Clear Feeding Override</span>
           </v-tooltip>
           <v-tooltip v-else top>
             <template v-slot:activator="{ on }">
@@ -441,10 +465,10 @@ export default {
                 v-on="on"
                 @click.prevent="dateInput = true"
               >
-                <v-icon>mdi-pause-octagon</v-icon>
+                <v-icon>mdi-calendar-edit</v-icon>
               </v-btn>
             </template>
-            <span>Pause Feeding</span>
+            <span>Override Next Feeding</span>
           </v-tooltip>
 
           <v-tooltip top>
@@ -484,8 +508,30 @@ export default {
         :allowed-dates="allowedDates"
         type="date"
         title="Pause feeding until:"
-        @input="updatePauseFeeding"
-      />
+        @input="updateFeedingOverride"
+      >
+        Next Feeding Override
+
+        <v-tooltip
+          top
+          max-width="250px"
+          open-on-click
+        >
+          <template v-slot:activator="{ on }">
+            <v-icon
+              color="#ffffff"
+              v-on="on"
+            >
+              mdi-information-outline
+            </v-icon>
+          </template>
+
+          <div class="text-center">
+            Manually set the next feeding date, overriding
+            feeding duration and last feeding event
+          </div>
+        </v-tooltip>
+      </date-time-picker-dialog>
     </v-expansion-panel-content>
   </v-expansion-panel>
 </template>

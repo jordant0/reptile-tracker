@@ -22,11 +22,6 @@ export default {
       type: Function,
       default: null,
     },
-
-    title: {
-      type: String,
-      default: null,
-    },
   },
 
   watch: {
@@ -68,8 +63,8 @@ export default {
     @input="$emit('update:open', $event)"
   >
     <v-card>
-      <v-card-title v-if="title">
-        {{ title }}
+      <v-card-title>
+        <slot />
       </v-card-title>
 
       <v-card-text>
@@ -130,5 +125,7 @@ export default {
 
   .theme--dark .date-time-picker_dialog .v-card__title {
     background-color: #4caf50;
+    display: flex;
+    justify-content: space-between;
   }
 </style>

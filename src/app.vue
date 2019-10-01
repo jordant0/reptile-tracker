@@ -278,11 +278,12 @@ export default {
 
   .animal-header--last {
     color: #b6b6b6;
+    display: flex;
+    align-items: flex-start;
   }
 
-  .animal-header--last span:not(:last-child):after {
-    content: '|';
-    padding: 0 8px;
+  .animal-header--last i {
+    margin-left: 6px;
   }
 
   .animal-name {

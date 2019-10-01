@@ -125,6 +125,13 @@ export default {
         this.getEventsList()
       }
     },
+
+    viewAnimalChart() {
+      this.$router.push({
+        name: 'chart',
+        params: { animal_id: this.animal.id },
+      })
+    },
   },
 }
 </script>
@@ -134,7 +141,23 @@ export default {
     <loading v-if="loading" />
     <template v-else>
       <div class="event-listing_header">
-        Events for {{ animalName }}
+        <div class="event-listing_header--label">
+          Events for {{ animalName }}
+        </div>
+
+        <v-tooltip right>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              icon
+              color="#ff8a36"
+              v-on="on"
+              @click.prevent="viewAnimalChart"
+            >
+              <v-icon>mdi-chart-line</v-icon>
+            </v-btn>
+          </template>
+          <span>View Weight Chart</span>
+        </v-tooltip>
 
         <div class="flex-grow-1"></div>
 
@@ -182,5 +205,10 @@ export default {
     margin-bottom: 12px;
     font-weight: 500;
     display: flex;
+    align-items: center;
+  }
+
+  .event-listing_header--label {
+    margin-right: 8px;
   }
 </style>

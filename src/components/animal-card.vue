@@ -327,7 +327,7 @@ export default {
 
         <div v-if="feedingPaused" class="animal-header--last">
           <span :style="{ color: '#ff8f5e' }">
-            Feeding paused until {{ pauseFeeding.format('MM/DD') }}
+            Feeding paused until {{ pauseFeeding.format('M/D') }}
           </span>
         </div>
         <div v-else-if="nextFeedingFromNow" class="animal-header--last">

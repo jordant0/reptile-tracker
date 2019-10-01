@@ -9,6 +9,21 @@ export default {
     },
   },
 
+  watch: {
+    '$route': {
+      immediate: true,
+      handler() {
+        this.animalId = this.$route.params.animal_id
+      },
+    },
+  },
+
+  data() {
+    return {
+      animalId: this.$route.params.animal_id,
+    }
+  },
+
   computed: {
     ...mapState([
       'darkTheme',
@@ -33,6 +48,13 @@ export default {
         this.$router.push({ name: 'login' })
       }, function(error) {
         console.log(error)
+      })
+    },
+
+    viewAnimalChart() {
+      this.$router.push({
+        name: 'chart',
+        params: { animal_id: this.animalId },
       })
     },
   },
@@ -62,6 +84,15 @@ export default {
         </v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>Home</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item v-if="animalId" @click="viewAnimalChart">
+        <v-list-item-action>
+          <v-icon>mdi-chart-line</v-icon>
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>View Chart</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 

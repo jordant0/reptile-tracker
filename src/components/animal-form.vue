@@ -32,11 +32,30 @@ export default {
         feedingDuration: this.animal.feedingDuration || null,
         birthdate: this.animal.birthdate ? this.animal.birthdate.toDate() : new Date(),
         arrival: this.animal.arrival ? this.animal.arrival.toDate() : new Date(),
+        sex: this.animal.sex || 'unknown',
       },
     }
   },
 
   created() {
+    this.sexOptions = {
+      'unknown': {
+        index: 0,
+        icon: 'mdi-help',
+        size: '20px',
+      },
+      'male': {
+        index: 1,
+        icon: 'mdi-gender-male',
+        color: '#468bff',
+      },
+      'female': {
+        index: 2,
+        icon: 'mdi-gender-female',
+        color: '#f886fe',
+      },
+    }
+
     if(this.animal.image && this.animal.image.length) {
       this.$firebase.storage().ref(this.animal.image).getDownloadURL().then((url) => {
         this.animalImageUrl = url
@@ -48,6 +67,16 @@ export default {
     ...mapGetters([
       'uuid',
     ]),
+
+    sexValue: {
+      get() {
+        return this.sexOptions[this.animalData.sex].index
+      },
+
+      set(value) {
+        this.animalData.sex = Object.keys(this.sexOptions).find((key) => this.sexOptions[key].index === value)
+      },
+    },
   },
 
   methods: {
@@ -237,6 +266,48 @@ export default {
       ]"
     />
 
+    <v-input class="special-input">
+      <template v-slot:label>
+        <div class="special-input_label">
+          Sex
+        </div>
+        <div  class="v-messages theme--light">
+          <div class="v-messages__message">
+            The animal's sex
+          </div>
+        </div>
+      </template>
+
+      <div class="selection-display">
+        <v-item-group
+          v-model="sexValue"
+          class="sex-selection"
+          mandatory
+        >
+          <v-item
+            v-for="(options, key) in sexOptions"
+            :key="key"
+            v-slot:default="{ active, toggle }"
+          >
+            <v-btn
+              icon
+              large
+              :color="options.color"
+              :class="{ active }"
+              :value="key"
+              @click="toggle"
+            >
+              <v-icon
+                :size="options.size"
+              >
+                {{ options.icon }}
+              </v-icon>
+            </v-btn>
+          </v-item>
+        </v-item-group>
+      </div>
+    </v-input>
+
     <date-time-input
       v-model="animalData.birthdate"
       exclude-time
@@ -274,3 +345,21 @@ export default {
     </div>
   </v-form>
 </template>
+
+<style scoped>
+  .sex-selection button {
+    margin-left: 12px;
+  }
+
+  .sex-selection button.active:before {
+    opacity: 1 !important;
+  }
+
+  .sex-selection button.active i {
+    color: #ffffff;
+  }
+
+  .sex-selection button:first-child.active i.theme--dark {
+    color: #333333;
+  }
+</style>

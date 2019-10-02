@@ -58,6 +58,24 @@ export default {
       ]
     },
 
+    animalSex() {
+      if(this.animal.sex) {
+        if(this.animal.sex === 'male') {
+          return {
+            icon: 'mdi-gender-male',
+            color: '#468bff',
+          }
+        } else if(this.animal.sex === 'female') {
+          return {
+            icon: 'mdi-gender-female',
+            color: '#f886fe',
+          }
+        }
+      }
+
+      return null
+    },
+
     imageBackgroundColor() {
       if(this.animalImage) {
         return this.darkTheme ? '#424242' : '#ffffff'
@@ -336,6 +354,13 @@ export default {
         <div class="animal-header--first">
           <span class="animal-name">
             {{ animal.name }}
+            <v-icon
+              small
+              v-if="animalSex"
+              :color="animalSex.color"
+            >
+              {{ animalSex.icon }}
+            </v-icon>
           </span>
 
           <span class="animal-header--species">{{ animal.species }}</span>

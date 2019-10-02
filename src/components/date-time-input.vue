@@ -89,9 +89,9 @@ export default {
 
 <template>
   <div>
-    <v-input class="date-time-input">
+    <v-input class="special-input">
       <template v-slot:label>
-        <div v-if="label" class="datetime-select_label">
+        <div v-if="label" class="special-input_label">
           {{ label }}
         </div>
         <div v-if="hint" class="v-messages theme--light">

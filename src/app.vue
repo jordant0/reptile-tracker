@@ -176,25 +176,25 @@ export default {
     word-break: normal;
   }
 
-  .date-time-input {
+  .special-input {
     display: flex;
     align-items: center;
     padding-top: 12px;
     margin-top: 4px;
   }
 
-  .date-time-input .v-messages {
+  .special-input .v-messages {
     margin-top: 4px;
   }
 
-  .date-time-input label.v-label {
+  .special-input label.v-label {
     height: auto;
     margin-right: 32px;
     min-width: 200px;
   }
 
   @media screen and (max-width: 500px) {
-    .date-time-input .v-input__slot {
+    .special-input .v-input__slot {
       flex-direction: column;
       align-items: flex-start;
     }
@@ -289,6 +289,12 @@ export default {
   .animal-name {
     font-size: 20px;
     font-weight: 400;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .animal-name i {
+    margin-left: 4px;
   }
 
   .expand-action {

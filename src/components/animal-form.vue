@@ -255,17 +255,6 @@ export default {
       required
     />
 
-    <v-text-field
-      v-model="animalData.feedingDuration"
-      type="number"
-      min="1"
-      label="Feeding Duration"
-      hint="How often the animal should be fed (optional)"
-      :rules="[
-        v => (!v || v >= 1) || 'Feeding duration must be at least 1'
-      ]"
-    />
-
     <v-input class="special-input">
       <template v-slot:label>
         <div class="special-input_label">
@@ -307,6 +296,17 @@ export default {
         </v-item-group>
       </div>
     </v-input>
+
+    <v-text-field
+      v-model="animalData.feedingDuration"
+      type="number"
+      min="1"
+      label="Feeding Duration"
+      hint="How often the animal should be fed (optional)"
+      :rules="[
+        v => (!v || v >= 1) || 'Feeding duration must be at least 1'
+      ]"
+    />
 
     <date-time-input
       v-model="animalData.birthdate"

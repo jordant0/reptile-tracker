@@ -513,4 +513,12 @@ export default {
     top: 0;
     opacity: 0;
   }
+
+  .v-divider {
+    margin: 8px 0;
+  }
+
+  .v-application {
+    overflow: hidden;
+  }
 </style>

@@ -162,7 +162,7 @@ export default {
   <v-form
     class="animal-form general-form"
     ref="form"
-    @sbmit.prevent="submit"
+    @submit.prevent="submit"
   >
     <v-dialog
       :value="cropDialog"

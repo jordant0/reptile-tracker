@@ -162,7 +162,7 @@ export default {
       <v-form
         class="event-form general-form"
         ref="form"
-        @sbmit.prevent="submit"
+        @submit.prevent="submit"
       >
         <date-time-input
           v-model="eventData.timestamp"

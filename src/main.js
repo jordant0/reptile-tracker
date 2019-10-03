@@ -13,6 +13,8 @@ import { firestorePlugin } from 'vuefire'
 
 import 'cropperjs/dist/cropper.css'
 
+import VCalendar from 'v-calendar'
+
 Vue.use(firestorePlugin)
 
 const config = {
@@ -28,6 +30,10 @@ firebase.initializeApp(config)
 
 Vue.config.productionTip = false
 Vue.prototype.$firebase = firebase
+
+Vue.use(VCalendar, {
+  componentPrefix: 'v2',
+})
 
 new Vue({
   router,

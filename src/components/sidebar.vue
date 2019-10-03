@@ -51,9 +51,9 @@ export default {
       })
     },
 
-    viewAnimalChart() {
+    goToAnimalRoute(name) {
       this.$router.push({
-        name: 'chart',
+        name,
         params: { animal_id: this.animalId },
       })
     },
@@ -87,15 +87,6 @@ export default {
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item v-if="animalId" @click="viewAnimalChart">
-        <v-list-item-action>
-          <v-icon>mdi-chart-line</v-icon>
-        </v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>View Chart</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-
       <v-list-item @click="$router.push({ name: 'archive' })">
         <v-list-item-action>
           <v-icon>mdi-archive</v-icon>
@@ -104,6 +95,39 @@ export default {
           <v-list-item-title>Archive</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+
+      <v-divider />
+
+      <template v-if="animalId">
+        <v-list-item @click="goToAnimalRoute('event-listing')">
+          <v-list-item-action>
+            <v-icon>mdi-format-list-bulleted</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Events Listing</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item @click="goToAnimalRoute('chart')">
+          <v-list-item-action>
+            <v-icon>mdi-chart-line</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Chart Weight</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item @click="goToAnimalRoute('calendar')">
+          <v-list-item-action>
+            <v-icon>mdi-calendar-multiselect</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>View Calendar</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-divider />
+      </template>
 
       <v-list-item @click="logOut">
         <v-list-item-action>

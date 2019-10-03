@@ -1,14 +1,13 @@
 <script>
 import Loading from '@/components/loading'
 import Empty from '@/components/empty'
-import LineChart from '@/components/line-chart'
-import { mapGetters } from 'vuex'
+import eventTypeData from '@/data/event-type'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   components: {
     Loading,
     Empty,
-    LineChart,
   },
 
   data() {
@@ -17,7 +16,12 @@ export default {
       animalId: this.$route.params.animal_id,
       animal: null,
       eventsList: [],
+      today: new Date(),
     }
+  },
+
+  created() {
+    this.typesConfig = eventTypeData.config
   },
 
   watch: {
@@ -37,6 +41,10 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'darkTheme',
+    ]),
+
     ...mapGetters([
       'uuid',
     ]),
@@ -56,25 +64,15 @@ export default {
       }
     },
 
-    chartData() {
-      let dataSet = []
-
-      this.eventsList.forEach((weightEvent) => {
-        dataSet.push({
-          x: weightEvent.timestamp.toDate(),
-          y: weightEvent.value,
-        })
-      })
-
-      return {
-        datasets: [{
-          label: 'Weight',
-          borderColor: '#ff8a36',
-          lineTension: 0,
-          fill: false,
-          data: dataSet.reverse(),
-        }],
-      }
+    calendarAttrs() {
+      return [
+        {
+          key: 'today',
+          highlight: true,
+          dates: this.today,
+        },
+        ...this.eventsList.map(event => this.getCalendarEvent(event)),
+      ]
     },
   },
 
@@ -104,8 +102,6 @@ export default {
         .collection('animals')
         .doc(this.animalId)
         .collection('events')
-        .where('type', '==', 'Weight')
-        .orderBy('timestamp', 'desc')
 
       this.$bind(
         'eventsList',
@@ -113,6 +109,35 @@ export default {
       ).then(() => {
         this.loading = false
       })
+    },
+
+    getCalendarEvent(event) {
+      let label
+      switch (event.type) {
+        case 'Feeding':
+          label = `Feeding: ${event.notes}`
+          break
+        case 'Handling':
+          label = `Handling: ${event.value}m`
+          break
+        case 'Weight':
+          label = `Weight: ${event.value}g`
+          break
+        case 'Shedding':
+          label = 'Shed'
+          break
+        default:
+          label = event.notes
+      }
+
+      return {
+        dates: event.timestamp.toDate(),
+        dot: this.typesConfig[event.type].calendar,
+        popover: {
+          label,
+          placement: 'auto',
+        },
+      }
     },
   },
 }
@@ -122,16 +147,18 @@ export default {
   <div class="event-listing container-wrapper">
     <loading v-if="loading" />
     <template v-else>
-      <empty v-if="!eventsList.length" noun="weight event" />
+      <empty v-if="!eventsList.length" noun="event" />
       <v-card v-else class="container-card">
         <v-card-title>
-          Weight History for {{ animalName }}
+          {{ animalName }}'s Events Calendar
         </v-card-title>
 
         <v-card-text class="chart-container">
-          <line-chart
-            :chart-data="chartData"
-            :styles="{ position: 'relative', height: '500px' }"
+          <v2-calendar
+            :attributes="calendarAttrs"
+            :is-dark="darkTheme"
+            color="red"
+            is-expanded
           />
         </v-card-text>
       </v-card>
@@ -139,15 +166,25 @@ export default {
   </div>
 </template>
 
-<style scoped>
-.v-card-title {
-  padding: 20px;
-  font-size: 18px;
-  display: flex;
-  justify-content: center;
+<style>
+.vc-weekday {
+  padding: 12px 0 !important;
 }
 
-.chart-container {
-  height: 500px;
+.vc-day-content {
+  margin: 12px 0 !important;
+}
+
+.vc-popover-content {
+  max-width: 200px !important;
+}
+
+.vc-day-popover-row {
+  align-items: flex-start !important;
+}
+
+.vc-day-popover-row-indicator {
+  margin-top: 6px !important;
+  flex-shrink: 0;
 }
 </style>

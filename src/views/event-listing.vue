@@ -126,9 +126,9 @@ export default {
       }
     },
 
-    viewAnimalChart() {
+    goToAnimalRoute(name) {
       this.$router.push({
-        name: 'chart',
+        name,
         params: { animal_id: this.animal.id },
       })
     },
@@ -151,12 +151,26 @@ export default {
               icon
               color="#ff8a36"
               v-on="on"
-              @click.prevent="viewAnimalChart"
+              @click.prevent="goToAnimalRoute('chart')"
             >
               <v-icon>mdi-chart-line</v-icon>
             </v-btn>
           </template>
-          <span>View Weight Chart</span>
+          <span>Weight Chart</span>
+        </v-tooltip>
+
+        <v-tooltip right>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              icon
+              color="#16a4ff"
+              v-on="on"
+              @click.prevent="goToAnimalRoute('calendar')"
+            >
+              <v-icon>mdi-calendar-multiselect</v-icon>
+            </v-btn>
+          </template>
+          <span>View Calendar</span>
         </v-tooltip>
 
         <div class="flex-grow-1"></div>

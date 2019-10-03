@@ -69,5 +69,11 @@ export default new Router({
       component: () => import('./views/event-chart.vue'),
       meta: { title: 'Weight Chart' },
     },
+    {
+      path: '/:animal_id/calendar',
+      name: 'calendar',
+      component: () => import('./views/event-calendar.vue'),
+      meta: { title: 'Calendar' },
+    },
   ],
 })

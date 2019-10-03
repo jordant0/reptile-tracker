@@ -539,7 +539,7 @@ export default {
 
         <v-tooltip
           top
-          max-width="250px"
+          max-width="300px"
           open-on-click
         >
           <template v-slot:activator="{ on }">
@@ -553,7 +553,8 @@ export default {
 
           <div class="text-center">
             Manually set the next feeding date, overriding
-            feeding duration and last feeding event
+            automatic next feeding calculation.
+            Will reset after next feeding.
           </div>
         </v-tooltip>
       </date-time-picker-dialog>

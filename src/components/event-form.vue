@@ -91,10 +91,29 @@ export default {
           ? collection.doc(this.currentEvent.id).update(this.eventData)
           : collection.add(this.eventData)
 
-        action.then(() => this.submitDone())
+        action.then(() => this.afterSubmit())
       } else {
         this.submitting = false
       }
+    },
+
+    afterSubmit() {
+      if(!this.existingEvent && this.eventData.type === 'Feeding') {
+        this.clearFeedingOverride()
+      } else {
+        this.submitDone()
+      }
+    },
+
+    clearFeedingOverride() {
+      this.$firebase
+        .firestore()
+        .collection('users')
+        .doc(this.uuid)
+        .collection('animals')
+        .doc(this.animalId)
+        .update({ feedingOverride: null })
+        .then(() => this.submitDone())
     },
 
     submitDone() {

@@ -2,12 +2,14 @@
 import Loading from '@/components/loading'
 import Empty from '@/components/empty'
 import eventTypeData from '@/data/event-type'
+import AddEventBttns from '@/components/add-event-bttns'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
   components: {
     Loading,
     Empty,
+    AddEventBttns,
   },
 
   data() {
@@ -162,29 +164,8 @@ export default {
           />
         </v-card-text>
       </v-card>
+
+      <add-event-bttns :animal-id="animalId" />
     </template>
   </div>
 </template>
-
-<style>
-.vc-weekday {
-  padding: 12px 0 !important;
-}
-
-.vc-day-content {
-  margin: 12px 0 !important;
-}
-
-.vc-popover-content {
-  max-width: 200px !important;
-}
-
-.vc-day-popover-row {
-  align-items: flex-start !important;
-}
-
-.vc-day-popover-row-indicator {
-  margin-top: 6px !important;
-  flex-shrink: 0;
-}
-</style>

@@ -19,6 +19,7 @@ module.exports = {
       'if': { 'after': false },
       'for': { 'after': false },
       'while': { 'after': false },
+      'switch': { 'after': false },
     } }],
   },
   parserOptions: {

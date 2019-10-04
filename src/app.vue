@@ -187,20 +187,24 @@ export default {
     margin-top: 4px;
   }
 
-  .special-input label.v-label {
+  .special-input > .v-input__control > .v-input__slot > label.v-label {
     height: auto;
     margin-right: 32px;
     min-width: 200px;
   }
 
+  .selection-display {
+    display: flex;
+    align-items: center;
+  }
+
   @media screen and (max-width: 500px) {
-    .special-input .v-input__slot {
+    .special-input > .v-input__control > .v-input__slot {
       flex-direction: column;
       align-items: flex-start;
     }
 
     .selection-display {
-      display: flex;
       width: 100%;
       justify-content: center;
       margin-top: 8px;

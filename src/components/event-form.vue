@@ -58,7 +58,7 @@ export default {
     },
 
     valueField() {
-      switch (this.eventData.type) {
+      switch(this.eventData.type) {
         case 'Handling':
           return {
             label: 'Duration',

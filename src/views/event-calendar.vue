@@ -115,7 +115,7 @@ export default {
 
     getCalendarEvent(event) {
       let label
-      switch (event.type) {
+      switch(event.type) {
         case 'Feeding':
           label = `Feeding: ${event.notes}`
           break

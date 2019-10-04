@@ -66,7 +66,7 @@ export default {
     },
 
     eventDetails() {
-      switch (this.currentEvent.type) {
+      switch(this.currentEvent.type) {
         case 'Feeding':
           return `Fed ${this.animalName} ${this.currentEvent.notes}`
         case 'Handling':

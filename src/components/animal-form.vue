@@ -33,6 +33,7 @@ export default {
         birthdate: this.animal.birthdate ? this.animal.birthdate.toDate() : new Date(),
         arrival: this.animal.arrival ? this.animal.arrival.toDate() : new Date(),
         sex: this.animal.sex || 'unknown',
+        sexConfirmed: this.animal.sexConfirmed || false,
       },
     }
   },
@@ -77,6 +78,10 @@ export default {
         this.animalData.sex = Object.keys(this.sexOptions).find((key) => this.sexOptions[key].index === value)
       },
     },
+
+    confirmSex() {
+      return this.animalData.sex === 'male' || this.animalData.sex === 'female'
+    },
   },
 
   methods: {
@@ -108,6 +113,10 @@ export default {
         .collection('users')
         .doc(this.uuid)
         .collection('animals')
+
+      if(!this.confirmSex) {
+        this.animalData.sexConfirmed = false
+      }
 
       let action = (this.animal && this.animal.id)
         ? collection.doc(this.animal.id).update(this.animalData)
@@ -260,11 +269,6 @@ export default {
         <div class="special-input_label">
           Sex
         </div>
-        <div  class="v-messages theme--light">
-          <div class="v-messages__message">
-            The animal's sex
-          </div>
-        </div>
       </template>
 
       <div class="selection-display">
@@ -294,6 +298,15 @@ export default {
             </v-btn>
           </v-item>
         </v-item-group>
+
+        <v-switch
+          v-if="confirmSex"
+          v-model="animalData.sexConfirmed"
+          class="sex-confirmed-switch"
+          label="Confirmed"
+          hide-details
+          dense
+        />
       </div>
     </v-input>
 
@@ -361,5 +374,11 @@ export default {
 
   .sex-selection button:first-child.active i.theme--dark {
     color: #333333;
+  }
+
+  .sex-confirmed-switch {
+    margin: 0;
+    padding: 0;
+    margin-left: 32px;
   }
 </style>

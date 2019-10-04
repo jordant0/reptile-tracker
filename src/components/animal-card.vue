@@ -209,6 +209,17 @@ export default {
         return null
       }
     },
+
+    sex() {
+      switch(this.animal.sex) {
+        case 'male':
+          return this.animal.sexConfirmed ? 'Confirmed male' : 'Male (unconfirmed)'
+        case 'female':
+          return this.animal.sexConfirmed ? 'Confirmed female' : 'Female (unconfirmed)'
+        default:
+          return 'Unknown'
+      }
+    },
   },
 
   methods: {
@@ -405,6 +416,10 @@ export default {
 
         <li v-if="birthDateStr">
           Birthdate: {{ birthDateStr }}
+        </li>
+
+        <li>
+          Sex: {{ sex }}
         </li>
 
         <li v-if="arrivalDate">

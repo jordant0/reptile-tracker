@@ -25,36 +25,6 @@ export default {
       submitting: false,
     }
   },
-
-  methods: {
-    submit() {
-      this.submitting = true
-      this.$firebase.auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then(() => {
-          this.submitting = false
-          this.$router.push({ name: 'animals' })
-        })
-        .catch(function(error) {
-          console.log(`Log in failed: ${error}`)
-          this.submitting = false
-        })
-    },
-  },
-
-  computed: {
-    header() {
-      return this.isLogin ? 'Login' : 'Sign-up'
-    },
-
-    subtitle() {
-      if(this.isLogin) {
-        return 'Login to access your animals and manage their activities'
-      } else {
-        return 'Sign-up to store information about your animals and manage their activities'
-      }
-    },
-  },
 }
 </script>
 

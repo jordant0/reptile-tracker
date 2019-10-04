@@ -47,7 +47,10 @@ export default {
       this.$firebase.auth().signOut().then(() => {
         this.$router.push({ name: 'login' })
       }, function(error) {
-        console.log(error)
+        this.$store.commit('showNotification', {
+          color: 'error',
+          text: error.message,
+        })
       })
     },
 

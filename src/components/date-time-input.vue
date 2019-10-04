@@ -27,6 +27,11 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    allowedDates: {
+      type: Function,
+      default: null,
+    },
   },
 
   data() {
@@ -119,6 +124,7 @@ export default {
     <date-time-picker-dialog
       :open.sync="dateModalOpen"
       :value="dateForPicker"
+      :allowed-dates="allowedDates"
       type="date"
       @input="updateDate"
     />

@@ -17,6 +17,7 @@ export default {
 
   data() {
     return {
+      today: moment().startOf('day'),
       lastFedEvent: null,
       randomColor: `hsl(${360 * Math.random()},${25 + 70 * Math.random()}%, ${85 + 10 * Math.random()}%)`,
       animalImage: null,
@@ -127,10 +128,6 @@ export default {
         return moment(this.lastFed).add(this.animal.feedingDuration, 'd').startOf('day')
       }
       return null
-    },
-
-    today() {
-      return moment().startOf('day')
     },
 
     tomorrow() {

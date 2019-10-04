@@ -2,6 +2,7 @@
 import DateTimeInput from '@/components/date-time-input'
 import VueCropper from 'vue-cropperjs'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 
 export default {
   components: {
@@ -26,6 +27,7 @@ export default {
       animalImageUrl: '',
       cropDialog: false,
       imageChanged: false,
+      today: moment().startOf('day'),
       animalData: {
         name: this.animal.name || '',
         species: this.animal.species || '',
@@ -82,9 +84,21 @@ export default {
     confirmSex() {
       return this.animalData.sex === 'male' || this.animalData.sex === 'female'
     },
+
+    startOfBirthdate() {
+      return moment(this.animalData.birthdate).startOf('day')
+    },
   },
 
   methods: {
+    allowedBirthdates(val) {
+      return moment(val, 'YYYY-MM-DD') <= this.today
+    },
+
+    allowedArrivals(val) {
+      return moment(val, 'YYYY-MM-DD') >= this.startOfBirthdate
+    },
+
     submit() {
       this.submitting = true
       if(this.$refs.form.validate() && this.uuid) {
@@ -323,6 +337,7 @@ export default {
 
     <date-time-input
       v-model="animalData.birthdate"
+      :allowed-dates="allowedBirthdates"
       exclude-time
       label="Birthdate"
       hint="Date the animal was born/hatched"
@@ -330,6 +345,7 @@ export default {
 
     <date-time-input
       v-model="animalData.arrival"
+      :allowed-dates="allowedArrivals"
       exclude-time
       label="Arrival Date"
       hint="Date the animal was obtained"

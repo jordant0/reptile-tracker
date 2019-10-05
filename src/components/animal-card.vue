@@ -1,9 +1,14 @@
 <script>
 import DateTimePickerDialog from '@/components/date-time-picker-dialog'
+import thumbnailMixin from '@/mixins/thumbnail'
 import moment from 'moment'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
+  mixins: [
+    thumbnailMixin,
+  ],
+
   components: {
     DateTimePickerDialog,
   },
@@ -22,6 +27,7 @@ export default {
       randomColor: `hsl(${360 * Math.random()},${25 + 70 * Math.random()}%, ${85 + 10 * Math.random()}%)`,
       animalImage: null,
       dateInput: false,
+      thumbnailUrl: null,
     }
   },
 
@@ -36,6 +42,8 @@ export default {
 
   created() {
     if(this.animal.image && this.animal.image.length) {
+      this.setupLazyLoad()
+
       this.$firebase.storage().ref(this.animal.image).getDownloadURL().then((url) => {
         this.animalImage = url
       })
@@ -217,6 +225,18 @@ export default {
           return 'Unknown'
       }
     },
+
+    hasThumbnail() {
+      return this.animal.thumbnail && this.animal.thumbnail.length
+    },
+
+    thumbnailRetriesExceeded() {
+      return this.animal.thumbnailFetchAttempts && this.animal.thumbnailFetchAttempts > 5
+    },
+
+    thumbnailImage() {
+      return this.animal.thumbnail || this.thumbnailUrl
+    },
   },
 
   methods: {
@@ -340,6 +360,42 @@ export default {
         }
       })
     },
+
+    setupLazyLoad() {
+      try {
+        if(!this.hasThumbnail && !this.thumbnailRetriesExceeded) {
+          let thumbnail = this.getThumbnailFromImage(this.animal.image)
+          let fetchAttempts = this.animal.thumbnailFetchAttempts || 0
+
+          if(thumbnail && thumbnail.length) {
+            this.$firebase.storage().ref(thumbnail).getDownloadURL()
+              .then((url) => {
+                this.thumbnailUrl = url
+
+                this.$firebase
+                  .firestore()
+                  .collection('users')
+                  .doc(this.uuid)
+                  .collection('animals')
+                  .doc(this.animal.id)
+                  .update({ thumbnail: url })
+              })
+              .catch(() => {
+                fetchAttempts += 1
+                this.$firebase
+                  .firestore()
+                  .collection('users')
+                  .doc(this.uuid)
+                  .collection('animals')
+                  .doc(this.animal.id)
+                  .update({
+                    thumbnailFetchAttempts: fetchAttempts,
+                  })
+              })
+          }
+        }
+      } catch(e) {}
+    },
   },
 }
 </script>
@@ -350,9 +406,10 @@ export default {
       class="animal-image"
       :style="{ backgroundColor: imageBackgroundColor }"
     >
-      <img
+      <v-img
         v-if="animalImage"
         :src="animalImage"
+        :lazy-src="thumbnailImage"
       />
       <span v-else>No image</span>
     </div>

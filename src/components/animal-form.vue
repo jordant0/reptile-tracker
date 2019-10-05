@@ -1,10 +1,15 @@
 <script>
 import DateTimeInput from '@/components/date-time-input'
 import VueCropper from 'vue-cropperjs'
+import thumbnailMixin from '@/mixins/thumbnail'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 
 export default {
+  mixins: [
+    thumbnailMixin,
+  ],
+
   components: {
     VueCropper,
     DateTimeInput,
@@ -103,13 +108,17 @@ export default {
       this.submitting = true
       if(this.$refs.form.validate() && this.uuid) {
         if(this.imageChanged && this.animalImage) {
-          let avatarName = `user/${this.uuid}/${encodeURI(this.animalData.name)}.png`
+          let fileName = `${this.animalData.name}${moment().format('DDMMYYYYkkmmss')}`
+          let avatarName = `user/${this.uuid}/${encodeURI(fileName)}.png`
           let storageRef = this.$firebase.storage().ref().child(avatarName)
 
           this.animalData.image = avatarName
+          this.animalData.thumbnail = ''
+          this.animalData.thumbnailFetchAttempts = 0
 
           this.animalImage.toBlob((blob) => {
             storageRef.put(blob).then(() => {
+              this.cleanUpOldImages()
               this.saveAnimalData()
             })
           })
@@ -137,6 +146,19 @@ export default {
         : collection.add(this.animalData)
 
       action.then(() => this.submitDone())
+    },
+
+    cleanUpOldImages() {
+      if(this.animal && this.animal.image) {
+        try {
+          let thumbnail = this.getThumbnailFromImage(this.animal.image)
+
+          this.$firebase.storage().ref(this.animal.image).delete()
+          if(thumbnail) {
+            this.$firebase.storage().ref(thumbnail).delete()
+          }
+        } catch(e) {}
+      }
     },
 
     submitDone() {

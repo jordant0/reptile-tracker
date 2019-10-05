@@ -415,7 +415,7 @@ export default {
     </div>
 
     <v-expansion-panel-header>
-      <div class="animal-header" @click.prevent.stop="goToAnimalDetails">
+      <div class="animal-header" @click.stop="goToAnimalDetails">
         <div class="animal-header--first">
           <span class="animal-name">
             {{ animal.name }}
@@ -501,7 +501,7 @@ export default {
                 icon
                 color="#f66262"
                 v-on="on"
-                @click.prevent="deleteAnimal"
+                @click="deleteAnimal"
               >
                 <v-icon>mdi-delete-forever</v-icon>
               </v-btn>
@@ -515,7 +515,7 @@ export default {
                 icon
                 color="#71f55c"
                 v-on="on"
-                @click.prevent="unarchive"
+                @click="unarchive"
               >
                 <v-icon>mdi-history</v-icon>
               </v-btn>
@@ -528,7 +528,7 @@ export default {
                 icon
                 color="#d0a16c"
                 v-on="on"
-                @click.prevent="archiveAnimal"
+                @click="archiveAnimal"
               >
                 <v-icon>mdi-archive</v-icon>
               </v-btn>
@@ -544,7 +544,7 @@ export default {
                 icon
                 color="#ff8f5e"
                 v-on="on"
-                @click.prevent="clearFeedingOverride"
+                @click="clearFeedingOverride"
               >
                 <v-icon>mdi-calendar-remove</v-icon>
               </v-btn>
@@ -557,7 +557,7 @@ export default {
                 icon
                 color="#ff8f5e"
                 v-on="on"
-                @click.prevent="dateInput = true"
+                @click="dateInput = true"
               >
                 <v-icon>mdi-calendar-edit</v-icon>
               </v-btn>
@@ -571,7 +571,7 @@ export default {
                 icon
                 color="#46cdff"
                 v-on="on"
-                @click.prevent="editAnimal"
+                @click="editAnimal"
               >
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
@@ -586,7 +586,7 @@ export default {
                 color="primary"
                 v-on="on"
                 large
-                @click.prevent="newEvent"
+                @click="newEvent"
               >
                 <v-icon>mdi-plus-circle</v-icon>
               </v-btn>

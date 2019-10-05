@@ -105,7 +105,7 @@ export default {
         <div class="password-prompt">
           <a
             href="#"
-            @click.prevent="$emit('switch', 'password')"
+            @click="$emit('switch', 'password')"
           >
             Forgot your password?
           </a>
@@ -117,7 +117,7 @@ export default {
           Don't have an account?
           <a
             href="#"
-            @click.prevent="$emit('switch', 'signup')"
+            @click="$emit('switch', 'signup')"
           >
             Sign-up here!
           </a>

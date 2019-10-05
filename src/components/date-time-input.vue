@@ -107,14 +107,14 @@ export default {
       </template>
 
       <div class="selection-display">
-        <v-btn text @click.prevent="dateModalOpen = true">
+        <v-btn text @click="dateModalOpen = true">
           {{ dateString }}
         </v-btn>
 
         <v-btn
           v-if="!excludeTime"
           text
-          @click.prevent="timeModalOpen = true"
+          @click="timeModalOpen = true"
         >
           {{ timeString }}
         </v-btn>

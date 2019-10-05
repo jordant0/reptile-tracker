@@ -151,7 +151,7 @@ export default {
               icon
               color="#ff8a36"
               v-on="on"
-              @click.prevent="goToAnimalRoute('chart')"
+              @click="goToAnimalRoute('chart')"
             >
               <v-icon>mdi-chart-line</v-icon>
             </v-btn>
@@ -165,7 +165,7 @@ export default {
               icon
               color="#16a4ff"
               v-on="on"
-              @click.prevent="goToAnimalRoute('calendar')"
+              @click="goToAnimalRoute('calendar')"
             >
               <v-icon>mdi-calendar-multiselect</v-icon>
             </v-btn>

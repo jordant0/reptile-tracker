@@ -81,21 +81,12 @@ export default {
         </v-list-item-content>
       </v-list-item>
 
-      <v-list-item @click.prevent="$router.push('/')">
+      <v-list-item @click="$router.push('/')">
         <v-list-item-action>
           <v-icon>mdi-home</v-icon>
         </v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>Home</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-list-item @click="$router.push({ name: 'archive' })">
-        <v-list-item-action>
-          <v-icon>mdi-archive</v-icon>
-        </v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>Archive</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
 
@@ -128,9 +119,28 @@ export default {
             <v-list-item-title>View Calendar</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-        <v-divider />
       </template>
+      <template v-else>
+        <v-list-item @click="$router.push({ name: 'settings' })">
+          <v-list-item-action>
+            <v-icon>mdi-settings</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Settings</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item @click="$router.push({ name: 'archive' })">
+          <v-list-item-action>
+            <v-icon>mdi-archive</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Archive</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+
+      <v-divider />
 
       <v-list-item @click="logOut">
         <v-list-item-action>

@@ -83,7 +83,7 @@ export default {
         <div class="prompt">
           <a
             href="#"
-            @click.prevent="$emit('switch', 'login')"
+            @click="$emit('switch', 'login')"
           >
             Back to Login
           </a>

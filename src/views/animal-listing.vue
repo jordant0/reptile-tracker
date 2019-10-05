@@ -52,7 +52,17 @@ export default {
 
     filteredAnimals() {
       if(this.animalsList) {
-        return this.animalsList.filter(animal => this.archive === !!animal.archive)
+        return this.animalsList
+          .filter(animal => this.archive === !!animal.archive)
+          .sort((animalA, animalB) => {
+            if(!animalB.position) {
+              return 1
+            } else if(!animalA.position) {
+              return -1
+            } else {
+              return animalA.position - animalB.position
+            }
+          })
       } else {
         return []
       }
@@ -87,7 +97,7 @@ export default {
         bottom
         right
         color="accent"
-        @click.prevent="addAnimal"
+        @click="addAnimal"
       >
         <v-icon>mdi-plus</v-icon>
       </v-btn>

@@ -377,7 +377,7 @@ export default {
       <v-btn
         text
         color="#b6b6b6"
-        @click.prevent="$router.back()"
+        @click="$router.back()"
       >
         Cancel
       </v-btn>
@@ -389,7 +389,7 @@ export default {
         type="submit"
         :disabled="submitting"
         :loading="submitting"
-        @click.prevent="submit"
+        @click="submit"
       >
         Submit
       </v-btn>

@@ -124,7 +124,7 @@ export default {
           Already have an account?
           <a
             href="#"
-            @click.prevent="$emit('switch', 'login')"
+            @click="$emit('switch', 'login')"
           >
             Login!
           </a>

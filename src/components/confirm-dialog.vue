@@ -50,7 +50,7 @@ export default {
         <v-btn
           color="#b6b6b6"
           text
-          @click.prevent="cancel"
+          @click="cancel"
         >
           Cancel
         </v-btn>
@@ -60,7 +60,7 @@ export default {
         <v-btn
           color="primary"
           text
-          @click.prevent="confirm"
+          @click="confirm"
         >
           Confirm
         </v-btn>

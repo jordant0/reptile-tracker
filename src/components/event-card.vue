@@ -167,7 +167,7 @@ export default {
               icon
               color="#f66262"
               v-on="on"
-              @click.prevent="deleteEvent"
+              @click="deleteEvent"
             >
               <v-icon>mdi-delete-forever</v-icon>
             </v-btn>
@@ -181,7 +181,7 @@ export default {
               icon
               color="#46cdff"
               v-on="on"
-              @click.prevent="editEvent"
+              @click="editEvent"
             >
               <v-icon>mdi-pencil</v-icon>
             </v-btn>

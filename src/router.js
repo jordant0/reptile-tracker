@@ -26,6 +26,12 @@ export default new Router({
       meta: { title: 'Login / Sign-up' },
     },
     {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('./views/settings.vue'),
+      meta: { title: 'Settings' },
+    },
+    {
       path: '/archive',
       name: 'archive',
       component: AnimalListing,

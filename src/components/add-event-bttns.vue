@@ -64,7 +64,7 @@ export default {
           small
           :color="typesData.config[eventType].color"
           v-on="on"
-          @click.prevent="addEvent(eventType)"
+          @click="addEvent(eventType)"
         >
           <v-icon>{{ typesData.config[eventType].icon }}</v-icon>
         </v-btn>

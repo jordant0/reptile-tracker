@@ -26,6 +26,8 @@ export default {
       animal: null,
       eventsList: [],
       filter: null,
+      pagingLoad: true,
+      endOfList: false,
     }
   },
 
@@ -70,7 +72,7 @@ export default {
     },
 
     includeOtherCards() {
-      return this.animal && (!this.filter || !this.filter.length || this.filter === 'Other')
+      return this.animal && this.endOfList && (!this.filter || !this.filter.length || this.filter === 'Other')
     },
 
     showEmpty() {
@@ -96,7 +98,7 @@ export default {
       }
     },
 
-    getEventsList() {
+    getEventsList(paging = false) {
       let collection = this.$firebase
         .firestore()
         .collection('users')
@@ -109,20 +111,58 @@ export default {
         collection = collection.where('type', '==', this.filter)
       }
 
-      this.$bind(
-        'eventsList',
-        collection
-          .orderBy('timestamp', 'desc')
-      ).then(() => {
-        this.loading = false
-      })
+      collection = collection.orderBy('timestamp', 'desc')
+
+      if(paging) {
+        if(this.eventsList.length >= 1) {
+          collection = collection.startAfter(
+            this.eventsList[this.eventsList.length - 1].timestamp
+          )
+        }
+      } else {
+        this.eventsList = []
+        this.endOfList = false
+      }
+
+      collection = collection.limit(100)
+
+      collection.get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.eventsList.push({
+              id: doc.id,
+              ...doc.data(),
+            })
+          })
+
+          this.loading = false
+
+          if(querySnapshot.size < 100) {
+            this.endOfList = true
+          }
+
+          setTimeout(() => {
+            this.pagingLoad = false
+          }, 1000)
+        })
+        .catch(() => {
+          this.loading = false
+          this.endOfList = false
+        })
     },
 
     refetchEvents() {
       if(!this.loading) {
         this.loading = true
-        this.$unbind('eventsList')
         this.getEventsList()
+      }
+    },
+
+    loadMore() {
+      if(!this.loading && !this.pagingLoad && this.eventsList.length) {
+        console.log('Loading more events...')
+        this.pagingLoad = true
+        this.getEventsList(true)
       }
     },
 
@@ -204,6 +244,24 @@ export default {
         />
       </v-expansion-panels>
 
+      <div
+        v-if="!endOfList"
+        v-intersect="loadMore"
+        class="events-loader"
+        ref="loadMore"
+      >
+        Loading more events
+
+        <v-progress-circular
+          indeterminate
+          size="16"
+          width="2"
+        />
+      </div>
+      <div v-else class="events-loader">
+        End of events list
+      </div>
+
       <add-event-bttns :animal-id="animalId" />
     </template>
   </div>
@@ -224,5 +282,18 @@ export default {
 
   .event-listing_header--label {
     margin-right: 8px;
+  }
+
+  .events-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #b6b6b6;
+    font-style: italic;
+    padding-top: 20px;
+  }
+
+  .events-loader .v-progress-circular {
+    margin-left: 12px;
   }
 </style>

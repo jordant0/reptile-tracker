@@ -124,7 +124,7 @@ export default {
         this.endOfList = false
       }
 
-      collection = collection.limit(100)
+      collection = collection.limit(50)
 
       collection.get()
         .then((querySnapshot) => {

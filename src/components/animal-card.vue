@@ -411,7 +411,6 @@ export default {
         :lazy-src="thumbnailImage"
       />
       <avatar-placeholder
-        v-else
         :seed="animal.id"
         :name="animal.name"
       />

@@ -240,6 +240,10 @@ export default {
     overflow: hidden;
   }
 
+  .animal-image .v-image {
+    z-index: 5;
+  }
+
   .animal-image img {
     width: 100%;
     height: auto;

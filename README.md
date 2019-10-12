@@ -1,5 +1,7 @@
 # Herps Tracker
 
+![](https://github.com/jordant0/reptile-tracker/workflows/CI%2FCD/badge.svg)
+
 Website for tracking reptile activities: https://herpstracker.com
 
 ## Project setup

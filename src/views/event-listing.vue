@@ -137,7 +137,7 @@ export default {
 
           this.loading = false
 
-          if(querySnapshot.size < 100) {
+          if(querySnapshot.size < 50) {
             this.endOfList = true
           }
 

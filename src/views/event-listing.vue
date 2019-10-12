@@ -160,7 +160,6 @@ export default {
 
     loadMore() {
       if(!this.loading && !this.pagingLoad && this.eventsList.length) {
-        console.log('Loading more events...')
         this.pagingLoad = true
         this.getEventsList(true)
       }

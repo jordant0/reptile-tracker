@@ -8,6 +8,8 @@ on:
 jobs:
   lint:
     runs-on: macOS-latest
+    env:
+      NODE_ENV: production
     steps:
     - name: Checkout repository
       uses: actions/checkout@v1
@@ -23,6 +25,8 @@ jobs:
   deploy:
     needs: lint
     runs-on: macOS-latest
+    env:
+      NODE_ENV: production
     steps:
     - name: Checkout repository
       uses: actions/checkout@v1

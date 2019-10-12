@@ -246,6 +246,7 @@ export default {
   }
 
   .avatar-placeholder {
+    position: absolute;
     height: 100%;
     width: 100%;
     display: flex;

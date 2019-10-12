@@ -3,12 +3,16 @@ name: Lint
 on: [push]
 
 jobs:
-  build:
+  lint:
     runs-on: macOS-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-node@v1
+    - name: Checkout repository
+      uses: actions/checkout@v1
+    - name: Setup Node.js
+      uses: actions/setup-node@v1
       with:
         node-version: '10.x'
-    - run: yarn install
-    - run: yarn run lint
+    - name: Install packages
+      run: yarn install --frozen-lockfile
+    - name: Run linter
+      run: yarn run lint --no-fix

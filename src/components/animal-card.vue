@@ -1,5 +1,6 @@
 <script>
 import DateTimePickerDialog from '@/components/date-time-picker-dialog'
+import AvatarPlaceholder from '@/components/avatar-placeholder'
 import thumbnailMixin from '@/mixins/thumbnail'
 import moment from 'moment'
 import { mapState, mapGetters } from 'vuex'
@@ -10,6 +11,7 @@ export default {
   ],
 
   components: {
+    AvatarPlaceholder,
     DateTimePickerDialog,
   },
 
@@ -402,16 +404,17 @@ export default {
 
 <template>
   <v-expansion-panel class="animal-card">
-    <div
-      class="animal-image"
-      :style="{ backgroundColor: imageBackgroundColor }"
-    >
+    <div class="animal-image">
       <v-img
         v-if="animalImage"
         :src="animalImage"
         :lazy-src="thumbnailImage"
       />
-      <span v-else>No image</span>
+      <avatar-placeholder
+        v-else
+        :seed="animal.id"
+        :name="animal.name"
+      />
     </div>
 
     <v-expansion-panel-header>

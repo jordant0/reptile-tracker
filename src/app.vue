@@ -235,9 +235,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #b6b6b6;
-    font-size: 12px;
-    font-style: italic;
     overflow: hidden;
     transition: all 0.05s ease;
     overflow: hidden;
@@ -246,6 +243,18 @@ export default {
   .animal-image img {
     width: 100%;
     height: auto;
+  }
+
+  .avatar-placeholder {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 300;
+    letter-spacing: 2px;
   }
 
   .v-expansion-panel.v-expansion-panel--active .animal-image {

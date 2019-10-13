@@ -81,5 +81,11 @@ export default new Router({
       component: () => import('./views/event-calendar.vue'),
       meta: { title: 'Calendar' },
     },
+    {
+      path: '/privacy-policy',
+      name: 'privacy',
+      component: () => import('./views/privacy.vue'),
+      meta: { title: 'Privacy Policy' },
+    },
   ],
 })

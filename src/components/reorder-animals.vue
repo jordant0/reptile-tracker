@@ -37,10 +37,6 @@ export default {
     },
   },
 
-  created() {
-    this.resetOrdering()
-  },
-
   computed: {
     ...mapGetters([
       'uuid',
@@ -120,7 +116,7 @@ export default {
       No animal found
     </v-card-text>
     <v-card-text class="animal-reorder-wrapper">
-      <v-list class="animal-reorder" dense>
+      <v-list class="animal-reorder settings-list" dense>
         <v-overlay
           class="animal-reorder_overlay"
           absolute
@@ -177,21 +173,3 @@ export default {
     </v-card-text>
   </v-card>
 </template>
-
-<style>
-.animal-reorder {
-  max-width: 400px;
-  margin: auto;
-  position: relative;
-}
-
-.animal-reorder .v-list-item {
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  margin-top: -1px;
-}
-
-.animal-reorder .v-list-item__content {
-  color: #ffffff;
-}
-</style>

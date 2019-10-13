@@ -560,4 +560,68 @@ export default {
     margin-top: 6px !important;
     flex-shrink: 0;
   }
+
+  .settings-list {
+    max-width: 400px;
+    margin: auto;
+    position: relative;
+  }
+
+  .animal-reorder .v-list-item {
+    border-radius: 4px;
+    margin: 1px;
+  }
+
+  .animal-reorder .v-list-item__content {
+    color: #ffffff;
+  }
+
+  .v-application .animal-export {
+    position: relative;
+    list-style: none;
+    padding: 0 24px;
+    margin-bottom: 32px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .animal-export li {
+    padding: 8px;
+    box-sizing: border-box;
+    width: 50%;
+  }
+
+  .animal-export .v-input  {
+    margin: 0;
+    padding: 0;
+  }
+
+  .animal-export .v-input--selection-controls__input {
+    margin-right: 18px;
+  }
+
+  .v-progress-linear {
+    position: absolute;
+    top: 0;
+  }
+
+  .animal-export_overlay .v-overlay__content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media screen and (max-width: 650px) {
+    .v-application .animal-export {
+      padding: 0;
+    }
+  }
+
+  @media screen and (max-width: 450px) {
+    .v-application .animal-export li {
+      width: 100%;
+    }
+  }
 </style>

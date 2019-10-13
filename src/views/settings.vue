@@ -1,11 +1,13 @@
 <script>
 import Loading from '@/components/loading'
 import ReorderAnimals from '@/components/reorder-animals'
+import ExportData from '@/components/export-data'
 import { mapGetters } from 'vuex'
 
 export default {
   components: {
     Loading,
+    ExportData,
     ReorderAnimals,
   },
 
@@ -49,6 +51,8 @@ export default {
     <loading v-if="loading" />
     <template v-else>
       <reorder-animals :animals-list="animalsList" />
+
+      <export-data :animals-list="animalsList" />
     </template>
   </div>
 </template>

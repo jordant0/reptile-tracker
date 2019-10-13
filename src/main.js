@@ -28,6 +28,8 @@ const config = {
 }
 firebase.initializeApp(config)
 
+firebase.firestore().enablePersistence()
+
 Vue.config.productionTip = false
 Vue.prototype.$firebase = firebase
 

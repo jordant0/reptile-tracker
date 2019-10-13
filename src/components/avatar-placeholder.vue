@@ -1,7 +1,11 @@
 <script>
-import seedrandom from 'seedrandom'
+import randomColor from '@/mixins/random-color'
 
 export default {
+  mixins: [
+    randomColor,
+  ],
+
   props: {
     seed: {
       type: String,
@@ -16,12 +20,7 @@ export default {
 
   computed: {
     animalColor() {
-      let randomizer = seedrandom(this.seed)
-      let hue = Math.floor(randomizer() * 361)
-      let saturation = Math.floor((randomizer() * 51) + 50)
-      let lightness = Math.floor((randomizer() * 31) + 20)
-
-      return `hsl(${hue},${saturation}%,${lightness}%)`
+      return this.randomColor(this.seed)
     },
 
     placeholderText() {

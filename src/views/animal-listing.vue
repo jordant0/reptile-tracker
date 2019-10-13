@@ -56,9 +56,9 @@ export default {
           .filter(animal => this.archive === !!animal.archive)
           .sort((animalA, animalB) => {
             if(!animalB.position) {
-              return 1
-            } else if(!animalA.position) {
               return -1
+            } else if(!animalA.position) {
+              return 1
             } else {
               return animalA.position - animalB.position
             }

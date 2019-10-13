@@ -466,6 +466,10 @@ export default {
           Species: {{ animal.species }}
         </li>
 
+        <li v-if="animal.morph && animal.morph.length">
+          Morph: {{ animal.morph }}
+        </li>
+
         <li v-if="age">
           {{ age }}
         </li>

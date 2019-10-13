@@ -36,6 +36,7 @@ export default {
       animalData: {
         name: this.animal.name || '',
         species: this.animal.species || '',
+        morph: this.animal.morph || '',
         feedingDuration: this.animal.feedingDuration || null,
         birthdate: this.animal.birthdate ? this.animal.birthdate.toDate() : new Date(),
         arrival: this.animal.arrival ? this.animal.arrival.toDate() : new Date(),
@@ -294,7 +295,7 @@ export default {
       hint="The animal's species"
       :rules="[
         v => !!v || 'Species is required',
-        v => (v && v.length <= 50) || 'Name must be less than 50 characters',
+        v => (v && v.length <= 50) || 'Species must be less than 50 characters',
       ]"
       counter="50"
       required
@@ -345,6 +346,12 @@ export default {
         />
       </div>
     </v-input>
+
+    <v-text-field
+      v-model="animalData.morph"
+      label="Morph"
+      hint="The animal's morph"
+    />
 
     <v-text-field
       v-model="animalData.feedingDuration"

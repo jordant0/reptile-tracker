@@ -1,5 +1,6 @@
 <script>
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 
 export default {
   props: {
@@ -17,6 +18,7 @@ export default {
       animalsForSelection: [],
       processedAnimal: 0,
       downloadUrl: null,
+      downloadFileName: 'herps-tracker.json',
     }
   },
 
@@ -28,7 +30,8 @@ export default {
           return {
             id: animal.id,
             name: animal.name,
-            included: true,
+            archive: animal.archive,
+            included: !animal.archive,
           }
         })
       },
@@ -71,13 +74,35 @@ export default {
           ...animalInfo,
           arrival: animalInfo.arrival.toDate().toISOString(),
           birthdate: animalInfo.birthdate.toDate().toISOString(),
+          events: [],
         }
 
-        json.push(animalData)
-        this.processedAnimal++
-      })
+        this.$firebase
+          .firestore()
+          .collection('users')
+          .doc(this.uuid)
+          .collection('animals')
+          .doc(animal.id)
+          .collection('events')
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              animalData.events.push({
+                ...doc.data(),
+                timestamp: doc.data().timestamp.toDate().toISOString(),
+              })
+            })
+          })
+          .finally(() => {
+            this.processedAnimal++
 
-      this.exportDone(json)
+            json.push(animalData)
+
+            if(this.processedAnimal >= this.selectedCount) {
+              this.exportDone(json)
+            }
+          })
+      })
     },
 
     exportDone(json) {
@@ -89,6 +114,7 @@ export default {
       }
 
       this.downloadUrl = window.URL.createObjectURL(file)
+      this.downloadFileName = `herps-tracker-${moment().format('YYYYMMDDkkmmss')}.json`
       this.processing = false
     },
   },
@@ -160,9 +186,21 @@ export default {
         >
           <v-checkbox
             v-model="animal.included"
-            :label="animal.name"
             hide-details
-          />
+          >
+            <template v-slot:label>
+              <span :class="{ 'animal-label--archived': animal.archive}">
+                {{ animal.name }}
+                <v-icon
+                  v-if="animal.archive"
+                  color="#b6b6b6"
+                  small
+                >
+                  mdi-archive
+                </v-icon>
+              </span>
+            </template>
+          </v-checkbox>
         </li>
       </ul>
 
@@ -171,7 +209,7 @@ export default {
           color="info"
           :disabled="!downloadUrl || processing"
           :href="downloadUrl"
-          download='herps-tracker.json'
+          :download="downloadFileName"
         >
           <v-icon left>mdi-download</v-icon>
           Download
@@ -192,3 +230,14 @@ export default {
     </v-card-text>
   </v-card>
 </template>
+
+<style scoped>
+.animal-label--archived {
+  font-style: italic;
+}
+
+.animal-label--archived .v-icon {
+  vertical-align: top;
+  margin-left: 4px;
+}
+</style>

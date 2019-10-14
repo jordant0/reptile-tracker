@@ -26,7 +26,6 @@ export default {
     return {
       today: moment().startOf('day'),
       lastFedEvent: null,
-      randomColor: `hsl(${360 * Math.random()},${25 + 70 * Math.random()}%, ${85 + 10 * Math.random()}%)`,
       animalImage: null,
       dateInput: false,
       thumbnailUrl: null,
@@ -85,14 +84,6 @@ export default {
       }
 
       return null
-    },
-
-    imageBackgroundColor() {
-      if(this.animalImage) {
-        return this.darkTheme ? '#424242' : '#ffffff'
-      } else {
-        return this.randomColor
-      }
     },
 
     feedingOverride() {
@@ -238,6 +229,14 @@ export default {
 
     thumbnailImage() {
       return this.animal.thumbnail || this.thumbnailUrl
+    },
+
+    animalTags() {
+      if(this.animal.tags && this.animal.tags.length) {
+        return this.animal.tags.join(', ')
+      }
+
+      return null
     },
   },
 
@@ -492,6 +491,10 @@ export default {
 
         <li v-if="lastFedDate">
           Last fed {{ lastFedDate }} ({{ lastFedFromNow }})
+        </li>
+
+        <li v-if="animalTags">
+          Tags: {{ animalTags }}
         </li>
       </ul>
 

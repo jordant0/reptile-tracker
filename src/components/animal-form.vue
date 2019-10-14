@@ -1,18 +1,22 @@
 <script>
 import DateTimeInput from '@/components/date-time-input'
+import TagsInput from '@johmun/vue-tags-input'
 import VueCropper from 'vue-cropperjs'
 import thumbnailMixin from '@/mixins/thumbnail'
+import randomColor from '@/mixins/random-color'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 
 export default {
   mixins: [
     thumbnailMixin,
+    randomColor,
   ],
 
   components: {
     VueCropper,
     DateTimeInput,
+    TagsInput,
   },
 
   props: {
@@ -20,6 +24,24 @@ export default {
       type: Object,
       default() {
         return {}
+      },
+    },
+  },
+
+  watch: {
+    uuid: {
+      immediate: true,
+      handler() {
+        if(this.uuid) {
+          this.$bind(
+            'animalsList',
+            this.$firebase
+              .firestore()
+              .collection('users')
+              .doc(this.uuid)
+              .collection('animals')
+          )
+        }
       },
     },
   },
@@ -33,6 +55,8 @@ export default {
       cropDialog: false,
       imageChanged: false,
       today: moment().startOf('day'),
+      tagValue: '',
+      animalsList: [],
       animalData: {
         name: this.animal.name || '',
         species: this.animal.species || '',
@@ -42,6 +66,7 @@ export default {
         arrival: this.animal.arrival ? this.animal.arrival.toDate() : new Date(),
         sex: this.animal.sex || 'unknown',
         sexConfirmed: this.animal.sexConfirmed || false,
+        tags: this.animal.tags || [],
       },
     }
   },
@@ -93,6 +118,30 @@ export default {
 
     startOfBirthdate() {
       return moment(this.animalData.birthdate).startOf('day')
+    },
+
+    existingTags() {
+      let tagList = this.animalsList.flatMap(animal => animal.tags || [])
+      const result = []
+      const map = new Map()
+
+      for(const item of tagList) {
+        if(!map.has(item)) {
+          map.set(item, true)
+          result.push({ text: item })
+        }
+      }
+
+      return result
+    },
+
+    tags() {
+      return this.animalData.tags.map((tag) => {
+        return {
+          text: tag,
+          style: `background-color: ${this.randomColor(tag)}`,
+        }
+      })
     },
   },
 
@@ -199,6 +248,10 @@ export default {
       this.animalImageUrl = this.animalImage.toDataURL()
       this.imageChanged = true
       this.cropDialog = false
+    },
+
+    updateTags(newTags) {
+      this.animalData.tags = newTags.map(tag => tag.text)
     },
   },
 }
@@ -380,6 +433,26 @@ export default {
       hint="Date the animal was obtained"
     />
 
+    <v-input class="special-input">
+      <template v-slot:label>
+        <div class="special-input_label">
+          Tags
+        </div>
+        <div class="v-messages theme--light">
+          <div class="v-messages__message">
+            Add custom tags for this animal
+          </div>
+        </div>
+      </template>
+
+      <tags-input
+        v-model="tagValue"
+        :tags="tags"
+        :autocomplete-items="existingTags"
+        @tags-changed="updateTags"
+      />
+    </v-input>
+
     <div class="form-actions">
       <v-btn
         text
@@ -425,5 +498,9 @@ export default {
     margin: 0;
     padding: 0;
     margin-left: 32px;
+  }
+
+  .vue-tags-input {
+    background-color: inherit;
   }
 </style>

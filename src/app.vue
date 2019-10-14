@@ -624,4 +624,90 @@ export default {
       width: 100%;
     }
   }
+
+  .vue-tags-input {
+    background-color: inherit !important;
+    flex-grow: 1;
+    max-width: none !important;
+    position: relative;
+  }
+
+  .v-application.theme--dark .ti-autocomplete {
+    background-color: #424242 !important;
+  }
+
+  .vue-tags-input:before {
+    border-color: rgba(255, 255, 255, 0.7);
+    border-style: solid;
+    border-width: thin 0 0 0;
+    bottom: -1px;
+    content: "";
+    left: 0;
+    position: absolute;
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+    width: 100%;
+  }
+
+  .vue-tags-input:hover:before {
+    border-color: #FFFFFF;
+  }
+
+  .v-application.theme--light .vue-tags-input:before {
+    border-color: rgba(0, 0, 0, 0.42);
+  }
+
+  .v-application.theme--light .vue-tags-input:hover:before {
+    border-color: rgba(0, 0, 0, 0.87);
+  }
+
+  .vue-tags-input:after {
+    border-color: #4caf50;
+    border-style: solid;
+    border-width: thin 0 thin 0;
+    transform: scaleX(0);
+    bottom: -1px;
+    content: "";
+    left: 0;
+    position: absolute;
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+    width: 100%;
+  }
+
+  .v-application.theme--light .vue-tags-input:after {
+    border-color: #8bc34a;
+  }
+
+  .vue-tags-input.ti-focus:after {
+    transform: scaleX(1);
+  }
+
+  .vue-tags-input .ti-input {
+    border: 0 !important;
+    padding: 4px 0;
+  }
+
+  .vue-tags-input .ti-input .ti-tags li {
+    font-size: 14px !important;
+    line-height: 24px;
+  }
+
+  .vue-tags-input .ti-input .ti-tags input {
+    font-size: 14px !important;
+    line-height: 24px;
+  }
+
+  .vue-tags-input .ti-input .ti-tags li.ti-tag {
+    border-radius: 16px;
+    padding: 4px 14px;
+    font-weight: 500;
+  }
+
+  .vue-tags-input .ti-input .ti-tags li.ti-new-tag-input-wrapper {
+    padding: 4px;
+  }
+
+  .vue-tags-input .ti-input .ti-tags li.ti-tag .ti-actions {
+    margin-left: 4px;
+    margin-right: -4px;
+  }
 </style>

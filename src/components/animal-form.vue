@@ -433,7 +433,7 @@ export default {
       hint="Date the animal was obtained"
     />
 
-    <v-input class="special-input">
+    <v-input class="animal-tags-input special-input">
       <template v-slot:label>
         <div class="special-input_label">
           Tags

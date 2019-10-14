@@ -710,4 +710,16 @@ export default {
     margin-left: 4px;
     margin-right: -4px;
   }
+
+  @media screen and (max-width: 700px) {
+    .animal-tags-input .v-input__slot {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .animal-tags-input .v-input__slot .vue-tags-input {
+      margin-top: 20px;
+      width: 100%;
+    }
+  }
 </style>

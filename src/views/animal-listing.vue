@@ -96,7 +96,10 @@ export default {
 
 <template>
   <div class="animal-listing container-wrapper">
-    <loading v-if="loading" />
+    <loading
+      v-if="loading"
+      type="list-item-avatar-two-line, list-item-avatar-two-line, list-item-avatar-two-line"
+    />
     <template v-else>
       <div v-if="filterTag" class="listing_header">
         <div class="listing_header--label">

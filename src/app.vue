@@ -734,4 +734,22 @@ export default {
   .listing_header--label {
     margin-right: 8px;
   }
+
+  .loading-skeleton .v-progress-linear {
+    position: relative;
+  }
+
+  .loading-skeleton .v-skeleton-loader__image {
+    height: 400px;
+  }
+
+  .loading-skeleton .v-skeleton-loader__actions {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 16px;
+  }
+
+  .loading-skeleton .v-skeleton-loader__list-item-avatar-two-line {
+    margin-bottom: 1px;
+  }
 </style>

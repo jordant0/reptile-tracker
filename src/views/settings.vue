@@ -48,7 +48,7 @@ export default {
 
 <template>
   <div class="container-wrapper">
-    <loading v-if="loading" />
+    <loading v-if="loading" type="card-heading, image, actions" />
     <template v-else>
       <reorder-animals :animals-list="animalsList" />
 

@@ -63,6 +63,14 @@ export default {
       ]
     },
 
+    eventsHeader() {
+      if(this.animal) {
+        return `Events for ${this.animal.name}`
+      } else {
+        return 'Events List'
+      }
+    },
+
     animalName() {
       if(this.animal) {
         return this.animal.name
@@ -177,50 +185,53 @@ export default {
 
 <template>
   <div class="event-listing container-wrapper">
-    <loading v-if="loading" />
-    <template v-else>
-      <div class="listing_header">
-        <div class="listing_header--label">
-          Events for {{ animalName }}
-        </div>
-
-        <v-tooltip right>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              icon
-              color="#ff8a36"
-              v-on="on"
-              @click="goToAnimalRoute('chart')"
-            >
-              <v-icon>mdi-chart-line</v-icon>
-            </v-btn>
-          </template>
-          <span>Weight Chart</span>
-        </v-tooltip>
-
-        <v-tooltip right>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              icon
-              color="#16a4ff"
-              v-on="on"
-              @click="goToAnimalRoute('calendar')"
-            >
-              <v-icon>mdi-calendar-multiselect</v-icon>
-            </v-btn>
-          </template>
-          <span>View Calendar</span>
-        </v-tooltip>
-
-        <div class="flex-grow-1"></div>
-
-        <filtering
-          :animal-id="animalId"
-          :current-filter.sync="filter"
-          :loading="loading"
-        />
+    <div class="listing_header">
+      <div class="listing_header--label">
+        {{ eventsHeader }}
       </div>
 
+      <v-tooltip right>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            icon
+            color="#ff8a36"
+            v-on="on"
+            @click="goToAnimalRoute('chart')"
+          >
+            <v-icon>mdi-chart-line</v-icon>
+          </v-btn>
+        </template>
+        <span>Weight Chart</span>
+      </v-tooltip>
+
+      <v-tooltip right>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            icon
+            color="#16a4ff"
+            v-on="on"
+            @click="goToAnimalRoute('calendar')"
+          >
+            <v-icon>mdi-calendar-multiselect</v-icon>
+          </v-btn>
+        </template>
+        <span>View Calendar</span>
+      </v-tooltip>
+
+      <div class="flex-grow-1"></div>
+
+      <filtering
+        :animal-id="animalId"
+        :current-filter.sync="filter"
+        :loading="loading"
+      />
+    </div>
+
+    <loading
+      v-if="loading"
+      type="list-item-avatar-two-line, list-item-avatar-two-line, list-item-avatar-two-line"
+    />
+    <template v-else>
       <empty v-if="showEmpty" noun="event" />
       <v-expansion-panels v-else>
         <event-card

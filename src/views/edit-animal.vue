@@ -69,7 +69,7 @@ export default {
 
 <template>
   <div class="container-wrapper">
-    <loading v-if="loading" />
+    <loading v-if="loading" type="card-heading, image, actions" />
     <v-card v-else class="container-card">
       <v-card-title>Edit Animal</v-card-title>
       <v-card-text>

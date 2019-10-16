@@ -1,8 +1,24 @@
+<script>
+  export default {
+    props: {
+      type: {
+        type: String,
+        default: 'card-heading, image',
+      },
+    },
+  }
+</script>
+
 <template>
-  <v-card
-    loading
-    class="container-card special-card loading-card"
-  >
-    <v-card-title>Loading data...</v-card-title>
-  </v-card>
+  <div class="loading-skeleton">
+    <v-progress-linear
+      indeterminate
+    />
+
+    <slot>
+      <v-skeleton-loader
+        :type="type"
+      />
+    </slot>
+  </div>
 </template>

@@ -74,7 +74,7 @@ export default {
 
 <template>
   <div class="container-wrapper">
-    <loading v-if="loading" />
+    <loading v-if="loading" type="card-heading, image, actions" />
     <event-form
       v-else
       :animal-id="animalId"

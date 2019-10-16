@@ -2,12 +2,14 @@
 import DateTimePickerDialog from '@/components/date-time-picker-dialog'
 import AvatarPlaceholder from '@/components/avatar-placeholder'
 import thumbnailMixin from '@/mixins/thumbnail'
+import randomColor from '@/mixins/random-color'
 import moment from 'moment'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
   mixins: [
     thumbnailMixin,
+    randomColor,
   ],
 
   components: {
@@ -29,6 +31,7 @@ export default {
       animalImage: null,
       dateInput: false,
       thumbnailUrl: null,
+      imageLoaded: false,
     }
   },
 
@@ -233,10 +236,15 @@ export default {
 
     animalTags() {
       if(this.animal.tags && this.animal.tags.length) {
-        return this.animal.tags.join(', ')
+        return this.animal.tags.map((tag) => {
+          return {
+            text: tag,
+            color: this.randomColor(tag),
+          }
+        })
       }
 
-      return null
+      return []
     },
   },
 
@@ -408,8 +416,10 @@ export default {
         v-if="animalImage"
         :src="animalImage"
         :lazy-src="thumbnailImage"
+        @load="imageLoaded = true"
       />
       <avatar-placeholder
+        v-if="!imageLoaded"
         :seed="animal.id"
         :name="animal.name"
       />
@@ -492,11 +502,17 @@ export default {
         <li v-if="lastFedDate">
           Last fed {{ lastFedDate }} ({{ lastFedFromNow }})
         </li>
-
-        <li v-if="animalTags">
-          Tags: {{ animalTags }}
-        </li>
       </ul>
+
+      <div v-if="animalTags.length" class="animal-tags">
+        <v-chip
+          v-for="(tag, index) in animalTags"
+          :key="index"
+          :color="tag.color"
+        >
+          {{ tag.text }}
+        </v-chip>
+      </div>
 
       <div v-if="animalImage" class="animal-expanded-image">
         <img :src="animalImage" />
@@ -648,5 +664,18 @@ export default {
   .v-expansion-panel-header {
     padding: 0;
     min-height: 60px;
+  }
+
+  .animal-tags {
+    margin-top: 16px;
+    visibility: hidden;
+  }
+
+  .animal-tags .v-chip {
+    margin: 0 4px;
+  }
+
+  .v-expansion-panel--active .animal-tags {
+    visibility: visible;
   }
 </style>

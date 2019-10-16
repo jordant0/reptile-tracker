@@ -1,12 +1,12 @@
 <script>
-  export default {
-    props: {
-      type: {
-        type: String,
-        default: 'card-heading, image',
-      },
+export default {
+  props: {
+    type: {
+      type: String,
+      default: 'card-heading, image',
     },
-  }
+  },
+}
 </script>
 
 <template>

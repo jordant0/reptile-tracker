@@ -2,9 +2,14 @@
 import Loading from '@/components/loading'
 import Empty from '@/components/empty'
 import AnimalCard from '@/components/animal-card'
+import randomColor from '@/mixins/random-color'
 import { mapGetters } from 'vuex'
 
 export default {
+  mixins: [
+    randomColor,
+  ],
+
   components: {
     AnimalCard,
     Loading,
@@ -22,6 +27,7 @@ export default {
     return {
       loading: true,
       animalsList: [],
+      filterTag: null,
     }
   },
 
@@ -53,7 +59,10 @@ export default {
     filteredAnimals() {
       if(this.animalsList) {
         return this.animalsList
-          .filter(animal => this.archive === !!animal.archive)
+          .filter((animal) => {
+            return (this.archive === !!animal.archive) &&
+              (!this.filterTag || (animal.tags && animal.tags.includes(this.filterTag)))
+          })
           .sort((animalA, animalB) => {
             if(!animalB.position) {
               return -1
@@ -66,6 +75,14 @@ export default {
       } else {
         return []
       }
+    },
+
+    filterTagColor() {
+      if(this.filterTag) {
+        return this.randomColor(this.filterTag)
+      }
+
+      return null
     },
   },
 
@@ -81,12 +98,26 @@ export default {
   <div class="animal-listing container-wrapper">
     <loading v-if="loading" />
     <template v-else>
+      <div v-if="filterTag" class="listing_header">
+        <div class="listing_header--label">
+          Animals with tag
+          <v-chip
+            :color="filterTagColor"
+            close
+            @click:close="filterTag = null"
+          >
+            {{ filterTag }}
+          </v-chip>
+        </div>
+      </div>
+
       <empty v-if="!animalsList.length" noun="animal" />
       <v-expansion-panels v-else>
         <animal-card
           v-for="animal in filteredAnimals"
           :key="animal.id"
           :animal="animal"
+          @filter-tag="filterTag = $event"
         />
       </v-expansion-panels>
 
@@ -104,3 +135,9 @@ export default {
     </template>
   </div>
 </template>
+
+<style scoped>
+  .listing_header--label .v-chip {
+    margin-left: 4px;
+  }
+</style>

@@ -509,6 +509,7 @@ export default {
           v-for="(tag, index) in animalTags"
           :key="index"
           :color="tag.color"
+          @click="$emit('filter-tag', tag.text)"
         >
           {{ tag.text }}
         </v-chip>

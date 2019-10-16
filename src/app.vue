@@ -722,4 +722,16 @@ export default {
       width: 100%;
     }
   }
+
+  .listing_header {
+    font-size: 18px;
+    margin-bottom: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+  }
+
+  .listing_header--label {
+    margin-right: 8px;
+  }
 </style>

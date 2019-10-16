@@ -179,8 +179,8 @@ export default {
   <div class="event-listing container-wrapper">
     <loading v-if="loading" />
     <template v-else>
-      <div class="event-listing_header">
-        <div class="event-listing_header--label">
+      <div class="listing_header">
+        <div class="listing_header--label">
           Events for {{ animalName }}
         </div>
 
@@ -269,18 +269,6 @@ export default {
 <style scoped>
   .event-listing {
     max-width: 100%;
-  }
-
-  .event-listing_header {
-    font-size: 18px;
-    margin-bottom: 12px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-  }
-
-  .event-listing_header--label {
-    margin-right: 8px;
   }
 
   .events-loader {

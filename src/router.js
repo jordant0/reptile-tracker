@@ -16,14 +16,14 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: () => import('./views/login.vue'),
-      meta: { title: 'Login / Sign-up' },
+      meta: { title: 'Login / Sign-up', public: true },
     },
     {
       path: '/sign-up',
       name: 'sign-up',
       component: () => import('./views/login.vue'),
       props: { login: false },
-      meta: { title: 'Login / Sign-up' },
+      meta: { title: 'Login / Sign-up', public: true },
     },
     {
       path: '/settings',
@@ -85,7 +85,7 @@ export default new Router({
       path: '/privacy-policy',
       name: 'privacy',
       component: () => import('./views/privacy.vue'),
-      meta: { title: 'Privacy Policy' },
+      meta: { title: 'Privacy Policy', public: true },
     },
   ],
 })

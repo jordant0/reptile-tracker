@@ -19,6 +19,12 @@ export default {
   },
 
   watch: {
+    '$route'(newRoute) {
+      if(!(newRoute.meta && newRoute.meta.public) && !this.user.uid) {
+        this.$router.push({ name: 'login' })
+      }
+    },
+
     darkTheme(value) {
       this.$vuetify.theme.dark = value
       set('dark-mode', value ? 'true' : 'false')
@@ -40,9 +46,10 @@ export default {
       if(user) {
         this.$store.commit('updateUser', user)
       } else {
-        let currentRoute = this.$router.currentRoute.name
+        let currentRoute = this.$router.currentRoute
+
         this.$store.commit('updateUser', {})
-        if(!(currentRoute === 'login' || currentRoute === 'sign-up')) {
+        if(!(currentRoute.meta && currentRoute.meta.public)) {
           this.$router.push({ name: 'login' })
         }
       }
@@ -55,6 +62,7 @@ export default {
   computed: {
     ...mapState([
       'darkTheme',
+      'user',
     ]),
   },
 }

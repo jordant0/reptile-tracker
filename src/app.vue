@@ -45,6 +45,12 @@ export default {
     this.$firebase.auth().onAuthStateChanged((user) => {
       if(user) {
         this.$store.commit('updateUser', user)
+
+        if(window.OneSignal) {
+          OneSignal.push(() => {
+            OneSignal.setExternalUserId(user.uid)
+          })
+        }
       } else {
         let currentRoute = this.$router.currentRoute
 

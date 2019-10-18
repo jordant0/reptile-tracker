@@ -9,6 +9,7 @@ module.exports = {
   ],
   globals: {
     'VERSION': 'readonly',
+    'OneSignal': 'readonly',
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',

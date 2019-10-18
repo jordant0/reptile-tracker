@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './app.vue'
 import router from './router'
 import store from './store'
-import './registerServiceWorker'
+// import './registerServiceWorker'
 import vuetify from './plugins/vuetify'
 
 import firebase from 'firebase/app'
@@ -14,6 +14,14 @@ import { firestorePlugin } from 'vuefire'
 import 'cropperjs/dist/cropper.css'
 
 import VCalendar from 'v-calendar'
+
+window.OneSignal = window.OneSignal || []
+window.OneSignal.push(() => {
+  window.OneSignal.init({
+    appId: process.env.VUE_APP_ONESIGNAL,
+    allowLocalhostAsSecureOrigin: process.env.NODE_ENV !== 'production',
+  })
+})
 
 Vue.use(firestorePlugin)
 

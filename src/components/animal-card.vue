@@ -45,7 +45,7 @@ export default {
     },
 
     nextFeed(newValue, oldValue) {
-      if(oldValue && !newValue) {
+      if(oldValue && (!newValue || newValue < moment())) {
         this.clearLastFeedingReminder()
       } else {
         this.sendNextFeedingReminder()

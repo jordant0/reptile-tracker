@@ -8,7 +8,7 @@ export default {
       include_external_user_ids: [store.getters.uuid],
       headings: { 'en': 'Feeding Reminder' },
       contents: { 'en': `${animal.name} is due to be fed today` },
-      url: `${window.location.href.split('/#/')}/#/${animal.id}/events`,
+      url: `${window.location.protocol}//${window.location.host}/#/${animal.id}/events`,
       send_after: timestamp,
     })
   },

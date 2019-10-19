@@ -22,3 +22,8 @@ yarn-error.log*
 
 # Firebase hosting
 .firebase
+
+# Secrets
+.env.production
+encryption-key
+production-secrets

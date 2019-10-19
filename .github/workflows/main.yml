@@ -34,6 +34,8 @@ jobs:
       run: yarn install --frozen-lockfile
     - name: Install firebase-tools
       run: npm install -g firebase-tools
+    - name: Decrypt production env
+      run: openssl enc -d -aes-256-cbc -in .env.production.enc -out .env.production -k "${{ secrets.ENCRYPTION_KEY }}"
     - name: Build for production
       run: yarn run build
     - name: Deploy

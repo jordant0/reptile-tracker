@@ -116,7 +116,17 @@ export default {
                 })
             }
           } else if(this.userConfig.notifyDate === tomorrow && this.userConfig.notificationId) {
-            pushService.cancelNotification(this.user.notificationId)
+            pushService.cancelNotification(this.userConfig.notificationId)
+
+            this.$firebase
+              .firestore()
+              .collection('users')
+              .doc(this.uuid)
+              .update({
+                notificationId: null,
+                notifyDate: null,
+                notifycontent: null,
+              })
           }
         }, 1000)
       }

@@ -44,3 +44,17 @@ yarn run lint
     ```
     firebase deploy
     ```
+
+## Encrypting/Decrypting secrets
+
+* Encrypt `.env.production`
+
+    ```
+    openssl enc -aes-256-cbc -in .env.production -out .env.production.enc -k [ENCRYPTION_KEY]
+    ```
+
+* Decrypt `.env.production.enc`
+
+    ```
+    openssl enc -d -aes-256-cbc -in .env.production.enc -out .env.production -k [ENCRYPTION_KEY]
+    ```

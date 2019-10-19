@@ -20,7 +20,7 @@ export default {
 
   watch: {
     '$route'(newRoute) {
-      if(!(newRoute.meta && newRoute.meta.public) && !this.user.uid) {
+      if(this.loginCheck && !(newRoute.meta && newRoute.meta.public) && !this.user.uid) {
         this.$router.push({ name: 'login' })
       }
     },
@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       drawerOpen: false,
+      loginCheck: false,
     }
   },
 
@@ -59,6 +60,7 @@ export default {
           this.$router.push({ name: 'login' })
         }
       }
+      this.loginCheck = true
     })
 
     this.version = `v${VERSION}`

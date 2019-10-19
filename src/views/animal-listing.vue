@@ -87,8 +87,8 @@ export default {
           let tomorrow = moment().add(1, 'd').format('MM-DD-YYYY')
 
           if(this.feedingMapping[tomorrow] && this.feedingMapping[tomorrow].length) {
-            let notificationTime = this.userConfig.reminderTime || '9:00 AM',
-                animalsToFeed = this.feedingMapping[tomorrow].map(animal => animal.name).sort().join(', ')
+            let notificationTime = this.userConfig.reminderTime || '9:00 AM'
+            let animalsToFeed = this.feedingMapping[tomorrow].map(animal => animal.name).sort().join(', ')
 
             if(this.userConfig.notifyDate !== tomorrow || this.userConfig.notifycontent !== animalsToFeed) {
               let timestamp = moment(`${tomorrow} ${notificationTime}`, 'MM-DD-YYYY h:mm A')
@@ -97,30 +97,23 @@ export default {
                 title: 'Feeding Today',
                 content: animalsToFeed,
               })
-              .then((doc) => {
-                let notificationId = doc.data ? doc.data.id : null
+                .then((doc) => {
+                  let notificationId = doc.data ? doc.data.id : null
 
-                debugger;
-                if(this.userConfig.notificationId) {
-                  pushService.cancelNotification(this.userConfig.notificationId)
-                  .then((doc) => {
-                    debugger;
-                  })
-                  .catch((err) => {
-                    debugger;
-                  })
-                }
+                  if(this.userConfig.notificationId) {
+                    pushService.cancelNotification(this.userConfig.notificationId)
+                  }
 
-                this.$firebase
-                  .firestore()
-                  .collection('users')
-                  .doc(this.uuid)
-                  .update({
-                    notificationId,
-                    notifyDate: tomorrow,
-                    notifycontent: animalsToFeed,
-                  })
-              })
+                  this.$firebase
+                    .firestore()
+                    .collection('users')
+                    .doc(this.uuid)
+                    .update({
+                      notificationId,
+                      notifyDate: tomorrow,
+                      notifycontent: animalsToFeed,
+                    })
+                })
             }
           } else if(this.userConfig.notifyDate === tomorrow && this.userConfig.notificationId) {
             pushService.cancelNotification(this.user.notificationId)
@@ -170,7 +163,7 @@ export default {
 
     allAnimalsReported() {
       if(this.archive || this.filterTag || !this.filteredAnimals.length) {
-        return false;
+        return false
       }
 
       return this.filteredAnimals.every(animal => this.animalsChecklist[animal.id])
@@ -191,7 +184,7 @@ export default {
 
       this.animalsChecklist = {
         ...this.animalsChecklist,
-        [animal.id]: true
+        [animal.id]: true,
       }
     },
   },

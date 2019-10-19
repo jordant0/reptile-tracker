@@ -43,7 +43,7 @@ export default {
         .collection('users')
         .doc(this.uuid)
         .update({
-          reminderTime: moment(value).format('h:mm A')
+          reminderTime: moment(value).format('h:mm A'),
         })
         .then(() => {
           this.$store.commit('showNotification', {

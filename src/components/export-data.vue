@@ -122,7 +122,7 @@ export default {
 </script>
 
 <template>
-  <v-card class="container-card mt-5">
+  <v-card class="container-card">
     <v-card-title>
       Export data
 

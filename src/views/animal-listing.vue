@@ -4,6 +4,8 @@ import Empty from '@/components/empty'
 import AnimalCard from '@/components/animal-card'
 import randomColor from '@/mixins/random-color'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
+import pushService from '@/services/push-notifications'
 
 export default {
   mixins: [
@@ -26,8 +28,13 @@ export default {
   data() {
     return {
       loading: true,
+      userConfigLoaded: false,
+      userConfig: {},
       animalsList: [],
       filterTag: null,
+      animalsChecklist: {},
+      feedingMapping: {},
+      reminderCheck: false,
     }
   },
 
@@ -36,6 +43,16 @@ export default {
       immediate: true,
       handler() {
         if(this.uuid) {
+          this.$bind(
+            'userConfig',
+            this.$firebase
+              .firestore()
+              .collection('users')
+              .doc(this.uuid)
+          ).then((doc) => {
+            this.userConfigLoaded = true
+          })
+
           this.$bind(
             'animalsList',
             this.$firebase
@@ -49,12 +66,78 @@ export default {
         }
       },
     },
+
+    userConfigLoaded() {
+      if(this.userConfig && !this.userConfig.reminderTime) {
+        this.$firebase
+          .firestore()
+          .collection('users')
+          .doc(this.uuid)
+          .set({
+            ...this.userConfig,
+            reminderTime: '9:00 AM',
+          })
+      }
+    },
+
+    allAnimalsReported() {
+      if(!this.reminderCheck && this.allAnimalsReported) {
+        setTimeout(() => {
+          this.reminderCheck = true
+          let tomorrow = moment().add(1, 'd').format('MM-DD-YYYY')
+
+          if(this.feedingMapping[tomorrow] && this.feedingMapping[tomorrow].length) {
+            let notificationTime = this.userConfig.reminderTime || '9:00 AM',
+                animalsToFeed = this.feedingMapping[tomorrow].map(animal => animal.name).sort().join(', ')
+
+            if(this.userConfig.notifyDate !== tomorrow || this.userConfig.notifycontent !== animalsToFeed) {
+              let timestamp = moment(`${tomorrow} ${notificationTime}`, 'MM-DD-YYYY h:mm A')
+
+              pushService.sendFeedingReminder(timestamp, {
+                title: 'Feeding Today',
+                content: animalsToFeed,
+              })
+              .then((doc) => {
+                let notificationId = doc.data ? doc.data.id : null
+
+                debugger;
+                if(this.userConfig.notificationId) {
+                  pushService.cancelNotification(this.userConfig.notificationId)
+                  .then((doc) => {
+                    debugger;
+                  })
+                  .catch((err) => {
+                    debugger;
+                  })
+                }
+
+                this.$firebase
+                  .firestore()
+                  .collection('users')
+                  .doc(this.uuid)
+                  .update({
+                    notificationId,
+                    notifyDate: tomorrow,
+                    notifycontent: animalsToFeed,
+                  })
+              })
+            }
+          } else if(this.userConfig.notifyDate === tomorrow && this.userConfig.notificationId) {
+            pushService.cancelNotification(this.user.notificationId)
+          }
+        }, 1000)
+      }
+    },
   },
 
   computed: {
     ...mapGetters([
       'uuid',
     ]),
+
+    userDocId() {
+      return this.userConfig.id
+    },
 
     filteredAnimals() {
       if(this.animalsList) {
@@ -84,11 +167,32 @@ export default {
 
       return null
     },
+
+    allAnimalsReported() {
+      if(this.archive || this.filterTag || !this.filteredAnimals.length) {
+        return false;
+      }
+
+      return this.filteredAnimals.every(animal => this.animalsChecklist[animal.id])
+    },
   },
 
   methods: {
     addAnimal() {
       this.$router.push({ name: 'add-animal' })
+    },
+
+    updateNextFeed(animal, nextFeed) {
+      if(nextFeed) {
+        let feedingDate = nextFeed.format('MM-DD-YYYY')
+        this.feedingMapping[feedingDate] = this.feedingMapping[feedingDate] || []
+        this.feedingMapping[feedingDate].push(animal)
+      }
+
+      this.animalsChecklist = {
+        ...this.animalsChecklist,
+        [animal.id]: true
+      }
     },
   },
 }
@@ -121,6 +225,7 @@ export default {
           :key="animal.id"
           :animal="animal"
           @filter-tag="filterTag = $event"
+          @next-feed="updateNextFeed"
         />
       </v-expansion-panels>
 

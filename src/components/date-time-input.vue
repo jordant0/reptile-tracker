@@ -23,6 +23,11 @@ export default {
       default: null,
     },
 
+    excludeDate: {
+      type: Boolean,
+      default: false,
+    },
+
     excludeTime: {
       type: Boolean,
       default: false,
@@ -31,6 +36,11 @@ export default {
     allowedDates: {
       type: Function,
       default: null,
+    },
+
+    loading: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -107,13 +117,21 @@ export default {
       </template>
 
       <div class="selection-display">
-        <v-btn text @click="dateModalOpen = true">
+        <v-btn
+          v-if="!excludeDate"
+          text
+          :disabled="loading"
+          :loading="loading"
+          @click="dateModalOpen = true"
+        >
           {{ dateString }}
         </v-btn>
 
         <v-btn
           v-if="!excludeTime"
           text
+          :disabled="loading"
+          :loading="loading"
           @click="timeModalOpen = true"
         >
           {{ timeString }}
@@ -122,6 +140,7 @@ export default {
     </v-input>
 
     <date-time-picker-dialog
+      v-if="!excludeDate"
       :open.sync="dateModalOpen"
       :value="dateForPicker"
       :allowed-dates="allowedDates"
@@ -130,6 +149,7 @@ export default {
     />
 
     <date-time-picker-dialog
+      v-if="!excludeTime"
       :open.sync="timeModalOpen"
       :value="timeForPicker"
       type="time"

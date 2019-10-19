@@ -91,7 +91,7 @@ export default {
 </script>
 
 <template>
-  <v-card class="container-card">
+  <v-card class="container-card mb-5">
     <v-card-title>
       Reorder Animals
 

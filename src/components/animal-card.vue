@@ -4,7 +4,6 @@ import AvatarPlaceholder from '@/components/avatar-placeholder'
 import thumbnailMixin from '@/mixins/thumbnail'
 import randomColor from '@/mixins/random-color'
 import moment from 'moment'
-import pushService from '@/services/push-notifications'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -44,12 +43,11 @@ export default {
       },
     },
 
-    nextFeed(newValue, oldValue) {
-      if(oldValue && (!newValue || newValue < moment())) {
-        this.clearLastFeedingReminder()
-      } else {
-        this.sendNextFeedingReminder()
-      }
+    nextFeed: {
+      immediate: true,
+      handler() {
+        this.$emit('next-feed', this.animal, this.nextFeed)
+      },
     },
   },
 
@@ -413,56 +411,6 @@ export default {
           }
         }
       } catch(e) {}
-    },
-
-    sendNextFeedingReminder() {
-      if(!this.nextFeed || this.nextFeed < moment()) {
-        return
-      }
-
-      let nextFeedDate = this.nextFeed.format('MM-DD-YYYY')
-      if(nextFeedDate === this.animal.lastFeedingNotification) {
-        return
-      }
-
-      let timestamp = moment(`${nextFeedDate} 8:00 AM`, 'MM-DD-YYYY h:mm A')
-
-      pushService.sendFeedingReminder(this.animal, timestamp.toString())
-        .then((doc) => {
-          if(this.animal.lastNotificationId) {
-            pushService.cancelNotification(this.animal.lastNotificationId)
-          }
-
-          if(doc.data && doc.data.id) {
-            this.$firebase
-              .firestore()
-              .collection('users')
-              .doc(this.uuid)
-              .collection('animals')
-              .doc(this.animal.id)
-              .update({
-                lastFeedingNotification: timestamp.format('MM-DD-YYYY'),
-                lastNotificationId: doc.data.id,
-              })
-          }
-        })
-    },
-
-    clearLastFeedingReminder() {
-      if(this.animal.lastNotificationId) {
-        pushService.cancelNotification(this.animal.lastNotificationId)
-
-        this.$firebase
-          .firestore()
-          .collection('users')
-          .doc(this.uuid)
-          .collection('animals')
-          .doc(this.animal.id)
-          .update({
-            lastFeedingNotification: null,
-            lastNotificationId: null,
-          })
-      }
     },
   },
 }

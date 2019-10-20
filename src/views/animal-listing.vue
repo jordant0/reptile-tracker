@@ -28,8 +28,6 @@ export default {
   data() {
     return {
       filterTag: null,
-      animalsChecklist: {},
-      feedingMapping: {},
       reminderCheck: false,
     }
   },
@@ -48,56 +46,69 @@ export default {
       }
     },
 
-    allAnimalsReported() {
-      if(!this.reminderCheck && this.allAnimalsReported) {
-        setTimeout(() => {
-          this.reminderCheck = true
-          let tomorrow = moment().add(1, 'd').format('MM-DD-YYYY')
+    notificationTrigger() {
+      if(!(this.animalListLoaded && this.userConfigLoaded)) {
+        return
+      }
 
-          if(this.feedingMapping[tomorrow] && this.feedingMapping[tomorrow].length) {
-            let notificationTime = this.userConfig.reminderTime || '9:00 AM'
-            let animalsToFeed = this.feedingMapping[tomorrow].map(animal => animal.name).sort().join(', ')
+      let currentReminders = { ...this.userConfig.reminders } || {}
+      let notificationTime = this.userConfig.reminderTime || '9:00 AM'
+      let newReminders = {}
+      let today = moment()
+      let promises = []
+      let feedingDates = Object.keys(this.feedingMapping)
 
-            if(this.userConfig.notifyDate !== tomorrow || this.userConfig.notifycontent !== animalsToFeed) {
-              let timestamp = moment(`${tomorrow} ${notificationTime}`, 'MM-DD-YYYY h:mm A')
+      feedingDates.forEach((key) => {
+        let date = moment(key, 'MM-DD-YYYY')
+        if(today < date) {
+          let animalsToFeed = this.feedingMapping[key].map(animal => animal.name).sort().join(', ')
+          let currentNotification = currentReminders[key]
 
-              pushService.sendFeedingReminder(timestamp, {
+          if(!currentNotification || currentNotification.content !== animalsToFeed) {
+            // Replace with new notification
+            let timestamp = moment(`${key} ${notificationTime}`, 'MM-DD-YYYY h:mm A')
+            newReminders[key] = { content: animalsToFeed }
+
+            promises.push(
+              pushService.sendFeedingReminder(timestamp.toString(), {
                 title: 'Feeding Today',
                 content: animalsToFeed,
+              }).then((doc) => {
+                let notificationId = doc.data ? doc.data.id : null
+
+                // Clear old notifications if any
+                if(currentNotification && currentNotification.notificationId) {
+                  pushService.cancelNotification(currentNotification.notificationId)
+                }
+
+                newReminders[key].notificationId = notificationId
               })
-                .then((doc) => {
-                  let notificationId = doc.data ? doc.data.id : null
-
-                  if(this.userConfig.notificationId) {
-                    pushService.cancelNotification(this.userConfig.notificationId)
-                  }
-
-                  this.$firebase
-                    .firestore()
-                    .collection('users')
-                    .doc(this.uuid)
-                    .update({
-                      notificationId,
-                      notifyDate: tomorrow,
-                      notifycontent: animalsToFeed,
-                    })
-                })
-            }
-          } else if(this.userConfig.notifyDate === tomorrow && this.userConfig.notificationId) {
-            pushService.cancelNotification(this.userConfig.notificationId)
-
-            this.$firebase
-              .firestore()
-              .collection('users')
-              .doc(this.uuid)
-              .update({
-                notificationId: null,
-                notifyDate: null,
-                notifycontent: null,
-              })
+            )
+          } else {
+            // Notification is the same
+            newReminders[key] = { ...currentNotification }
           }
-        }, 1000)
-      }
+        }
+      })
+
+      // Update the users reminders cache
+      Promise.all(promises).then(() => {
+        this.$firebase
+          .firestore()
+          .collection('users')
+          .doc(this.uuid)
+          .update({
+            reminders: newReminders,
+          })
+      })
+
+      // Clear out any date that no longer has reminders
+      Object.keys(currentReminders).forEach((key) => {
+        let date = moment(key, 'MM-DD-YYYY')
+        if(today < date && !feedingDates.includes(key) && currentReminders[key] && currentReminders[key].notificationId) {
+          pushService.cancelNotification(currentReminders[key].notificationId)
+        }
+      })
     },
   },
 
@@ -111,6 +122,7 @@ export default {
 
     ...mapGetters([
       'uuid',
+      'animalData',
     ]),
 
     userDocId() {
@@ -146,13 +158,45 @@ export default {
       return null
     },
 
-    allAnimalsReported() {
-      if(this.archive || this.filterTag || !this.filteredAnimals.length) {
-        return false
+    animalNextFeed() {
+      let nextFeedMapping = {}
+
+      if(!this.animalListLoaded) {
+        return nextFeedMapping
+      } else {
+        this.animalList.forEach((animal) => {
+          if(!animal.archive) {
+            if(animal.feedingOverride) {
+              nextFeedMapping[animal.id] = moment(animal.feedingOverride.toDate()).startOf('day')
+            } else if(animal.lastFed && animal.lastFed !== 'none' && animal.feedingDuration) {
+              nextFeedMapping[animal.id] =  moment(animal.lastFed.toDate()).add(animal.feedingDuration, 'd').startOf('day')
+            }
+          }
+        })
       }
 
-      return this.filteredAnimals.every(animal => this.animalsChecklist[animal.id])
+      return nextFeedMapping
     },
+
+    feedingMapping() {
+      let mapping = {}
+
+      Object.keys(this.animalNextFeed).forEach((key) => {
+        let feedingDate = this.animalNextFeed[key].format('MM-DD-YYYY')
+        mapping[feedingDate] = mapping[feedingDate] || []
+        mapping[feedingDate].push(this.animalData(key))
+      })
+
+      return mapping
+    },
+
+    notificationTrigger() {
+      return [
+        this.animalListLoaded,
+        this.userConfigLoaded,
+        this.feedingMapping,
+      ]
+    }
   },
 
   methods: {
@@ -202,8 +246,8 @@ export default {
           v-for="animal in filteredAnimals"
           :key="animal.id"
           :animal="animal"
+          :next-feed="animalNextFeed[animal.id]"
           @filter-tag="filterTag = $event"
-          @next-feed="updateNextFeed"
         />
       </v-expansion-panels>
 

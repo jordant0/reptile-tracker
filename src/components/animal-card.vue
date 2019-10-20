@@ -24,6 +24,11 @@ export default {
       type: Object,
       required: true,
     },
+
+    nextFeed: {
+      type: Object,
+      default: null,
+    },
   },
 
   data() {
@@ -34,15 +39,6 @@ export default {
       thumbnailUrl: null,
       imageLoaded: false,
     }
-  },
-
-  watch: {
-    nextFeed: {
-      immediate: true,
-      handler() {
-        this.$emit('next-feed', this.animal, this.nextFeed)
-      },
-    },
   },
 
   created() {
@@ -87,18 +83,6 @@ export default {
       return null
     },
 
-    feedingOverride() {
-      if(this.animal.feedingOverride) {
-        return moment(this.animal.feedingOverride.toDate()).startOf('day')
-      }
-
-      return null
-    },
-
-    hasFeedingOverride() {
-      return this.feedingOverride && this.today <= this.feedingOverride
-    },
-
     lastFed() {
       if(!this.animal.lastFed || this.animal.lastFed === 'none') {
         return null
@@ -121,15 +105,6 @@ export default {
       } else {
         return null
       }
-    },
-
-    nextFeed() {
-      if(this.hasFeedingOverride) {
-        return this.feedingOverride
-      } else if(this.lastFed && this.animal.feedingDuration) {
-        return moment(this.lastFed).add(this.animal.feedingDuration, 'd').startOf('day')
-      }
-      return null
     },
 
     tomorrow() {
@@ -426,7 +401,7 @@ export default {
             Next feeding {{ feedingConfig.text }}
           </span>
 
-          <v-tooltip v-if="hasFeedingOverride" top>
+          <v-tooltip v-if="animal.feedingOverride" top>
             <template v-slot:activator="{ on }">
               <v-icon
                 size="14px"
@@ -543,7 +518,7 @@ export default {
         </div>
 
         <div v-if="!animal.archive">
-          <v-tooltip v-if="hasFeedingOverride" top>
+          <v-tooltip v-if="animal.feedingOverride" top>
             <template v-slot:activator="{ on }">
               <v-btn
                 icon

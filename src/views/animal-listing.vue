@@ -169,7 +169,7 @@ export default {
             if(animal.feedingOverride) {
               nextFeedMapping[animal.id] = moment(animal.feedingOverride.toDate()).startOf('day')
             } else if(animal.lastFed && animal.lastFed !== 'none' && animal.feedingDuration) {
-              nextFeedMapping[animal.id] =  moment(animal.lastFed.toDate()).add(animal.feedingDuration, 'd').startOf('day')
+              nextFeedMapping[animal.id] = moment(animal.lastFed.toDate()).add(animal.feedingDuration, 'd').startOf('day')
             }
           }
         })
@@ -196,7 +196,7 @@ export default {
         this.userConfigLoaded,
         this.feedingMapping,
       ]
-    }
+    },
   },
 
   methods: {

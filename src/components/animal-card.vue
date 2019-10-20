@@ -3,6 +3,7 @@ import DateTimePickerDialog from '@/components/date-time-picker-dialog'
 import AvatarPlaceholder from '@/components/avatar-placeholder'
 import thumbnailMixin from '@/mixins/thumbnail'
 import randomColor from '@/mixins/random-color'
+import updateLastFed from '@/mixins/update-last-fed'
 import moment from 'moment'
 import { mapState, mapGetters } from 'vuex'
 
@@ -10,6 +11,7 @@ export default {
   mixins: [
     thumbnailMixin,
     randomColor,
+    updateLastFed,
   ],
 
   components: {
@@ -27,7 +29,6 @@ export default {
   data() {
     return {
       today: moment().startOf('day'),
-      lastFedEvent: null,
       animalImage: null,
       dateInput: false,
       thumbnailUrl: null,
@@ -36,13 +37,6 @@ export default {
   },
 
   watch: {
-    bindingProps: {
-      immediate: true,
-      handler() {
-        this.setupBinging()
-      },
-    },
-
     nextFeed: {
       immediate: true,
       handler() {
@@ -59,6 +53,10 @@ export default {
         this.animalImage = url
       })
     }
+
+    if(!this.animal.lastFed) {
+      this.updateLastFed(this.animal.id)
+    }
   },
 
   computed: {
@@ -70,13 +68,6 @@ export default {
     ...mapGetters([
       'uuid',
     ]),
-
-    bindingProps() {
-      return [
-        this.animal.id,
-        this.uuid,
-      ]
-    },
 
     animalSex() {
       if(this.animal.sex) {
@@ -109,11 +100,11 @@ export default {
     },
 
     lastFed() {
-      if(!(this.lastFedEvent && this.lastFedEvent.length)) {
+      if(!this.animal.lastFed || this.animal.lastFed === 'none') {
         return null
       }
 
-      return moment(this.lastFedEvent[0].timestamp.toDate())
+      return moment(this.animal.lastFed.toDate())
     },
 
     lastFedDate() {
@@ -256,25 +247,6 @@ export default {
   },
 
   methods: {
-    setupBinging() {
-      if(!this.animal.archive && !this.bindingSetup && this.uuid && this.animal.id) {
-        this.bindingSetup = true
-        this.$bind(
-          'lastFedEvent',
-          this.$firebase
-            .firestore()
-            .collection('users')
-            .doc(this.uuid)
-            .collection('animals')
-            .doc(this.animal.id)
-            .collection('events')
-            .where('type', '==', 'Feeding')
-            .orderBy('timestamp', 'desc')
-            .limit(1)
-        )
-      }
-    },
-
     allowedDates(val) {
       return moment(val, 'YYYY-MM-DD') > this.today
     },

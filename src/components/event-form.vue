@@ -2,8 +2,13 @@
 import DateTimeInput from '@/components/date-time-input'
 import { mapGetters } from 'vuex'
 import eventTypeData from '@/data/event-type'
+import updateLastFed from '@/mixins/update-last-fed'
 
 export default {
+  mixins: [
+    updateLastFed,
+  ],
+
   components: {
     DateTimeInput,
   },
@@ -111,22 +116,37 @@ export default {
     },
 
     afterSubmit() {
-      if(!this.existingEvent && this.eventData.type === 'Feeding') {
-        this.clearFeedingOverride()
+      if(this.eventData.type === 'Feeding') {
+        this.feedingEventAfterSubmit()
       } else {
         this.submitDone()
       }
     },
 
-    clearFeedingOverride() {
-      this.$firebase
-        .firestore()
-        .collection('users')
-        .doc(this.uuid)
-        .collection('animals')
-        .doc(this.animalId)
-        .update({ feedingOverride: null })
-        .then(() => this.submitDone())
+    feedingEventAfterSubmit() {
+      this.getLastFed(this.animalId)
+        .get()
+        .then((querySnapshot) => {
+          let updateParams = {}
+          if(querySnapshot.empty) {
+            updateParams.lastFed = 'none'
+          } else {
+            updateParams.lastFed = querySnapshot.docs[0].data().timestamp
+          }
+
+          if(!this.existingEvent) {
+            updateParams.feedingOverride = null
+          }
+
+          this.$firebase
+            .firestore()
+            .collection('users')
+            .doc(this.uuid)
+            .collection('animals')
+            .doc(this.animalId)
+            .update(updateParams)
+            .then(() => this.submitDone())
+        })
     },
 
     submitDone() {

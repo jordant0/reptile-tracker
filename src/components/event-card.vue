@@ -1,9 +1,14 @@
 <script>
 import eventTypeData from '@/data/event-type'
 import moment from 'moment'
+import updateLastFed from '@/mixins/update-last-fed'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
+  mixins: [
+    updateLastFed,
+  ],
+
   props: {
     animal: {
       type: Object,
@@ -16,6 +21,12 @@ export default {
       type: Object,
       required: true,
     },
+  },
+
+  data() {
+    return {
+      deleted: false,
+    }
   },
 
   created() {
@@ -112,6 +123,10 @@ export default {
             .collection('events')
             .doc(this.currentEvent.id)
             .delete()
+            .then(() => {
+              this.updateLastFed(this.animal.id)
+              this.deleted = true
+            })
         }
       })
     },
@@ -120,7 +135,7 @@ export default {
 </script>
 
 <template>
-  <v-expansion-panel>
+  <v-expansion-panel v-if="!deleted">
     <v-expansion-panel-header class="event-info_header">
       <div class="event-info_wrapper">
         <v-icon

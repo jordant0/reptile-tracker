@@ -47,9 +47,10 @@ export default {
     },
 
     notificationTrigger() {
-      if(!(this.animalListLoaded && this.userConfigLoaded)) {
+      if(this.reminderCheck || !(this.animalListLoaded && this.userConfigLoaded)) {
         return
       }
+      this.reminderCheck = true
 
       let currentReminders = { ...this.userConfig.reminders } || {}
       let notificationTime = this.userConfig.reminderTime || '9:00 AM'

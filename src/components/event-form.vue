@@ -207,7 +207,11 @@ export default {
         </v-list>
       </v-menu>
 
-      Event {{ animalName }}
+      Event
+
+      <div class="animal-name">
+        {{ animalName }}
+      </div>
     </v-card-title>
 
     <v-card-text>
@@ -287,5 +291,11 @@ export default {
 
 .update-type-bttn .v-icon {
   margin-right: 12px;
+}
+
+.animal-name {
+  margin-left: 8px;
+  font-size: 1.5rem;
+  line-height: 42px;
 }
 </style>

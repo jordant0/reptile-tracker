@@ -1,11 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { vuexfireMutations, firestoreAction } from 'vuexfire'
 
 Vue.use(Vuex)
 
 const INITIAL_STATE = {
   user: {},
   darkTheme: false,
+  userConfig: {},
+  userConfigLoaded: false,
+  animalList: [],
+  animalListLoaded: false,
   confirmDialog: {
     shown: false,
     title: null,
@@ -28,9 +33,15 @@ export default new Vuex.Store({
     uuid: state => {
       return state.user.uid
     },
+
+    animalData: state => animalId => {
+      return state.animalList.find(animal => animal.id === animalId)
+    },
   },
 
   mutations: {
+    ...vuexfireMutations,
+
     updateDarkTheme(state, payload) {
       state.darkTheme = payload
     },
@@ -67,5 +78,33 @@ export default new Vuex.Store({
     setNotificationShown(state, value) {
       state.notification.shown = value
     },
+
+    userConfigLoadFinish(state) {
+      state.userConfigLoaded = true
+    },
+
+    animalListLoadFinish(state) {
+      state.animalListLoaded = true
+    },
+  },
+
+  actions: {
+    bindAnimalList: firestoreAction(
+      ({ bindFirestoreRef, commit }, ref) => {
+        bindFirestoreRef('animalList', ref)
+          .then((doc) => {
+            commit('animalListLoadFinish')
+          })
+      }
+    ),
+
+    bindUserConfig: firestoreAction(
+      ({ bindFirestoreRef, commit }, ref) => {
+        bindFirestoreRef('userConfig', ref)
+          .then((doc) => {
+            commit('userConfigLoadFinish')
+          })
+      }
+    ),
   },
 })

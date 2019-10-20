@@ -3,7 +3,7 @@ import Loading from '@/components/loading'
 import Empty from '@/components/empty'
 import AnimalCard from '@/components/animal-card'
 import randomColor from '@/mixins/random-color'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import moment from 'moment'
 import pushService from '@/services/push-notifications'
 
@@ -27,10 +27,6 @@ export default {
 
   data() {
     return {
-      loading: true,
-      userConfigLoaded: false,
-      userConfig: {},
-      animalsList: [],
       filterTag: null,
       animalsChecklist: {},
       feedingMapping: {},
@@ -39,34 +35,6 @@ export default {
   },
 
   watch: {
-    uuid: {
-      immediate: true,
-      handler() {
-        if(this.uuid) {
-          this.$bind(
-            'userConfig',
-            this.$firebase
-              .firestore()
-              .collection('users')
-              .doc(this.uuid)
-          ).then((doc) => {
-            this.userConfigLoaded = true
-          })
-
-          this.$bind(
-            'animalsList',
-            this.$firebase
-              .firestore()
-              .collection('users')
-              .doc(this.uuid)
-              .collection('animals')
-          ).then(() => {
-            this.loading = false
-          })
-        }
-      },
-    },
-
     userConfigLoaded() {
       if(this.userConfig && !this.userConfig.reminderTime) {
         this.$firebase
@@ -134,6 +102,13 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'animalList',
+      'animalListLoaded',
+      'userConfig',
+      'userConfigLoaded',
+    ]),
+
     ...mapGetters([
       'uuid',
     ]),
@@ -143,8 +118,8 @@ export default {
     },
 
     filteredAnimals() {
-      if(this.animalsList) {
-        return this.animalsList
+      if(this.animalList) {
+        return this.animalList
           .filter((animal) => {
             return (this.archive === !!animal.archive) &&
               (!this.filterTag || (animal.tags && animal.tags.includes(this.filterTag)))
@@ -204,7 +179,7 @@ export default {
 <template>
   <div class="animal-listing container-wrapper">
     <loading
-      v-if="loading"
+      v-if="!animalListLoaded"
       type="list-item-avatar-two-line, list-item-avatar-two-line, list-item-avatar-two-line"
     />
     <template v-else>
@@ -221,7 +196,7 @@ export default {
         </div>
       </div>
 
-      <empty v-if="!animalsList.length" noun="animal" />
+      <empty v-if="!animalList.length" noun="animal" />
       <v-expansion-panels v-else>
         <animal-card
           v-for="animal in filteredAnimals"

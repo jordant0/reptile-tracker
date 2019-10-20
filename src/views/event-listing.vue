@@ -23,7 +23,6 @@ export default {
     return {
       loading: true,
       animalId: this.$route.params.animal_id,
-      animal: null,
       eventsList: [],
       filter: null,
       pagingLoad: true,
@@ -54,7 +53,12 @@ export default {
   computed: {
     ...mapGetters([
       'uuid',
+      'animalData',
     ]),
+
+    animal() {
+      return this.animalData(this.animalId)
+    },
 
     bindingProps() {
       return [
@@ -92,16 +96,6 @@ export default {
     setupBinging() {
       if(!this.bindingSetup && this.uuid && this.animalId) {
         this.bindingSetup = true
-        this.$bind(
-          'animal',
-          this.$firebase
-            .firestore()
-            .collection('users')
-            .doc(this.uuid)
-            .collection('animals')
-            .doc(this.animalId)
-        )
-
         this.getEventsList()
       }
     },
@@ -132,7 +126,7 @@ export default {
         this.endOfList = false
       }
 
-      collection = collection.limit(50)
+      collection = collection.limit(25)
 
       collection.get()
         .then((querySnapshot) => {
@@ -145,7 +139,7 @@ export default {
 
           this.loading = false
 
-          if(querySnapshot.size < 50) {
+          if(querySnapshot.size < 25) {
             this.endOfList = true
           }
 

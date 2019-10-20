@@ -29,6 +29,27 @@ export default {
       this.$vuetify.theme.dark = value
       set('dark-mode', value ? 'true' : 'false')
     },
+
+    user() {
+      if(this.user.uid) {
+        this.$store.dispatch(
+          'bindAnimalList',
+          this.$firebase
+            .firestore()
+            .collection('users')
+            .doc(this.user.uid)
+            .collection('animals')
+        )
+
+        this.$store.dispatch(
+          'bindUserConfig',
+          this.$firebase
+            .firestore()
+            .collection('users')
+            .doc(this.user.uid)
+        )
+      }
+    },
   },
 
   data() {

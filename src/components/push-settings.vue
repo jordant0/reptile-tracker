@@ -1,20 +1,11 @@
 <script>
 import DateTimeInput from '@/components/date-time-input'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import moment from 'moment'
 
 export default {
   components: {
     DateTimeInput,
-  },
-
-  props: {
-    userConfig: {
-      type: Object,
-      default() {
-        return {}
-      },
-    },
   },
 
   data() {
@@ -24,6 +15,10 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'userConfig',
+    ]),
+
     ...mapGetters([
       'uuid',
     ]),

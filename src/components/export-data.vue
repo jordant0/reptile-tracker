@@ -1,17 +1,8 @@
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import moment from 'moment'
 
 export default {
-  props: {
-    animalsList: {
-      type: Array,
-      default() {
-        return []
-      },
-    },
-  },
-
   data() {
     return {
       processing: false,
@@ -23,10 +14,10 @@ export default {
   },
 
   watch: {
-    animalsList: {
+    animalList: {
       immediate: true,
       handler() {
-        this.animalsForSelection = this.animalsList.map((animal) => {
+        this.animalsForSelection = this.animalList.map((animal) => {
           return {
             id: animal.id,
             name: animal.name,
@@ -39,6 +30,10 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'animalList',
+    ]),
+
     ...mapGetters([
       'uuid',
     ]),
@@ -69,7 +64,7 @@ export default {
       this.processedAnimal = 0
 
       this.selectedAnimals.forEach((animal) => {
-        let animalInfo = this.animalsList.find((checkAnimal) => checkAnimal.id === animal.id) || {}
+        let animalInfo = this.animalList.find((checkAnimal) => checkAnimal.id === animal.id) || {}
         let animalData = {
           ...animalInfo,
           arrival: animalInfo.arrival.toDate().toISOString(),
@@ -157,7 +152,7 @@ export default {
       </v-tooltip>
     </v-card-title>
 
-    <v-card-text v-if="!animalsList.length" class="d-flex justify-center pb-9">
+    <v-card-text v-if="!animalList.length" class="d-flex justify-center pb-9">
       No animal found
     </v-card-text>
     <v-card-text class="animal-export-wrapper">

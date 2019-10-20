@@ -16,7 +16,6 @@ export default {
     return {
       loading: true,
       animalId: this.$route.params.animal_id,
-      animal: null,
       eventsList: [],
       today: new Date(),
     }
@@ -49,7 +48,12 @@ export default {
 
     ...mapGetters([
       'uuid',
+      'animalData',
     ]),
+
+    animal() {
+      return this.animalData(this.animalId)
+    },
 
     bindingProps() {
       return [
@@ -82,35 +86,23 @@ export default {
     setupBinging() {
       if(!this.bindingSetup && this.uuid && this.animalId) {
         this.bindingSetup = true
+
+        let collection = this.$firebase
+          .firestore()
+          .collection('users')
+          .doc(this.uuid)
+          .collection('animals')
+          .doc(this.animalId)
+          .collection('events')
+          .limit(100)
+
         this.$bind(
-          'animal',
-          this.$firebase
-            .firestore()
-            .collection('users')
-            .doc(this.uuid)
-            .collection('animals')
-            .doc(this.animalId)
-        )
-
-        this.getEventsList()
+          'eventsList',
+          collection,
+        ).then(() => {
+          this.loading = false
+        })
       }
-    },
-
-    getEventsList() {
-      let collection = this.$firebase
-        .firestore()
-        .collection('users')
-        .doc(this.uuid)
-        .collection('animals')
-        .doc(this.animalId)
-        .collection('events')
-
-      this.$bind(
-        'eventsList',
-        collection,
-      ).then(() => {
-        this.loading = false
-      })
     },
 
     getCalendarEvent(event) {

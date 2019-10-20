@@ -3,7 +3,7 @@ import Loading from '@/components/loading'
 import PushSettings from '@/components/push-settings'
 import ReorderAnimals from '@/components/reorder-animals'
 import ExportData from '@/components/export-data'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -13,52 +13,18 @@ export default {
     ReorderAnimals,
   },
 
-  data() {
-    return {
-      userLoaded: false,
-      animalsLoaded: false,
-      animalsList: [],
-      userConfig: {},
-    }
-  },
-
-  watch: {
-    uuid: {
-      immediate: true,
-      handler() {
-        if(this.uuid) {
-          this.$bind(
-            'userConfig',
-            this.$firebase
-              .firestore()
-              .collection('users')
-              .doc(this.uuid)
-          ).then(() => {
-            this.userLoaded = true
-          })
-
-          this.$bind(
-            'animalsList',
-            this.$firebase
-              .firestore()
-              .collection('users')
-              .doc(this.uuid)
-              .collection('animals')
-          ).then(() => {
-            this.animalsLoaded = true
-          })
-        }
-      },
-    },
-  },
-
   computed: {
+    ...mapState([
+      'animalListLoaded',
+      'userConfigLoaded',
+    ]),
+
     ...mapGetters([
       'uuid',
     ]),
 
     loading() {
-      return !(this.animalsLoaded && this.userLoaded)
+      return !(this.animalListLoaded && this.userConfigLoaded)
     },
   },
 }
@@ -68,11 +34,11 @@ export default {
   <div class="container-wrapper">
     <loading v-if="loading" type="card-heading, image, actions" />
     <template v-else>
-      <push-settings :user-config="userConfig" />
+      <push-settings />
 
-      <reorder-animals :animals-list="animalsList" />
+      <reorder-animals />
 
-      <export-data :animals-list="animalsList" />
+      <export-data />
     </template>
   </div>
 </template>

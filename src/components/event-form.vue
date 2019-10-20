@@ -47,7 +47,20 @@ export default {
   computed: {
     ...mapGetters([
       'uuid',
+      'animalData',
     ]),
+
+    animal() {
+      return this.animalData(this.animalId)
+    },
+
+    animalName() {
+      if(this.animal) {
+        return `for ${this.animal.name}`
+      } else {
+        return ''
+      }
+    },
 
     existingEvent() {
       return this.currentEvent && this.currentEvent.id
@@ -174,7 +187,7 @@ export default {
         </v-list>
       </v-menu>
 
-      Event
+      Event {{ animalName }}
     </v-card-title>
 
     <v-card-text>

@@ -4,7 +4,7 @@ import TagsInput from '@johmun/vue-tags-input'
 import VueCropper from 'vue-cropperjs'
 import thumbnailMixin from '@/mixins/thumbnail'
 import randomColor from '@/mixins/random-color'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import moment from 'moment'
 
 export default {
@@ -28,24 +28,6 @@ export default {
     },
   },
 
-  watch: {
-    uuid: {
-      immediate: true,
-      handler() {
-        if(this.uuid) {
-          this.$bind(
-            'animalsList',
-            this.$firebase
-              .firestore()
-              .collection('users')
-              .doc(this.uuid)
-              .collection('animals')
-          )
-        }
-      },
-    },
-  },
-
   data() {
     return {
       submitting: false,
@@ -56,7 +38,6 @@ export default {
       imageChanged: false,
       today: moment().startOf('day'),
       tagValue: '',
-      animalsList: [],
       animalData: {
         name: this.animal.name || '',
         species: this.animal.species || '',
@@ -98,6 +79,10 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'animalList',
+    ]),
+
     ...mapGetters([
       'uuid',
     ]),
@@ -121,7 +106,7 @@ export default {
     },
 
     existingTags() {
-      let tagList = this.animalsList.flatMap(animal => animal.tags || [])
+      let tagList = this.animalList.flatMap(animal => animal.tags || [])
       const result = []
       const map = new Map()
 

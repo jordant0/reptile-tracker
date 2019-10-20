@@ -1,7 +1,7 @@
 <script>
 import Draggable from 'vuedraggable'
 import randomColor from '@/mixins/random-color'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   mixins: [
@@ -12,15 +12,6 @@ export default {
     Draggable,
   },
 
-  props: {
-    animalsList: {
-      type: Array,
-      default() {
-        return []
-      },
-    },
-  },
-
   data() {
     return {
       orderingList: [],
@@ -29,7 +20,7 @@ export default {
   },
 
   watch: {
-    animalsList: {
+    animalList: {
       immediate: true,
       handler() {
         this.resetOrdering()
@@ -38,6 +29,10 @@ export default {
   },
 
   computed: {
+    ...mapState([
+      'animalList',
+    ]),
+
     ...mapGetters([
       'uuid',
     ]),
@@ -45,7 +40,7 @@ export default {
 
   methods: {
     resetOrdering() {
-      this.orderingList = this.animalsList
+      this.orderingList = this.animalList
         .filter(animal => !animal.archive)
         .sort((animalA, animalB) => {
           if(!animalB.position) {
@@ -112,7 +107,7 @@ export default {
       </v-tooltip>
     </v-card-title>
 
-    <v-card-text v-if="!animalsList.length" class="d-flex justify-center pb-9">
+    <v-card-text v-if="!animalList.length" class="d-flex justify-center pb-9">
       No animal found
     </v-card-text>
     <v-card-text class="animal-reorder-wrapper">

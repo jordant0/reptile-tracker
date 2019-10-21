@@ -58,6 +58,7 @@ export default {
       let today = moment()
       let promises = []
       let feedingDates = Object.keys(this.feedingMapping)
+      let remindersUpdated = false
 
       feedingDates.forEach((key) => {
         let date = moment(key, 'MM-DD-YYYY')
@@ -66,6 +67,8 @@ export default {
           let currentNotification = currentReminders[key]
 
           if(!currentNotification || currentNotification.content !== animalsToFeed) {
+            remindersUpdated = true
+
             // Replace with new notification
             let timestamp = moment(`${key} ${notificationTime}`, 'MM-DD-YYYY h:mm A')
             newReminders[key] = { content: animalsToFeed }
@@ -92,22 +95,28 @@ export default {
         }
       })
 
-      // Update the users reminders cache
-      Promise.all(promises).then(() => {
-        this.$firebase
-          .firestore()
-          .collection('users')
-          .doc(this.uuid)
-          .update({
-            reminders: newReminders,
-          })
-      })
-
       // Clear out any date that no longer has reminders
       Object.keys(currentReminders).forEach((key) => {
         let date = moment(key, 'MM-DD-YYYY')
-        if(today < date && !feedingDates.includes(key) && currentReminders[key] && currentReminders[key].notificationId) {
-          pushService.cancelNotification(currentReminders[key].notificationId)
+        if(!feedingDates.includes(key)) {
+          remindersUpdated = true
+
+          if(today < date && currentReminders[key] && currentReminders[key].notificationId) {
+            pushService.cancelNotification(currentReminders[key].notificationId)
+          }
+        }
+      })
+
+      // Update the users reminders cache
+      Promise.all(promises).then(() => {
+        if(remindersUpdated) {
+          this.$firebase
+            .firestore()
+            .collection('users')
+            .doc(this.uuid)
+            .update({
+              reminders: newReminders,
+            })
         }
       })
     },

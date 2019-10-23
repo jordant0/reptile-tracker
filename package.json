@@ -17,6 +17,7 @@
     "moment": "^2.24.0",
     "register-service-worker": "^1.6.2",
     "seedrandom": "^3.0.5",
+    "uuidv4": "^5.0.1",
     "v-calendar": "^1.0.0-beta.22",
     "vue": "^2.6.10",
     "vue-chartjs": "^3.4.2",

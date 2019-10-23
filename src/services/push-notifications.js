@@ -1,5 +1,6 @@
 import axios from '@/plugins/axios'
 import store from '@/store'
+import uuid from 'uuidv4'
 
 export default {
   async sendFeedingReminder(timestamp, message) {
@@ -10,6 +11,7 @@ export default {
       contents: { 'en': message.content },
       url: `${window.location.protocol}//${window.location.host}`,
       send_after: timestamp,
+      external_id: uuid.fromString(`${timestamp}|${message.content}`),
     })
   },
 

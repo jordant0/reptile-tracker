@@ -94,6 +94,7 @@ export default {
           .collection('animals')
           .doc(this.animalId)
           .collection('events')
+          .orderBy('timestamp', 'desc')
           .limit(100)
 
         this.$bind(

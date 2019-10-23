@@ -67,14 +67,6 @@ export default {
     </v-card-title>
 
     <v-card-text>
-      <div class="notice">
-        <v-icon small>mdi-information</v-icon>
-        <div>
-          <strong>Note:</strong>
-          Changes to push notification settings may not affect already scheduled notifications
-        </div>
-      </div>
-
       <date-time-input
         :value="reminderTime"
         :loading="submitting"
@@ -86,16 +78,3 @@ export default {
     </v-card-text>
   </v-card>
 </template>
-
-<style scoped>
-.notice {
-  font-style: italic;
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.notice .v-icon {
-  margin-right: 6px;
-}
-</style>

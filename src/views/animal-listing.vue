@@ -66,12 +66,15 @@ export default {
           let animalsToFeed = this.feedingMapping[key].map(animal => animal.name).sort().join(', ')
           let currentNotification = currentReminders[key]
 
-          if(!currentNotification || currentNotification.content !== animalsToFeed) {
+          if(!currentNotification || currentNotification.content !== animalsToFeed || currentNotification.time !== notificationTime) {
             remindersUpdated = true
 
             // Replace with new notification
             let timestamp = moment(`${key} ${notificationTime}`, 'MM-DD-YYYY h:mm A')
-            newReminders[key] = { content: animalsToFeed }
+            newReminders[key] = {
+              content: animalsToFeed,
+              time: notificationTime,
+            }
 
             promises.push(
               pushService.sendFeedingReminder(timestamp.toString(), {

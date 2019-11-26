@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       submitting: false,
+      previousType: this.currentEvent.type,
       eventData: {
         type: this.currentEvent.type || this.eventType,
         timestamp: this.currentEvent.timestamp ? this.currentEvent.timestamp.toDate() : new Date(),
@@ -116,7 +117,7 @@ export default {
     },
 
     afterSubmit() {
-      if(this.eventData.type === 'Feeding') {
+      if(this.previousType === 'Feeding' || this.eventData.type === 'Feeding') {
         this.feedingEventAfterSubmit()
       } else {
         this.submitDone()

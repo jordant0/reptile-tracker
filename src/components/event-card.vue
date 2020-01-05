@@ -111,7 +111,7 @@ export default {
         body: 'This action cannot be undone.',
       })
 
-      this.confirmWatcher = this.$watch('confirmDialog.response', function(response) {
+      this.confirmWatcher = this.$watch('confirmDialog.response', (response) => {
         this.confirmWatcher()
         if(response === 'confirm') {
           this.$firebase

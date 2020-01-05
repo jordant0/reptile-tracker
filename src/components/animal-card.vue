@@ -254,7 +254,7 @@ export default {
         body: `This action cannot be undone.${this.animal.archive ? '' : 'If you need future access to the animal\'s data, consider archiving instead.'}`,
       })
 
-      this.confirmWatcher = this.$watch('confirmDialog.response', function(response) {
+      this.confirmWatcher = this.$watch('confirmDialog.response', (response) => {
         this.confirmWatcher()
         if(response === 'confirm') {
           this.$firebase
@@ -274,7 +274,7 @@ export default {
         body: 'Archive animals and their data can still be accessed under the Archive menu.',
       })
 
-      this.confirmWatcher = this.$watch('confirmDialog.response', function(response) {
+      this.confirmWatcher = this.$watch('confirmDialog.response', (response) => {
         this.confirmWatcher()
         if(response === 'confirm') {
           this.$firebase
@@ -316,7 +316,7 @@ export default {
         body: 'Next feeding will resume to be calculated from feeding duration and last feed event.',
       })
 
-      this.confirmWatcher = this.$watch('confirmDialog.response', function(response) {
+      this.confirmWatcher = this.$watch('confirmDialog.response', (response) => {
         this.confirmWatcher()
         if(response === 'confirm') {
           this.updateFeedingOverride(false)

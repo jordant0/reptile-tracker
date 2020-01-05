@@ -11,6 +11,10 @@ const INITIAL_STATE = {
   userConfigLoaded: false,
   animalList: [],
   animalListLoaded: false,
+  pushSettings: {
+    enabled: false,
+    supported: false,
+  },
   confirmDialog: {
     shown: false,
     title: null,
@@ -48,6 +52,13 @@ export default new Vuex.Store({
 
     updateUser(state, payload) {
       state.user = payload || {}
+    },
+
+    updatePushSettings(state, payload) {
+      state.pushSettings = {
+        ...state.pushSettings,
+        ...payload,
+      }
     },
 
     showConfirmDialog(state, payload) {

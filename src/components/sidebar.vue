@@ -158,6 +158,7 @@ export default {
           <v-switch
             v-model="darkMode"
             label="Dark Mode"
+            inset
           />
         </v-list-item>
 

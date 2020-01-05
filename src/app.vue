@@ -71,6 +71,23 @@ export default {
         if(window.OneSignal) {
           OneSignal.push(() => {
             OneSignal.setExternalUserId(user.uid)
+
+            if(OneSignal.isPushNotificationsSupported()) {
+              OneSignal.isPushNotificationsEnabled().then((isEnabled) => {
+                this.$store.commit('updatePushSettings', {
+                  supported: true,
+                  enabled: isEnabled,
+                })
+              })
+
+              OneSignal.getNotificationPermission().then((permission) => {
+                this.$store.commit('updatePushSettings', { permission })
+              })
+
+              OneSignal.on('subscriptionChange', (enabled) => {
+                this.$store.commit('updatePushSettings', { enabled })
+              })
+            }
           })
         }
       } else {

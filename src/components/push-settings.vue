@@ -112,16 +112,18 @@ export default {
           inset
         >
           <template v-slot:label>
-            Push notification is
-            <v-chip
-              class="push-toggle-label"
-              :color="`${pushEnabled ? 'green' : 'red'}`"
-              text-color="white"
-              small
-            >
-              {{ pushLabel }}
-            </v-chip>
-            for this device
+            <span class="push-toggle-label--wrapper">
+              Push notification is
+              <v-chip
+                class="push-toggle-label"
+                :color="`${pushEnabled ? 'green' : 'red'}`"
+                text-color="white"
+                small
+              >
+                {{ pushLabel }}
+              </v-chip>
+              for this device
+            </span>
           </template>
         </v-switch>
       </div>
